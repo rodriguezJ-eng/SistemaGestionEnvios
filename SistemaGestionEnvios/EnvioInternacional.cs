@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// La clase EnvioInternacional hereda de Envio
 
-namespace SistemaGestionEnvios
+public class EnvioInternacional : Envio
 {
-    internal class EnvioInternacional
-    {
-    }
+    // TODO:
+    // definir atributos y propiedades
+    // definir constructor
+    // aplicar métodos heredados
 }
