@@ -1,44 +1,108 @@
 ﻿public class Paquete
 {
     // atributos 
+    
+    private string _CodigoPaquete;
+    private string _Contenido;
+    private bool _EsFragil;
+    private decimal _ValorDeclarado; // valor monetario declarado por el cliente, en caso de pérdida o daño, se reembolsa este valor.
+    private string _TipoPaquete;  // pequeño, mediano, grande, monetario, electrónico, perecedero, etc.
+    private double _Peso; // en kg
+
+    // atributos extras que no son tan relevantes para el sistema, pero podrían ser útiles para futuras funcionalidades o mejoras del sistema
+    /*
     private string _descripcion;
-    private double _peso;
     private double _largo;
     private double _alto;
     private double _ancho;
-    private bool _esFragil;
+    */
 
-    public Paquete(string descripcion, double peso, double largo, double alto, double ancho, bool esFragil)
+    // Constructor
+    public Paquete(string codigoPaquete, string contenido, bool esFragil, decimal valorDeclarado, string tipoPaquete, double peso)
     {
-        Descripcion = descripcion;
-        Peso = peso;
-        Largo = largo;
-        Alto = alto;
-        Ancho = ancho;
+        CodigoPaquete = codigoPaquete;
+        Contenido = contenido;
         EsFragil = esFragil;
+        ValorDeclarado = valorDeclarado;
+        TipoPaquete = tipoPaquete;
+        Peso = peso;
     }
 
+
     // propiedades (aún faltan validar)
-    public string Descripcion { get => _descripcion; set => _descripcion = value; }
-    public double Peso { get => _peso; set => _peso = value; }
-    public double Largo { get => _largo; set => _largo = value; }
-    public double Alto { get => _alto; set => _alto = value; }
-    public double Ancho { get => _ancho; set => _ancho = value; }
-    public bool EsFragil { get => _esFragil; set => _esFragil = value; }
+    public string CodigoPaquete
+    {
+        get { return _CodigoPaquete; }
+        set { _CodigoPaquete = value; }
+    }
+
+    public string Contenido
+    {
+        get { return _Contenido; }
+        set { _Contenido = value; }
+    }
+    
+    public bool EsFragil
+    {
+        get { return _EsFragil; }
+        set { _EsFragil = value; }
+    }
+
+    public decimal ValorDeclarado
+    {
+        get { return _ValorDeclarado; }
+        set { _ValorDeclarado = value; }
+    }
+
+    public string TipoPaquete
+    {
+        get { return _TipoPaquete; }
+        set { _TipoPaquete = value; }
+    }
+
+    public double Peso
+    {
+        get { return _Peso; }
+        set { _Peso = value; }
+    }
 
     // Métodos
 
-    public double CalcularVolumen()
+
+    // Este metodo lo veo innecesario, no es tan relevante para el sistema
+    /* public double CalcularVolumen()
+     {
+         return _alto * _ancho * _largo;
+     }*/
+
+    public void MostrarInformacion()
     {
-        return _alto * _ancho * _largo;
+        Console.WriteLine($"Codigo           : {CodigoPaquete}");
+        Console.WriteLine($"Contenido        : {Contenido}");
+        Console.WriteLine($"Valor Declarado  : {ValorDeclarado}");s
+        Console.WriteLine($"Tipo Paquete     : {TipoPaquete}");
+        Console.WriteLine($"Peso             : {Peso}");
+        Console.WriteLine($"Fragil           : {(EsFragil ? "Sí" : "No")}");
     }
 
-    public void MostrarInfo()
+    public decimal CalcularCostoBase()
     {
-        Console.WriteLine($"Descripción : {_descripcion}");
-        Console.WriteLine($"Peso        : {_peso}");
-        Console.WriteLine($"Dimesiones  : {_alto} x {_ancho} x {_largo}");
-        Console.WriteLine($"Volumen     : {CalcularVolumen()} cm^3");
-        Console.WriteLine($"Fragil      : {(_esFragil ? "Sí" : "No")}");
+        return CalcularCostoBase;
+    }
+
+    private bool Fragil()
+    {
+        return Fragil;
+    }
+
+    public string CategoriaPeso()
+    {
+        return "falta";
     }
 }
+
+    /*decimal valorBase = (decimal)(Peso * 10); // $10 por kg
+        if (EsFragil)
+        {
+            valorBase += 50; // Cargo adicional por fragilidad
+        }*/
