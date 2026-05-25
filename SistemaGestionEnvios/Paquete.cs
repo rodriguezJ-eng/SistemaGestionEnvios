@@ -8,14 +8,9 @@
     private decimal _ValorDeclarado; // valor monetario declarado por el cliente, en caso de pérdida o daño, se reembolsa este valor.
     private string _TipoPaquete;  // pequeño, mediano, grande, monetario, electrónico, perecedero, etc.
     private double _Peso; // en kg
-
-    // atributos extras que no son tan relevantes para el sistema, pero podrían ser útiles para futuras funcionalidades o mejoras del sistema
-    /*
-    private string _descripcion;
-    private double _largo;
-    private double _alto;
-    private double _ancho;
-    */
+    private double _Largo;
+    private double _Alto;
+    private double _Ancho;
 
     // Constructor
     public Paquete(string codigoPaquete, string contenido, bool esFragil, decimal valorDeclarado, string tipoPaquete, double peso)
@@ -66,14 +61,31 @@
         set { _Peso = value; }
     }
 
+    public double Largo
+    {
+        get { return _Largo; }
+        set { _Largo = value; }
+    }
+
+    public double Alto
+    {
+        get { return _Alto; }
+        set { _Alto = value; }
+    }
+
+    public double Ancho
+    {
+        get { return _Ancho; }
+        set { _Ancho = value; }
+    }   
+
+
     // Métodos
 
-
-    // Este metodo lo veo innecesario, no es tan relevante para el sistema
-    /* public double CalcularVolumen()
-     {
-         return _alto * _ancho * _largo;
-     }*/
+    public double CalcularVolumen()
+    {
+        return _alto * _ancho * _largo;
+    }
 
     public void MostrarInformacion()
     {
