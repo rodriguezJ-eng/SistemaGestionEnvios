@@ -13,7 +13,7 @@
     private double _Ancho;
 
     // Constructor
-    public Paquete(string codigoPaquete, string contenido, bool esFragil, decimal valorDeclarado, string tipoPaquete, double peso)
+    public Paquete(string codigoPaquete, string contenido, bool esFragil, decimal valorDeclarado, string tipoPaquete, double peso, double largo, double alto, double ancho)
     {
         CodigoPaquete = codigoPaquete;
         Contenido = contenido;
@@ -21,6 +21,9 @@
         ValorDeclarado = valorDeclarado;
         TipoPaquete = tipoPaquete;
         Peso = peso;
+        Largo = largo;
+        Alto = alto;
+        Ancho = ancho;
     }
 
 

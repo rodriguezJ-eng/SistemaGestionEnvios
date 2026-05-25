@@ -1,54 +1,122 @@
 ﻿// Clase principal, clase abstracta
+using System.Data;
 using System.Runtime.CompilerServices;
 
-public abstract class Envio
+abstract class Envio
 {
-    // TODO:
-    // definir los atributos(ENCAPSULAR) y propiedades
-    private string _numeroPaquete;
-    private string _remitente;
-    private string _destinatario;
-    private string _estado;
-    private DateTime _fechaRegistro;
-    // Envio tiene un paquete ? 
-    private Paquete _paquete;  // envio.Paquete.Peso
+    //Atributos 
+    private string _NumeroGuia;
+    private DateTime _FechaEnvio;
+    private string _Origen;
+    private string _Destino;
+    private string _Estado;
+    private List<Paquete> _Paquetes; // Un envío puede contener uno o varios paquetes
+    private string _CategoriaEnvio;
+    private string _Remitente;
+    private string _Destinatario;
 
     // definir el constructor
-    protected Envio(string numeroPaquete, string remitente, string destinatario, string estado, DateTime fechaRegistro, Paquete paquete)
+    protected Envio(string _NumeroGuia, DateTime _FechaEnvio, string _Origen, string _Destino, string _Estado, List<Paquete> _Paquetes, string _CategoriaEnvio, string _Remitente, string _Destinatario)
     {
-        NumeroPaquete = numeroPaquete;
-        Remitente = remitente;
-        Destinatario = destinatario;
-        Estado = estado;
-        FechaRegistro = fechaRegistro;
-        Paquete = paquete;
+        NumeroGuia = _NumeroGuia;
+        FechaEnvio = _FechaEnvio;
+        Origen = _Origen;
+        Destino = _Destino;
+        Estado = _Estado;
+        Paquetes = _Paquetes;
+        CategoriaEnvio = _CategoriaEnvio;
+        Remitente = _Remitente;
+        Destinatario = _Destinatario;
     }
 
-    public string NumeroPaquete { get => _numeroPaquete; set => _numeroPaquete = value; }
-    public string Remitente { get => _remitente; set => _remitente = value; }
-    public string Destinatario { get => _destinatario; set => _destinatario = value; }
-    public string Estado { get => _estado; set => _estado = value; }
-    public DateTime FechaRegistro { get => _fechaRegistro; set => _fechaRegistro = value; }
-    public Paquete Paquete { get => _paquete; set => _paquete = value; }
+    // Propiedades
 
+    public string NumeroGuia
+    {
+        get { return _NumeroGuia; }
+        set { _NumeroGuia = value; }
+    }
 
+    public string FechaEnvio
+    {
+        get { return _FechaEnvio.ToString("dd/MM/yyyy HH:mm"); }
+        set
+        {
+            if (DateTime.TryParse(value, out DateTime fecha))
+            {
+                _FechaEnvio = fecha;
+            }
+            else
+            {
+                throw new ArgumentException("Fecha de envío no válida. Use el formato dd/MM/yyyy HH:mm");
+            }
+        }
+    }
+
+    public string Origen
+    {
+        get { return _Origen; }
+        set { _Origen = value; }
+    }
+
+    public string Destino
+    {
+        get { return _Destino; }
+        set { _Destino = value; }
+    }
+
+    public string Estado
+    {
+        get { return _Estado; }
+        set { _Estado = value; }
+    }
+
+    public List<Paquete> Paquetes
+    {
+        get { return _Paquetes; }
+        set { _Paquetes = value; }
+    }
+
+    public string CategoriaEnvio
+    {
+        get { return _CategoriaEnvio; }
+        set { _CategoriaEnvio = value; }
+    }
+
+    public string Remitente
+    {
+        get { return _Remitente; }
+        set { _Remitente = value; }
+    }
+
+    public string Destinatario
+    {
+        get { return _Destinatario; }
+        set { _Destinatario = value; }
+    }
 
     // definir métodos abstractos o virtuales
-
-    public abstract double CalcularCosto();
-    public abstract string TipoEnvio();
-
-    public virtual void MostrarInfo()
+    public virtual void MostrarInformacion()
     {
-        Console.WriteLine($"  Código        : {_numeroPaquete}");
+        Console.WriteLine($"  Código        : {NumeroPaquete}");
         Console.WriteLine($"  Tipo          : {TipoEnvio()}");
-        Console.WriteLine($"  Remitente     : {_remitente}");
-        Console.WriteLine($"  Destinatario  : {_destinatario}");
-        Console.WriteLine($"  Estado        : {_estado}");
-        Console.WriteLine($"  Fecha Reg.    : {_fechaRegistro:dd/MM/yyyy HH:mm}");
-        Console.WriteLine($"  Costo         : ${CalcularCosto():F2}");
+        Console.WriteLine($"  Remitente     : {Remitente}");
+        Console.WriteLine($"  Destinatario  : {Destinatario}");
+        Console.WriteLine($"  Estado        : {Estado}");
+        Console.WriteLine($"  Fecha Reg.    : {FechaRegistro}");
+        Console.WriteLine($"  Costo         : ${CalcularCostoTotal():F2}");
         Console.WriteLine("===== Paquete ==============================");
-        _paquete.MostrarInfo();
     }
 
+    public abstract void ActualizarEstado();
+
+    public abstract Decimal CalcularCostoTotal();
+
+    protected abstract void GenerearNumeroGuia();
+
+    public abstract string ObtenerInformacion();
+
+    public abstract List<T> TipoEnvio();
+
+    public abstract string CalcularTiempoEntrega();
 }
