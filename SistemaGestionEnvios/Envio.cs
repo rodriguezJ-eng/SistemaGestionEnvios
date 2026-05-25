@@ -110,7 +110,7 @@ abstract class Envio
 
     public abstract void ActualizarEstado();
 
-    public abstract Decimal CalcularCostoTotal();
+    public abstract decimal CalcularCostoTotal();
 
     protected abstract void GenerearNumeroGuia();
 
