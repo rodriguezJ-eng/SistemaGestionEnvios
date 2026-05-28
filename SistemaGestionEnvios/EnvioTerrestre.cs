@@ -1,4 +1,7 @@
-﻿public sealed class EnvioTerrestre : Envio
+﻿using System;
+using System.Collections.Generic;
+
+public sealed class EnvioTerrestre : Envio
 {
     // Atributos
     private int _DistanciaKm;
@@ -7,7 +10,19 @@
 
     // Constructor
 
-    public EnvioTerrestre(int distanciaKm, string placaCamion, string ruta)
+    public EnvioTerrestre(
+    string numeroGuia,
+    DateTime fechaEnvio,
+    string origen,
+    string destino,
+    string estado,
+    List<Paquete> paquetes,
+    string categoriaEnvio,
+    string remitente,
+    string destinatario, 
+    int distanciaKm, 
+    string placaCamion, 
+    string ruta) : base(numeroGuia, fechaEnvio, origen, destino, estado, paquetes, categoriaEnvio, remitente, destinatario)
     {
         DistanciaKm = distanciaKm;
         PlacaCamion = placaCamion;
@@ -15,7 +30,7 @@
     }
 
     // Propiedades
-    public string DistanciaKm
+    public int DistanciaKm
     {
         get { return _DistanciaKm; }
         set { _DistanciaKm = value; }
@@ -37,11 +52,11 @@
 
     public override decimal CalcularCostoTotal();
 
-    protected override void GenerearNumeroGuia();
+    protected override void GenerarNumeroGuia();
 
     public override string ObtenerInformacion();
 
-    public override List<T> TipoEnvio();
+    public override string TipoEnvio();
 
     public override string CalcularTiempoEntrega();
 }

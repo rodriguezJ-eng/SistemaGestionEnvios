@@ -1,4 +1,6 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+
 public class GestorEnvios
 {
     // Atributos
@@ -6,9 +8,9 @@ public class GestorEnvios
     private string _RutaEnvio;
 
     // Constructor
-    public GestorEnvios(List<Envio> envios, string rutaEnvio)
+    public GestorEnvios(string rutaEnvio)
     {
-        Envios = envios;
+        Envios = new List<Envio>();
         RutaEnvio = rutaEnvio;
     }
 
@@ -26,54 +28,78 @@ public class GestorEnvios
     }
 
     // Metodos
-    public void RegistrarEnvio()
+    public void RegistrarEnvio(Envio envio)
     {
+        Envios.Add(envio);
+    }
+
+    public List<Envio> MostrarEnvios()
+    {
+        return Envios;
+    }
+
+    public Envio BuscarEnvio(string numeroGuia)
+    {
+        foreach (Envio envio in Envios)
+        {
+            if (envio.NumeroGuia == numeroGuia)
+            {
+                return envio;
+            }
+        }
+
+        return null;
+    }
+
+    public void ModificarEnvio(
+    string numeroGuia,
+    string? origen = null,
+    string? destino = null,
+    string? estado = null,
+    string? remitente = null,
+    string? destinatario = null,
+    string? categoriaEnvio = null
+    )
+    {
+        Envio envio = BuscarEnvio(numeroGuia);
+
+        if (envio != null)
+        {
+            if (origen != null)
+                envio.Origen = origen;
+
+            if (destino != null)
+                envio.Destino = destino;
+
+            if (estado != null)
+                envio.Estado = estado;
+
+            if (remitente != null)
+                envio.Remitente = remitente;
+
+            if (destinatario != null)
+                envio.Destinatario = destinatario;
+
+            if (categoriaEnvio != null)
+                envio.CategoriaEnvio = categoriaEnvio;
+
+            Console.WriteLine("Envío modificado correctamente.");
+        }
+        else
+        {
+            Console.WriteLine("Envío no encontrado.");
+        }
 
     }
 
-    public List<T> MostrarEnvios()
+    public void EliminarEnvio(string numeroGuia)
     {
-        return MostrarEnvios;
-    }
+        Envio envio = BuscarEnvio(numeroGuia);
 
-    public Envio BuscarEnvio(int numeroGuia)
-    {
-        return BuscarEnvio(1);
-    }
-
-    public void ModificarEnvio(int numeroGuia, DateTime fechaEnvio)
-    {
-
-    }
-
-    public void ModificarEnvio(int numeroGuia, string origen)
-    {
-
-    }
-
-    public void ModificarEnvio(int numeroGuia, string destino)
-    {
-
-    }
-
-    public void ModificarEnvio(int numeroGuia)
-    {
-
-    }
-
-    public void ModificarEnvio(int numeroGuia, List<Paquete> paquetes)
-    {
-
-    }
-
-    public void ModificarEnvio(int numeroGuia, string tipoEnvio)
-    {
-
-    }
-
-    public void EliminarEnvio()
-    {
-
+        if (envio != null)
+        {
+            Envios.Remove(envio);
+        }
     }
 
     public void GuardarArchivo()
@@ -83,7 +109,7 @@ public class GestorEnvios
 
     public void CargarArchivo()
     {
-
+    
     }
 
 }

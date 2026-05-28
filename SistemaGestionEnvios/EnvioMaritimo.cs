@@ -1,4 +1,7 @@
-﻿public sealed class EnvioMaritimo : Envio
+﻿using System;
+using System.Collections.Generic;
+
+public sealed class EnvioMaritimo : Envio
 {
     // Atributos
     private string _NombreBarco;
@@ -8,7 +11,20 @@
 
     // Constructor
 
-    public EnvioMaritimo(string nombreBarco, string puertoOrigen, string puertoDestino, int diasNavegacion)
+    public EnvioMaritimo(
+    string numeroGuia,
+    DateTime fechaEnvio,
+    string origen,
+    string destino,
+    string estado,
+    List<Paquete> paquetes,
+    string categoriaEnvio,
+    string remitente,
+    string destinatario, 
+    string nombreBarco, 
+    string puertoOrigen, 
+    string puertoDestino, 
+    int diasNavegacion) : base(numeroGuia, fechaEnvio, origen, destino, estado, paquetes, categoriaEnvio, remitente, destinatario)
     {
         NombreBarco = nombreBarco;
         PuertoOrigen = puertoOrigen;
@@ -29,7 +45,7 @@
         set { _PuertoOrigen = value; }
     }
 
-    public string Puertoestino
+    public string PuertoDestino
     {
         get { return _PuertoDestino; }
         set { _PuertoDestino = value; }
@@ -44,11 +60,11 @@
 
     public override decimal CalcularCostoTotal();
 
-    protected override void GenerearNumeroGuia();
+    protected override void GenerarNumeroGuia();
 
     public override string ObtenerInformacion();
 
-    public override List<T> TipoEnvio();
+    public override string TipoEnvio();
 
     public override string CalcularTiempoEntrega();
 }

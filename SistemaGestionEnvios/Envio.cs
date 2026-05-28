@@ -1,8 +1,8 @@
 ﻿// Clase principal, clase abstracta
-using System.Data;
-using System.Runtime.CompilerServices;
+using System;
+using System.Collections.Generic;
 
-abstract class Envio
+public abstract class Envio
 {
     //Atributos 
     private string _NumeroGuia;
@@ -16,17 +16,17 @@ abstract class Envio
     private string _Destinatario;
 
     // definir el constructor
-    protected Envio(string _NumeroGuia, DateTime _FechaEnvio, string _Origen, string _Destino, string _Estado, List<Paquete> _Paquetes, string _CategoriaEnvio, string _Remitente, string _Destinatario)
+    public Envio(string numeroGuia, DateTime fechaEnvio, string origen, string destino, string estado, List<Paquete> paquetes, string categoriaEnvio, string remitente, string destinatario)
     {
-        NumeroGuia = _NumeroGuia;
-        FechaEnvio = _FechaEnvio;
-        Origen = _Origen;
-        Destino = _Destino;
-        Estado = _Estado;
-        Paquetes = _Paquetes;
-        CategoriaEnvio = _CategoriaEnvio;
-        Remitente = _Remitente;
-        Destinatario = _Destinatario;
+        NumeroGuia = numeroGuia;
+        FechaEnvio = fechaEnvio;
+        Origen = origen;
+        Destino = destino;
+        Estado = estado;
+        Paquetes = paquetes;
+        CategoriaEnvio = categoriaEnvio;
+        Remitente = remitente;
+        Destinatario = destinatario;
     }
 
     // Propiedades
@@ -37,20 +37,10 @@ abstract class Envio
         set { _NumeroGuia = value; }
     }
 
-    public string FechaEnvio
+    public DateTime FechaEnvio
     {
-        get { return _FechaEnvio.ToString("dd/MM/yyyy HH:mm"); }
-        set
-        {
-            if (DateTime.TryParse(value, out DateTime fecha))
-            {
-                _FechaEnvio = fecha;
-            }
-            else
-            {
-                throw new ArgumentException("Fecha de envío no válida. Use el formato dd/MM/yyyy HH:mm");
-            }
-        }
+        get { return _FechaEnvio; }
+        set { _FechaEnvio = value; }
     }
 
     public string Origen
@@ -98,25 +88,29 @@ abstract class Envio
     // definir métodos abstractos o virtuales
     public virtual void MostrarInformacion()
     {
-        Console.WriteLine($"  Código        : {NumeroPaquete}");
+        Console.WriteLine($"  Código        : {NumeroGuia}");
         Console.WriteLine($"  Tipo          : {TipoEnvio()}");
         Console.WriteLine($"  Remitente     : {Remitente}");
         Console.WriteLine($"  Destinatario  : {Destinatario}");
         Console.WriteLine($"  Estado        : {Estado}");
-        Console.WriteLine($"  Fecha Reg.    : {FechaRegistro}");
+        Console.WriteLine($"  Fecha Reg.    : {FechaEnvio.ToString("dd/MM/yyyy HH:mm")}");
         Console.WriteLine($"  Costo         : ${CalcularCostoTotal():F2}");
         Console.WriteLine("===== Paquete ==============================");
+        foreach (Paquete paquete in Paquetes)
+        {
+            paquete.MostrarInformacion();
+        }
     }
 
     public abstract void ActualizarEstado();
 
     public abstract decimal CalcularCostoTotal();
 
-    protected abstract void GenerearNumeroGuia();
+    protected abstract void GenerarNumeroGuia();
 
     public abstract string ObtenerInformacion();
 
-    public abstract List<T> TipoEnvio();
+    public abstract string TipoEnvio();
 
     public abstract string CalcularTiempoEntrega();
 }

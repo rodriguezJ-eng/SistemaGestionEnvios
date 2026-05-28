@@ -8,3 +8,5 @@
 // 5. Eliminar envío 
 // 6. Filtrar por tipo de envío ( un extra dado que la guía de el proyecto no lo pide, pero por la naturaleza del envío internacional o nacional podemos integrarlo)
 // 0. Salir
+
+Console.WriteLine("Bienvenido al Sistema de Gestión de Envíos");

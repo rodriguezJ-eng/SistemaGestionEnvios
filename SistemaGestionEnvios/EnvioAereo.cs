@@ -1,4 +1,7 @@
-﻿public sealed class EnvioAereo : Envio
+﻿using System;
+using System.Collections.Generic;
+
+public sealed class EnvioAereo : Envio
 {
     // Atributos
     private string _NumeroVuelo;
@@ -7,7 +10,19 @@
 
     // Constructor
 
-    public EnvioAereo(string numeroVuelo, string aeropuertoOrigen,  string aeropuertoDestino)
+    public EnvioAereo(
+    string numeroGuia,
+    DateTime fechaEnvio,
+    string origen,
+    string destino,
+    string estado,
+    List<Paquete> paquetes,
+    string categoriaEnvio,
+    string remitente,
+    string destinatario, 
+    string numeroVuelo,
+    string aeropuertoOrigen,  
+    string aeropuertoDestino) : base(numeroGuia, fechaEnvio, origen, destino, estado, paquetes, categoriaEnvio, remitente, destinatario)
     {
         NumeroVuelo = numeroVuelo;
         AeropuertoOrigen = aeropuertoOrigen;
@@ -37,11 +52,11 @@
 
     public override decimal CalcularCostoTotal();
 
-    protected override void GenerearNumeroGuia();
+    protected override void GenerarNumeroGuia();
 
     public override string ObtenerInformacion();
 
-    public override List<T> TipoEnvio();
+    public override string TipoEnvio();
 
     public override string CalcularTiempoEntrega();
 }

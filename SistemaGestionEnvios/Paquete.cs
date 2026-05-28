@@ -1,4 +1,7 @@
-﻿public class Paquete
+﻿using System;
+using System.Collections.Generic;
+
+public class Paquete
 {
     // atributos 
     
@@ -87,14 +90,14 @@
 
     public double CalcularVolumen()
     {
-        return _alto * _ancho * _largo;
+        return Alto * Ancho * Largo;
     }
 
     public void MostrarInformacion()
     {
         Console.WriteLine($"Codigo           : {CodigoPaquete}");
         Console.WriteLine($"Contenido        : {Contenido}");
-        Console.WriteLine($"Valor Declarado  : {ValorDeclarado}");s
+        Console.WriteLine($"Valor Declarado  : {ValorDeclarado}");
         Console.WriteLine($"Tipo Paquete     : {TipoPaquete}");
         Console.WriteLine($"Peso             : {Peso}");
         Console.WriteLine($"Fragil           : {(EsFragil ? "Sí" : "No")}");
@@ -102,12 +105,14 @@
 
     public decimal CalcularCostoBase()
     {
-        return CalcularCostoBase;
-    }
+        decimal costo = (decimal)Peso * 10;
 
-    private bool Fragil()
-    {
-        return Fragil;
+        if (EsFragil)
+        {
+            costo += 50;
+        }
+
+        return costo;
     }
 
     public string CategoriaPeso()
