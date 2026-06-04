@@ -1,10 +1,10 @@
-﻿// Clase principal, clase abstracta
-using System;
-using System.Collections.Generic;
+﻿/// <summary>
+/// Clase base abstracta que representa un envio generico.
+/// Define los atributos y comportamientos comunes a todos los tipos de envio.
+/// </summary>
 
 public abstract class Envio
 {
-    //Atributos 
     private string _NumeroGuia;
     private DateTime _FechaEnvio;
     private string _Origen;
@@ -15,7 +15,6 @@ public abstract class Envio
     private string _Remitente;
     private string _Destinatario;
 
-    // definir el constructor
     public Envio(string numeroGuia, DateTime fechaEnvio, string origen, string destino, string estado, List<Paquete> paquetes, string categoriaEnvio, string remitente, string destinatario)
     {
         NumeroGuia = numeroGuia;
@@ -28,8 +27,6 @@ public abstract class Envio
         Remitente = remitente;
         Destinatario = destinatario;
     }
-
-    // Propiedades
 
     public string NumeroGuia
     {
@@ -85,7 +82,10 @@ public abstract class Envio
         set { _Destinatario = value; }
     }
 
-    // definir métodos abstractos o virtuales
+    /// <summary>
+    /// Muestra en consola toda la informacion del envio y sus paquetes.
+    /// </summary>
+
     public virtual void MostrarInformacion()
     {
         Console.WriteLine($"  Código        : {NumeroGuia}");
@@ -102,15 +102,38 @@ public abstract class Envio
         }
     }
 
+    /// <summary>
+    /// Permite al usuario actualizar el estado del envio desde consola.
+    /// </summary>
     public abstract void ActualizarEstado();
 
+    /// <summary>
+    /// Calcula el costo total del envio segun el tipo y los paquetes que contiene.
+    /// </summary>
+    /// <returns>Costo total como valor decimal.</returns>
     public abstract decimal CalcularCostoTotal();
 
+    /// <summary>
+    /// Genera el numero de guia automaticamente con el prefijo del tipo de envio.
+    /// </summary>
     protected abstract void GenerarNumeroGuia();
 
+    /// <summary>
+    /// Retorna un resumen del envio en una sola linea de texto.
+    /// </summary>
+    /// <returns>Cadena con la informacion resumida del envio.</returns>
     public abstract string ObtenerInformacion();
 
+    /// <summary>
+    /// Retorna el tipo de envio: Terrestre, Maritimo o Aereo.
+    /// </summary>
+    /// <returns>Nombre del tipo de envio.</returns>
     public abstract string TipoEnvio();
 
+
+    /// <summary>
+    /// Calcula y retorna el tiempo estimado de entrega segun el tipo de envio.
+    /// </summary>
+    /// <returns>Descripcion del tiempo estimado de entrega.</returns>
     public abstract string CalcularTiempoEntrega();
 }
