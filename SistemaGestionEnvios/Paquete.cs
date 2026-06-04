@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/// <summary>
+/// Representa un paquete fisico dentro de un envio.
+/// Contiene las caracteristicas del objeto a transportar.
+/// </summary>
 
 public class Paquete
 {
-    // atributos 
     
     private string _CodigoPaquete;
     private string _Contenido;
@@ -15,7 +16,6 @@ public class Paquete
     private double _Alto;
     private double _Ancho;
 
-    // Constructor
     public Paquete(string codigoPaquete, string contenido, bool esFragil, decimal valorDeclarado, string tipoPaquete, double peso, double largo, double alto, double ancho)
     {
         CodigoPaquete = codigoPaquete;
@@ -29,8 +29,6 @@ public class Paquete
         Ancho = ancho;
     }
 
-
-    // propiedades (aún faltan validar)
     public string CodigoPaquete
     {
         get { return _CodigoPaquete; }
@@ -83,15 +81,24 @@ public class Paquete
     {
         get { return _Ancho; }
         set { _Ancho = value; }
-    }   
+    }
 
 
     // Métodos
+
+    /// <summary>
+    /// Calcula el volumen del paquete multiplicando sus tres dimensiones.
+    /// </summary>
+    /// <returns></returns>
 
     public double CalcularVolumen()
     {
         return Alto * Ancho * Largo;
     }
+
+    /// <summary>
+    /// Muestra en consola la informacion principal del paquete.
+    /// </summary>
 
     public void MostrarInformacion()
     {
@@ -103,6 +110,10 @@ public class Paquete
         Console.WriteLine($"Fragil           : {(EsFragil ? "Sí" : "No")}");
     }
 
+    /// <summary>
+    /// Calcula el costo base del paquete segun su peso. Agrega un recargo si es fragil.
+    /// </summary>
+    /// <returns>Costo base como valor decimal.</returns>
     public decimal CalcularCostoBase()
     {
         decimal costo = (decimal)Peso * 10;
@@ -115,14 +126,18 @@ public class Paquete
         return costo;
     }
 
+    /// <summary>
+    /// Clasifica el paquete segun su peso en liviano, normal o pesado.
+    /// </summary>
+    /// <returns>Categoria del paquete segun su peso.</returns>
     public string CategoriaPeso()
     {
-        return "falta";
+        if (Peso <= 1)
+            return "Liviano";
+        else if (Peso <= 10)
+            return "Normal";
+        else
+            return "Pesado";
     }
-}
 
-    /*decimal valorBase = (decimal)(Peso * 10); // $10 por kg
-        if (EsFragil)
-        {
-            valorBase += 50; // Cargo adicional por fragilidad
-        }*/
+}
