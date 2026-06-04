@@ -56,15 +56,68 @@ public sealed class EnvioMaritimo : Envio
         get { return _DiasNavegacion; }
         set { _DiasNavegacion = value; }
     }
-    public override void ActualizarEstado();
 
-    public override decimal CalcularCostoTotal();
+    public override void ActualizarEstado()
+    {
+        Console.WriteLine("  Estados disponibles:");
+        Console.WriteLine("  1. Pendiente");
+        Console.WriteLine("  2. En transito");
+        Console.WriteLine("  3. Entregado");
+        Console.WriteLine("  4. Cancelado");
+        Console.Write("  Seleccione: ");
+        string opcion = Console.ReadLine()?.Trim();
 
-    protected override void GenerarNumeroGuia();
+        switch (opcion)
+        {
+            case "1": Estado = "Pendiente"; break;
+            case "2": Estado = "En transito"; break;
+            case "3": Estado = "Entregado"; break;
+            case "4": Estado = "Cancelado"; break;
+            default: Console.WriteLine("  Opcion no valida."); return;
+        }
+        Console.WriteLine($"  Estado actualizado a: {Estado}");
 
-    public override string ObtenerInformacion();
+    }
 
-    public override string TipoEnvio();
+    public override decimal CalcularCostoTotal()
+    {
+        decimal costo = 0;
+        foreach (Paquete p in Paquetes)
+            costo += p.CalcularCostoBase();
 
-    public override string CalcularTiempoEntrega();
+        costo += DiasNavegacion * 15000;
+        return costo;
+
+    }
+
+    public override string CalcularTiempoEntrega()
+    {
+        return $"{DiasNavegacion} dia(s) de navegacion";
+    }
+
+    public override string ObtenerInformacion()
+    {
+        return $"[{TipoEnvio()}] Guia: {NumeroGuia} | Barco: {NombreBarco} | {PuertoOrigen} -> {PuertoDestino} | {DiasNavegacion} dias";
+    }
+
+    public override void MostrarInformacion()
+    {
+        base.MostrarInformacion();
+        Console.WriteLine($"  Barco         : {NombreBarco}");
+        Console.WriteLine($"  Puerto Origen : {PuertoOrigen}");
+        Console.WriteLine($"  Puerto Destino: {PuertoDestino}");
+        Console.WriteLine($"  Dias Naveg.   : {DiasNavegacion} dias");
+        Console.WriteLine($"  Tiempo Entrega: {CalcularTiempoEntrega()}");
+    }
+
+
+    public override string TipoEnvio()
+    {
+        return "Maritimo";
+    }
+
+    protected override void GenerarNumeroGuia()
+    {
+        NumeroGuia = $"MAR-{DateTime.Now:yyyyMMddHHmmss}";
+    }
 }

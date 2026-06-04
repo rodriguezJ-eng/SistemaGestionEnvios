@@ -48,15 +48,81 @@ public sealed class EnvioTerrestre : Envio
         set { _Ruta = value; }
     }
 
-    public override void ActualizarEstado();
 
-    public override decimal CalcularCostoTotal();
+    public override string TipoEnvio()
+    {
+        return "Terrestre";
+    }
 
-    protected override void GenerarNumeroGuia();
+   /// <summary>
+   /// Calcula el costo: costo base de paquetes + Tarifa por km
+   /// </summary>
+   /// <returns></returns>
+    public override decimal CalcularCostoTotal()
+    {
+        decimal costo = 0;
+        foreach (Paquete p in Paquetes)
+        {
+            costo += p.CalcularCostoBase();
+        }
 
-    public override string ObtenerInformacion();
+        costo += DistanciaKm * 500;
+        return costo;
+    }
 
-    public override string TipoEnvio();
+    public override void ActualizarEstado()
+    {
+        Console.WriteLine("  Estados disponibles:");
+        Console.WriteLine("  1. Pendiente");
+        Console.WriteLine("  2. En transito");
+        Console.WriteLine("  3. Entregado");
+        Console.WriteLine("  4. Cancelado");
+        Console.Write("  Seleccione: ");
+        string opcion = Console.ReadLine()?.Trim();
 
-    public override string CalcularTiempoEntrega();
+        switch (opcion)
+        {
+            case "1": Estado = "Pendiente"; break;
+            case "2": Estado = "En transito"; break;
+            case "3": Estado = "Entregado"; break;
+            case "4": Estado = "Cancelado"; break;
+            default: Console.WriteLine("  Opcion no valida."); return;
+        }
+        Console.WriteLine($"  Estado actualizado a: {Estado}");
+
+    }
+
+    /// <summary>
+    /// Retorna un resumen del envio en una sola linea
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public override string ObtenerInformacion()
+    {
+        return $"[{TipoEnvio()}] Guia: {NumeroGuia} | Ruta: {Ruta} | Placa: {PlacaCamion} | {DistanciaKm} km";
+    }
+    /// <summary>
+    /// Genera un número de guia con prefijo TER
+    /// </summary>
+    /// <exception cref="NotImplementedException"></exception>
+    protected override void GenerarNumeroGuia()
+    {
+        NumeroGuia = $"TER-{DateTime.Now:yyyyMMddHHmmss}";
+    }
+
+    // Muestra la informacion del envio incluyendo datos propios
+    public override void MostrarInformacion()
+    {
+        base.MostrarInformacion();
+        Console.WriteLine($"  Placa Camion  : {PlacaCamion}");
+        Console.WriteLine($"  Ruta          : {Ruta}");
+        Console.WriteLine($"  Distancia     : {DistanciaKm} km");
+        Console.WriteLine($"  Tiempo Entrega: {CalcularTiempoEntrega()}");
+    }
+
+    
+    public override string CalcularTiempoEntrega()
+    {
+        throw new NotImplementedException();
+    }
 }
