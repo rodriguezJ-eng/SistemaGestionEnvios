@@ -123,6 +123,16 @@ public sealed class EnvioTerrestre : Envio
     
     public override string CalcularTiempoEntrega()
     {
-        throw new NotImplementedException();
+    
+        if (DistanciaKm <= 100)
+            return "1 día";
+
+        if (DistanciaKm <= 500)
+            return "2 a 3 días";
+
+        if (DistanciaKm <= 1000)
+            return "4 a 5 días";
+
+        return "Más de 5 días";
     }
 }

@@ -43,24 +43,17 @@
         }
 
         // Datos comunes del envío
+        string numeroGuia = Validador.LeerNumeroGuia();
 
-        Console.Write("\n  Número de guía : ");
-        string numeroGuia = Console.ReadLine()?.Trim();
+        string remitente = Validador.LeerNombre("  Remitente      : ");
 
-        Console.Write("  Remitente      : ");
-        string remitente = Console.ReadLine()?.Trim();
+        string destinatario = Validador.LeerNombre("  Destinatario   : ");
 
-        Console.Write("  Destinatario   : ");
-        string destinatario = Console.ReadLine()?.Trim();
+        string origen = Validador.LeerLugar("  Origen         : ");
 
-        Console.Write("  Origen         : ");
-        string origen = Console.ReadLine()?.Trim();
+        string destino = Validador.LeerLugar("  Destino        : ");
 
-        Console.Write("  Destino        : ");
-        string destino = Console.ReadLine()?.Trim();
-
-        Console.Write("  Categoría (Nacional/Internacional): ");
-        string categoria = Console.ReadLine()?.Trim();
+        string categoria = Validador.LeerCategoria(); 
 
         // SE PREGUNTA CUANTOS PAQUETES TIENE EL ENVIO
         Console.WriteLine("\n Cuantos paquetes tiene el envio: ");
@@ -76,33 +69,23 @@
 
         for (int i = 1; i <= cantidadPaquetes; i++)
         {
-            Console.Write("  Codigo paquete : ");
-            string codigoPaquete = Console.ReadLine()?.Trim();
+            string codigoPaquete = Validador.LeerCodigoPaquete();
 
-            Console.Write("  Contenido      : ");
-            string contenido = Console.ReadLine()?.Trim();
+            string contenido = Validador.LeerTexto("  Contenido      : ", 3, 100);
 
-            Console.Write("  Es fragil? (s/n): ");
-            bool esFragil = Console.ReadLine()?.Trim().ToLower() == "s";
+            bool esFragil = Validador.LeerSiNo("  Es fragil? (s/n): ");
 
-            Console.Write("  Valor declarado: ");
-            decimal.TryParse(Console.ReadLine()?.Trim(), out decimal valorDeclarado);
+            decimal valorDeclarado = Validador.LeerDecimalPositivo("  Valor declarado: ");
 
-            Console.Write("  Tipo paquete (pequeno/mediano/grande): ");
-            string tipoPaquete = Console.ReadLine()?.Trim();
+            string tipoPaquete = Validador.LeerTipoPaquete();
 
-            Console.Write("  Peso (kg)      : ");
-            double.TryParse(Console.ReadLine()?.Trim(), out double peso);
+            double peso = Validador.LeerDoublePositivo("  Peso (kg)      : ");
+            
+            double alto = Validador.LeerDoublePositivo("  Alto (cm)      : ");
 
-            Console.Write("  Alto (cm)      : ");
-            double.TryParse(Console.ReadLine()?.Trim(), out double alto);
+            double ancho = Validador.LeerDoublePositivo("  Ancho (cm)     : ");
 
-            Console.Write("  Ancho (cm)     : ");
-            double.TryParse(Console.ReadLine()?.Trim(), out double ancho);
-
-            Console.Write("  Largo (cm)     : ");
-            double.TryParse(Console.ReadLine()?.Trim(), out double largo);
-
+            double largo = Validador.LeerDoublePositivo("  Largo (cm)     : ");
             // Se crea el paquete y se agrega a la lista
             Paquete paquete = new Paquete(codigoPaquete, contenido, esFragil,
                                           valorDeclarado, tipoPaquete, peso, largo, alto, ancho);

@@ -2,7 +2,7 @@
 /// Clase base abstracta que representa un envio generico.
 /// Define los atributos y comportamientos comunes a todos los tipos de envio.
 /// </summary>
-
+using System;
 public abstract class Envio
 {
     private string _NumeroGuia;
@@ -31,7 +31,21 @@ public abstract class Envio
     public string NumeroGuia
     {
         get { return _NumeroGuia; }
-        set { _NumeroGuia = value; }
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException("El número de guía es obligatorio.");
+
+            value = value.Trim();
+
+            foreach (char c in value)
+            {
+                if (!char.IsDigit(c))
+                    throw new ArgumentException("El número de guía solo puede contener dígitos.");
+            }
+
+            _NumeroGuia = value;
+        }
     }
 
     public DateTime FechaEnvio
