@@ -1,5 +1,10 @@
-﻿// Program.cs - Solo maneja el menú y delega todo al GestorEnvios
-GestorEnvios gestor = new GestorEnvios("envios.xml");
+﻿// Program.cs
+// Conecta las 3 capas: crea el Repository, se lo pasa al Service, y el Service al GestorEnvios.
+// Si mañana se cambia a XML, solo cambia la línea del Repository — nada más.
+
+IEnvioRepository repository = new EnvioRepositoryMemoria();
+EnvioService service = new EnvioService(repository);
+GestorEnvios gestor = new GestorEnvios(service);
 
 bool salir = false;
 while (!salir)
@@ -21,7 +26,7 @@ while (!salir)
             Console.WriteLine("\n  Hasta luego.\n");
             break;
         default:
-            Console.WriteLine("\n Opción no válida.");
+            Console.WriteLine("\n  Opción no válida.");
             Pausa();
             break;
     }
@@ -33,7 +38,7 @@ void MostrarMenu()
     Console.WriteLine("╔══════════════════════════════════════════════╗");
     Console.WriteLine("║      SISTEMA DE GESTIÓN DE ENVÍOS            ║");
     Console.WriteLine("╠══════════════════════════════════════════════╣");
-    Console.WriteLine($"║  Envíos registrados                          ║");
+    Console.WriteLine($"║  Envíos registrados: {gestor.ContarEnvios(),-25}║");
     Console.WriteLine("╠══════════════════════════════════════════════╣");
     Console.WriteLine("║  1. Registrar envío                          ║");
     Console.WriteLine("║  2. Mostrar todos los envíos                 ║");
