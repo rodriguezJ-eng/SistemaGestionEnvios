@@ -17,7 +17,6 @@ public abstract class Envio
 
     public Envio(string numeroGuia, DateTime fechaEnvio, string origen, string destino, string estado, List<Paquete> paquetes, string categoriaEnvio, string remitente, string destinatario)
     {
-        NumeroGuia = numeroGuia;
         FechaEnvio = fechaEnvio;
         Origen = origen;
         Destino = destino;
@@ -26,25 +25,20 @@ public abstract class Envio
         CategoriaEnvio = categoriaEnvio;
         Remitente = remitente;
         Destinatario = destinatario;
+        // Nota: GenerearNumeroGuia() se llama desde el constructuro de cada clase hija
+        // Despues de que base() asigna los demás campos.
     }
 
     public string NumeroGuia
     {
         get { return _NumeroGuia; }
-        set
+        // El setter es internal: solo las clases del mismo ensamblado (las hijas) pueden asignarlo.
+        // El usuario nunca lo toca directamente.
+        internal set
         {
             if (string.IsNullOrWhiteSpace(value))
                 throw new ArgumentException("El número de guía es obligatorio.");
-
-            value = value.Trim();
-
-            foreach (char c in value)
-            {
-                if (!char.IsDigit(c))
-                    throw new ArgumentException("El número de guía solo puede contener dígitos.");
-            }
-
-            _NumeroGuia = value;
+            _NumeroGuia = value.Trim();
         }
     }
 
@@ -128,15 +122,11 @@ public abstract class Envio
     public abstract decimal CalcularCostoTotal();
 
     /// <summary>
-    /// Genera el numero de guia automaticamente con el prefijo del tipo de envio.
+    /// Genera y asigna el numero de guia automaticamente con el prefijo del tipo de envio.
+    /// Debe llamarse al final del constructor de cada clase hija
+    /// Formato: PREFIJO-yyyyMMddHHmmss-XXXX (XXXX = 4 dijitos aleatorios para evitar conflictos)
     /// </summary>
     protected abstract void GenerarNumeroGuia();
-
-    /// <summary>
-    /// Retorna un resumen del envio en una sola linea de texto.
-    /// </summary>
-    /// <returns>Cadena con la informacion resumida del envio.</returns>
-    public abstract string ObtenerInformacion();
 
     /// <summary>
     /// Retorna el tipo de envio: Terrestre, Maritimo o Aereo.
