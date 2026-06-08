@@ -61,9 +61,8 @@ public class GestorEnvios
     { return _Envios.FirstOrDefault(criterio); }
 
     /// <summary>
-    /// Pide los datos por consola, 
-    /// crea los paquetes y registra 
-    /// un nuevo envio en la lista.
+    /// Pide los datos por consola, crea los paquetes y registra un nuevo envio.
+    /// El número de guía lo genera el sistema automáticamente; el usuario no lo ingresa.
     /// </summary>
     public void RegistrarEnvio()
     {
@@ -83,20 +82,13 @@ public class GestorEnvios
             return;
         }
 
-        // Datos comunes del envío
-        string numeroGuia = Validador.LeerNumeroGuia();
-
+        //Ya no se pide el numero de guia
         string remitente = Validador.LeerNombre("  Remitente      : ");
-
         string destinatario = Validador.LeerNombre("  Destinatario   : ");
-
         string origen = Validador.LeerLugar("  Origen         : ");
-
         string destino = Validador.LeerLugar("  Destino        : ");
-
         string categoria = Validador.LeerCategoria(); 
 
-        // SE PREGUNTA CUANTOS PAQUETES TIENE EL ENVIO
         Console.WriteLine("\n Cuantos paquetes tiene el envio: ");
         int.TryParse(Console.ReadLine()?.Trim(), out int cantidadPaquetes);
 
@@ -112,21 +104,13 @@ public class GestorEnvios
         for (int i = 1; i <= cantidadPaquetes; i++)
         {
             string codigoPaquete = Validador.LeerCodigoPaquete();
-
             string contenido = Validador.LeerTexto("  Contenido      : ", 3, 100);
-
             bool esFragil = Validador.LeerSiNo("  Es fragil? (s/n): ");
-
             decimal valorDeclarado = Validador.LeerDecimalPositivo("  Valor declarado: ");
-
             string tipoPaquete = Validador.LeerTipoPaquete();
-
             double peso = Validador.LeerDoublePositivo("  Peso (kg)      : ");
-            
             double alto = Validador.LeerDoublePositivo("  Alto (cm)      : ");
-
             double ancho = Validador.LeerDoublePositivo("  Ancho (cm)     : ");
-
             double largo = Validador.LeerDoublePositivo("  Largo (cm)     : ");
             // Se crea el paquete y se agrega a la lista
             Paquete paquete = new Paquete(codigoPaquete, contenido, esFragil,
@@ -142,68 +126,53 @@ public class GestorEnvios
         if (tipo == "1")
         {
             Console.WriteLine("\n  === Datos del Envío Terrestre ===");
-
             Console.Write("  Placa del camión: ");
             string placa = Console.ReadLine()?.Trim();
-
             Console.Write("  Ruta            : ");
             string ruta = Console.ReadLine()?.Trim();
-
             Console.Write("  Distancia (km)  : ");
             int.TryParse(Console.ReadLine()?.Trim(), out int km);
-
             envio = new EnvioTerrestre(
-                numeroGuia, DateTime.Now, origen, destino, "Pendiente",
+                DateTime.Now, origen, destino, "Pendiente",
                 paquetes, categoria, remitente, destinatario,
                 km, placa, ruta
             );
         }
-
         else if (tipo == "2")
         {
             Console.WriteLine("\n=== Datos del Envío Marítimo ===");
-
             Console.Write("  Nombre del barco  : ");
             string barco = Console.ReadLine()?.Trim();
-
             Console.Write("  Puerto de origen  : ");
             string puertoOrigen = Console.ReadLine()?.Trim();
-
             Console.Write("  Puerto de destino : ");
             string puertoDestino = Console.ReadLine()?.Trim();
-
             Console.Write("  Días de navegación: ");
             int.TryParse(Console.ReadLine()?.Trim(), out int dias);
-
             envio = new EnvioMaritimo(
-                numeroGuia, DateTime.Now, origen, destino, "Pendiente",
+                DateTime.Now, origen, destino, "Pendiente",
                 paquetes, categoria, remitente, destinatario,
                 barco, puertoOrigen, puertoDestino, dias
             );
         }
-
         else
         {
             Console.WriteLine("\n===Datos del Envío Aéreo ===");
-
             Console.Write("  Número de vuelo      : ");
             string vuelo = Console.ReadLine()?.Trim();
-
             Console.Write("  Aeropuerto de origen : ");
             string aerOrigen = Console.ReadLine()?.Trim();
-
             Console.Write("  Aeropuerto de destino: ");
             string aerDestino = Console.ReadLine()?.Trim();
-
             envio = new EnvioAereo(
-                numeroGuia, DateTime.Now, origen, destino, "Pendiente",
+                DateTime.Now, origen, destino, "Pendiente",
                 paquetes, categoria, remitente, destinatario,
                 vuelo, aerOrigen, aerDestino
             );
         }
 
         Envios.Add(envio);
-        Console.WriteLine("\n Envío registrado exitosamente.");
+        Console.WriteLine($"\n Envio registrado. Número de guía asignado: {envio.NumeroGuia}");
     }
 
     /// <summary>
@@ -255,7 +224,6 @@ public class GestorEnvios
     {
         Console.Clear();
         Console.WriteLine("=== BUSCAR ENVIO ===");
-
         Console.WriteLine("Numero de guia: ");
         string guia = Console.ReadLine()?.Trim();
 
@@ -272,15 +240,13 @@ public class GestorEnvios
     }
 
     /// <summary>
-    /// Pide el numero de guia por consola, muestra los datos actuales
-    /// y permite al usuario modificar los campos del envio.
+    /// Pide el numero de guia por consola, muestra los datos actuales y permite al usuario modificar los campos del envio.
     /// </summary>
 
     public void ModificarEnvio()
     {
         Console.Clear();
         Console.WriteLine("== MODIFICAR ENVIO ==\n");
-
         Console.Write("  Numero de guia a modificar: ");
         string guia = Console.ReadLine()?.Trim();
 
@@ -333,7 +299,6 @@ public class GestorEnvios
     {
         Console.Clear();
         Console.WriteLine("== ELIMINAR ENVIO ==\n");
-
         Console.Write("  Numero de guia a eliminar: ");
         string guia = Console.ReadLine()?.Trim();
 
