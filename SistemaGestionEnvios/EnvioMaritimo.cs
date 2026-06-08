@@ -12,7 +12,6 @@ public sealed class EnvioMaritimo : Envio
     // Constructor
 
     public EnvioMaritimo(
-    string numeroGuia,
     DateTime fechaEnvio,
     string origen,
     string destino,
@@ -24,12 +23,13 @@ public sealed class EnvioMaritimo : Envio
     string nombreBarco, 
     string puertoOrigen, 
     string puertoDestino, 
-    int diasNavegacion) : base(numeroGuia, fechaEnvio, origen, destino, estado, paquetes, categoriaEnvio, remitente, destinatario)
+    int diasNavegacion) : base(fechaEnvio, origen, destino, estado, paquetes, categoriaEnvio, remitente, destinatario)
     {
         NombreBarco = nombreBarco;
         PuertoOrigen = puertoOrigen;
         PuertoDestino = puertoDestino;
         DiasNavegacion = diasNavegacion;
+        GenerarNumeroGuia();
     }
 
     // Propiedades
@@ -57,6 +57,30 @@ public sealed class EnvioMaritimo : Envio
         set { _DiasNavegacion = value; }
     }
 
+    public override string TipoEnvio() => "Maritimo";
+
+    /// <summary>
+    /// Genera el número de guía con prefijo MAR, timestamp y 4 dígitos aleatorios.
+    /// </summary>
+    protected override void GenerarNumeroGuia()
+    {
+        string randomNumb = new Random().Next(1000, 9999).ToString();
+        NumeroGuia = $"MAR-{DateTime.Now:yyyyMMddHHmmss}-{randomNumb}";
+    }
+
+    public override decimal CalcularCostoTotal()
+    {
+        decimal costo = 0;
+        foreach (Paquete p in Paquetes)
+            costo += p.CalcularCostoBase();
+
+        costo += DiasNavegacion * 15000;
+        return costo;
+
+    }
+
+    public override string CalcularTiempoEntrega() => $"{DiasNavegacion} dia(s) de navegacion";
+
     public override void ActualizarEstado()
     {
         Console.WriteLine("  Estados disponibles:");
@@ -79,27 +103,6 @@ public sealed class EnvioMaritimo : Envio
 
     }
 
-    public override decimal CalcularCostoTotal()
-    {
-        decimal costo = 0;
-        foreach (Paquete p in Paquetes)
-            costo += p.CalcularCostoBase();
-
-        costo += DiasNavegacion * 15000;
-        return costo;
-
-    }
-
-    public override string CalcularTiempoEntrega()
-    {
-        return $"{DiasNavegacion} dia(s) de navegacion";
-    }
-
-    public override string ObtenerInformacion()
-    {
-        return $"[{TipoEnvio()}] Guia: {NumeroGuia} | Barco: {NombreBarco} | {PuertoOrigen} -> {PuertoDestino} | {DiasNavegacion} dias";
-    }
-
     public override void MostrarInformacion()
     {
         base.MostrarInformacion();
@@ -108,16 +111,5 @@ public sealed class EnvioMaritimo : Envio
         Console.WriteLine($"  Puerto Destino: {PuertoDestino}");
         Console.WriteLine($"  Dias Naveg.   : {DiasNavegacion} dias");
         Console.WriteLine($"  Tiempo Entrega: {CalcularTiempoEntrega()}");
-    }
-
-
-    public override string TipoEnvio()
-    {
-        return "Maritimo";
-    }
-
-    protected override void GenerarNumeroGuia()
-    {
-        NumeroGuia = $"MAR-{DateTime.Now:yyyyMMddHHmmss}";
     }
 }

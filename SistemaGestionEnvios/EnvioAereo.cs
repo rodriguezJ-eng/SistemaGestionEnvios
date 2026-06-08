@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 public sealed class EnvioAereo : Envio
 {
@@ -11,7 +12,6 @@ public sealed class EnvioAereo : Envio
     // Constructor
 
     public EnvioAereo(
-    string numeroGuia,
     DateTime fechaEnvio,
     string origen,
     string destino,
@@ -22,11 +22,12 @@ public sealed class EnvioAereo : Envio
     string destinatario, 
     string numeroVuelo,
     string aeropuertoOrigen,  
-    string aeropuertoDestino) : base(numeroGuia, fechaEnvio, origen, destino, estado, paquetes, categoriaEnvio, remitente, destinatario)
+    string aeropuertoDestino) : base(fechaEnvio, origen, destino, estado, paquetes, categoriaEnvio, remitente, destinatario)
     {
         NumeroVuelo = numeroVuelo;
         AeropuertoOrigen = aeropuertoOrigen;
         AeropuertoDestino = aeropuertoDestino;
+        GenerarNumeroGuia();
     }
 
     // Propiedades
@@ -48,6 +49,33 @@ public sealed class EnvioAereo : Envio
         set { _AeropuertoDestino = value; }
     }
 
+    public override string TipoEnvio() => "Aereo";
+
+
+    /// <summary>
+    /// Genera el numero de guia con el prefijo AER, y 4 dijitos aleatorios.
+    /// </summary>
+    protected override void GenerarNumeroGuia()
+    {   
+        string randomNumb = new Random().Next(1000,9999).ToString();
+        NumeroGuia = $"AER-{DateTime.Now:yyyyMMddHHmmss}-{randomNumb}";
+    }
+
+    public override decimal CalcularCostoTotal()
+    {
+        decimal costo = 0;
+        foreach (Paquete p in Paquetes)
+            costo += p.CalcularCostoBase();
+
+        costo *= 2.5m;
+        return costo;
+    }
+
+    public override string CalcularTiempoEntrega()
+    {
+        return "1 a 3 dias habiles";
+    }
+
     public override void ActualizarEstado()
     {
         Console.WriteLine("  Estados disponibles:");
@@ -67,39 +95,6 @@ public sealed class EnvioAereo : Envio
             default: Console.WriteLine("  Opcion no valida."); return;
         }
         Console.WriteLine($"  Estado actualizado a: {Estado}");
-
-    }
-
-    public override decimal CalcularCostoTotal()
-    {
-        decimal costo = 0;
-        foreach (Paquete p in Paquetes)
-            costo += p.CalcularCostoBase();
-
-        costo *= 2.5m;
-        return costo;
-
-    }
-
-    public override string CalcularTiempoEntrega()
-    {
-        return "1 a 3 dias habiles";
-    }
-
-    public override string ObtenerInformacion()
-    {
-        return $"[{TipoEnvio()}] Guia: {NumeroGuia} | Vuelo: " +
-            $"{NumeroVuelo} | {AeropuertoOrigen} -> {AeropuertoDestino}";
-    }
-
-    public override string TipoEnvio()
-    {
-        return "Aereo";
-    }
-
-    protected override void GenerarNumeroGuia()
-    {
-        NumeroGuia = $"AER-{DateTime.Now:yyyyMMddHHmmss}";
     }
 
     public override void MostrarInformacion()
@@ -110,5 +105,4 @@ public sealed class EnvioAereo : Envio
         Console.WriteLine($"  Aerop. Destino: {AeropuertoDestino}");
         Console.WriteLine($"  Tiempo Entrega: {CalcularTiempoEntrega()}");
     }
-
 }

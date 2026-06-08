@@ -11,7 +11,6 @@ public sealed class EnvioTerrestre : Envio
     // Constructor
 
     public EnvioTerrestre(
-    string numeroGuia,
     DateTime fechaEnvio,
     string origen,
     string destino,
@@ -22,11 +21,12 @@ public sealed class EnvioTerrestre : Envio
     string destinatario, 
     int distanciaKm, 
     string placaCamion, 
-    string ruta) : base(numeroGuia, fechaEnvio, origen, destino, estado, paquetes, categoriaEnvio, remitente, destinatario)
+    string ruta) : base(fechaEnvio, origen, destino, estado, paquetes, categoriaEnvio, remitente, destinatario)
     {
         DistanciaKm = distanciaKm;
         PlacaCamion = placaCamion;
         Ruta = ruta;
+        GenerarNumeroGuia();
     }
 
     // Propiedades
@@ -48,16 +48,21 @@ public sealed class EnvioTerrestre : Envio
         set { _Ruta = value; }
     }
 
+    public override string TipoEnvio() => "Terrestre";
 
-    public override string TipoEnvio()
+    /// <summary>
+    /// Genera el número de guía con prefijo TER, timestamp y 4 dígitos aleatorios.
+    /// </summary>
+    protected override void GenerarNumeroGuia()
     {
-        return "Terrestre";
+        string randomNumb = new Random().Next(1000, 9999).ToString();
+        NumeroGuia = $"TER-{DateTime.Now:yyyyMMddHHmmss}-{randomNumb}";
     }
 
-   /// <summary>
-   /// Calcula el costo: costo base de paquetes + Tarifa por km
-   /// </summary>
-   /// <returns></returns>
+    /// <summary>
+    /// Calcula el costo: costo base de paquetes + Tarifa por km
+    /// </summary>
+    /// <returns></returns>
     public override decimal CalcularCostoTotal()
     {
         decimal costo = 0;
@@ -92,23 +97,6 @@ public sealed class EnvioTerrestre : Envio
 
     }
 
-    /// <summary>
-    /// Retorna un resumen del envio en una sola linea
-    /// </summary>
-    /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public override string ObtenerInformacion()
-    {
-        return $"[{TipoEnvio()}] Guia: {NumeroGuia} | Ruta: {Ruta} | Placa: {PlacaCamion} | {DistanciaKm} km";
-    }
-    /// <summary>
-    /// Genera un número de guia con prefijo TER
-    /// </summary>
-    /// <exception cref="NotImplementedException"></exception>
-    protected override void GenerarNumeroGuia()
-    {
-        NumeroGuia = $"TER-{DateTime.Now:yyyyMMddHHmmss}";
-    }
 
     // Muestra la informacion del envio incluyendo datos propios
     public override void MostrarInformacion()
