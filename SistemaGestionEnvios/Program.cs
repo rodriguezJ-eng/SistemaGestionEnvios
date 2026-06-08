@@ -12,8 +12,10 @@ while (!salir)
         case "1": gestor.RegistrarEnvio(); Pausa(); break;
         case "2": gestor.MostrarEnvios(); Pausa(); break;
         case "3": gestor.BuscarEnvio(); Pausa(); break;
-        case "4": gestor.ModificarEnvio(); Pausa(); break;
-        case "5": gestor.EliminarEnvio(); Pausa(); break;
+        case "4": gestor.FiltrarEnvios(); Pausa(); break;
+        case "5": gestor.OrdenarEnvios(); Pausa(); break;
+        case "6": gestor.ModificarEnvio(); Pausa(); break;
+        case "7": gestor.EliminarEnvio(); Pausa(); break;
         case "0":
             salir = true;
             Console.WriteLine("\n  Hasta luego.\n");
@@ -35,9 +37,11 @@ void MostrarMenu()
     Console.WriteLine("╠══════════════════════════════════════════════╣");
     Console.WriteLine("║  1. Registrar envío                          ║");
     Console.WriteLine("║  2. Mostrar todos los envíos                 ║");
-    Console.WriteLine("║  3. Buscar envío                             ║");
-    Console.WriteLine("║  4. Modificar envío                          ║");
-    Console.WriteLine("║  5. Eliminar envío                           ║");
+    Console.WriteLine("║  3. Buscar envío por número de guía          ║");
+    Console.WriteLine("║  4. Filtrar envíos                           ║");
+    Console.WriteLine("║  5. Ordenar envíos                           ║");
+    Console.WriteLine("║  6. Modificar envío                          ║");
+    Console.WriteLine("║  7. Eliminar envío                           ║");
     Console.WriteLine("║  0. Salir                                    ║");
     Console.WriteLine("╚══════════════════════════════════════════════╝");
     Console.Write("\n  Seleccione una opción: ");

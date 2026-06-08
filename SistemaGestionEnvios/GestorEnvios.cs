@@ -103,6 +103,7 @@ public class GestorEnvios
 
         for (int i = 1; i <= cantidadPaquetes; i++)
         {
+            Console.WriteLine($"\n -- Paquete {i} --");
             string codigoPaquete = Validador.LeerCodigoPaquete();
             string contenido = Validador.LeerTexto("  Contenido      : ", 3, 100);
             bool esFragil = Validador.LeerSiNo("  Es fragil? (s/n): ");
@@ -205,16 +206,7 @@ public class GestorEnvios
     /// <param name="numeroGuia">Numero de guia del envio a buscar.</param>
     /// <returns>El objeto Envio encontrado, o null si no existe.</returns>
     public Envio BuscarEnvio(string numeroGuia)
-    {
-        foreach (Envio envio in Envios)
-        {
-            if (envio.NumeroGuia == numeroGuia)
-            {
-                return envio;
-            }
-        }
-        return null;
-    }
+        => Buscar(e => e.NumeroGuia == numeroGuia);
 
     /// <summary>
     /// Pide el numero de guia por consola y muestra la informacion del envio encontrado.
@@ -223,7 +215,7 @@ public class GestorEnvios
     public void BuscarEnvio()
     {
         Console.Clear();
-        Console.WriteLine("=== BUSCAR ENVIO ===");
+        Console.WriteLine("=== BUSCAR ENVIO POR NÚMERO DE GUÍA ===");
         Console.WriteLine("Numero de guia: ");
         string guia = Console.ReadLine()?.Trim();
 
@@ -238,6 +230,137 @@ public class GestorEnvios
         Console.WriteLine("\n == Envio encontrado");
         encontrado.MostrarInformacion();
     }
+
+    /// <summary>
+    /// Muestra un submenú para que el usuario elija el criterio de filtrado
+    /// y llama a Filtrar(Func) con el criterio correspondiente.
+    /// </summary>
+    public void FiltrarEnvios()
+    {
+        Console.Clear();
+        Console.WriteLine("=== FILTRAR ENVÍOS ===\n");
+        Console.WriteLine("  Filtrar por:");
+        Console.WriteLine("  1. Tipo de envío (Terrestre / Marítimo / Aéreo)");
+        Console.WriteLine("  2. Estado (Pendiente / En transito / Entregado / Cancelado)");
+        Console.WriteLine("  3. Categoría de envío");
+        Console.WriteLine("  4. Remitente");
+        Console.Write("\n  Seleccione: ");
+        string opcion = Console.ReadLine()?.Trim();
+
+        List<Envio> resultado = null;
+
+        switch (opcion)
+        {
+            case "1":
+                Console.Write("  Tipo (Terrestre / Maritimo / Aereo): ");
+                string tipo = Console.ReadLine()?.Trim();
+                resultado = Filtrar(e => e.TipoEnvio().Equals(tipo, StringComparison.OrdinalIgnoreCase));
+                break;
+
+            case "2":
+                Console.Write("  Estado: ");
+                string estado = Console.ReadLine()?.Trim();
+                resultado = Filtrar(e => e.Estado.Equals(estado, StringComparison.OrdinalIgnoreCase));
+                break;
+
+            case "3":
+                Console.Write("  Categoría: ");
+                string categoria = Console.ReadLine()?.Trim();
+                resultado = Filtrar(e => e.CategoriaEnvio.Equals(categoria, StringComparison.OrdinalIgnoreCase));
+                break;
+
+            case "4":
+                Console.Write("  Remitente (o parte del nombre): ");
+                string remitente = Console.ReadLine()?.Trim();
+                resultado = Filtrar(e => e.Remitente.Contains(remitente, StringComparison.OrdinalIgnoreCase));
+                break;
+
+            default:
+                Console.WriteLine("  Opción no válida.");
+                return;
+        }
+
+        MostrarResultados(resultado);
+    }
+
+    /// <summary>
+    /// Muestra un submenú para que el usuario elija el campo de ordenamiento
+    /// y llama a Ordenar(Func) con el criterio correspondiente.
+    /// </summary>
+    public void OrdenarEnvios()
+    {
+        Console.Clear();
+        Console.WriteLine("=== ORDENAR ENVÍOS ===\n");
+        Console.WriteLine("  Ordenar por:");
+        Console.WriteLine("  1. Fecha de registro (más reciente primero)");
+        Console.WriteLine("  2. Número de guía");
+        Console.WriteLine("  3. Estado");
+        Console.WriteLine("  4. Costo total (mayor a menor)");
+        Console.Write("\n  Seleccione: ");
+        string opcion = Console.ReadLine()?.Trim();
+
+        List<Envio> resultado = null;
+
+        switch (opcion)
+        {
+            case "1":
+                // Ordenar devuelve ascendente; para fecha más reciente primero invertimos
+                resultado = Ordenar(e => e.FechaEnvio)
+                                .AsEnumerable()
+                                .Reverse()
+                                .ToList();
+                break;
+
+            case "2":
+                resultado = Ordenar(e => e.NumeroGuia);
+                break;
+
+            case "3":
+                resultado = Ordenar(e => e.Estado);
+                break;
+
+            case "4":
+                resultado = Ordenar(e => e.CalcularCostoTotal())
+                                .AsEnumerable()
+                                .Reverse()
+                                .ToList();
+                break;
+
+            default:
+                Console.WriteLine("  Opción no válida.");
+                return;
+        }
+
+        MostrarResultados(resultado);
+    }
+
+    /// <summary>
+    /// Muestra una lista de envios por consola. Método auxiliar compartido
+    /// por FiltrarEnvios() y OrdenarEnvios() para no duplicar el foreach.
+    /// </summary>
+    private void MostrarResultados(List<Envio> lista)
+    {
+        Console.WriteLine();
+
+        if (lista == null || lista.Count == 0)
+        {
+            Console.WriteLine("  No se encontraron envíos con ese criterio.");
+            return;
+        }
+
+        Console.WriteLine($"  {lista.Count} envío(s) encontrado(s):");
+        Console.WriteLine(new string('-', 50));
+
+        foreach (Envio envio in lista)
+        {
+            envio.MostrarInformacion();
+            Console.WriteLine(new string('-', 50));
+        }
+    }
+
+
+
+
 
     /// <summary>
     /// Pide el numero de guia por consola, muestra los datos actuales y permite al usuario modificar los campos del envio.
