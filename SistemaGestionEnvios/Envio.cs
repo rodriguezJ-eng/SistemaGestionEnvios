@@ -15,7 +15,7 @@ public abstract class Envio
     private string _Remitente;
     private string _Destinatario;
 
-    public Envio(string numeroGuia, DateTime fechaEnvio, string origen, string destino, string estado, List<Paquete> paquetes, string categoriaEnvio, string remitente, string destinatario)
+    public Envio(DateTime fechaEnvio, string origen, string destino, string estado, List<Paquete> paquetes, string categoriaEnvio, string remitente, string destinatario)
     {
         FechaEnvio = fechaEnvio;
         Origen = origen;
