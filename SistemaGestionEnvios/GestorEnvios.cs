@@ -1,6 +1,14 @@
-﻿public class GestorEnvios
+﻿/// <summary>
+/// Clase encargada de gestioanr la coleccion de envios
+/// Contiene la logica de negocio y la interaccion con el usuario desde consola
+/// </summary>
+
+public class GestorEnvios
 {
+    // Lista donde ser almacenan todos los envios registrados del sistema
     private List<Envio> _Envios;
+
+    // ruta del archivo donde se guardan y cargan los datos de los envios
     private string _RutaEnvio;
 
     public List<Envio> Envios
@@ -21,8 +29,41 @@
         RutaEnvio = rutaEnvio; // Cabe aclarar que al referirse a ruta nos referimos a la ruta donde los datos seran guardados
     }
 
+    // METODOS CON DELEGADOS Func (nuevo commit)
+
     /// <summary>
-    /// Pide los datos por consola, crea los paquetes y registra un nuevo envio en la lista.
+    /// Filtra la lista de envios según un criterio personalizado usando un delegado de Func
+    /// permite filtrar por cualquier condición: tipo, estado, categoria, etc.
+    /// </summary>
+    /// <param name="criterio">Función que recibe un Envio y retorna true si cumple la condición.</param>
+    /// <returns>Lista de envios que cumple el criterio.</returns>
+    public List<Envio> Filtrar(Func<Envio, bool> criterio)
+    { return _Envios.Where(criterio).ToList(); }
+
+    /// <summary>
+    /// Ordena la lista de envios según un campo especificado usando un delegado Func
+    /// permite ordenar por cualquier propiedad: Fecha, numero de guia, estado, etc.
+    /// </summary>
+    /// <param name="criterio">Función que indica el campo por el cual ordenar.</param>
+    /// <returns>Lista de envios ordenada.</returns>
+    public List<Envio> Ordenar(Func<Envio, object> criterio)
+    {
+        return _Envios.OrderBy(criterio).ToList();
+    }
+
+    /// <summary>
+    /// Busca el primer envio que cumpla el criterio indicado usando un delegado Func.
+    /// Uso interno para buscar por cualquier condición.
+    /// </summary>
+    /// <param name="criterio">Función que recibe un Envio y retorna true si es el buscado</param>
+    /// <returns>El primer Envio que cumple el criterio, o null si no existe.</returns>
+    public Envio Buscar(Func<Envio, bool> criterio)
+    { return _Envios.FirstOrDefault(criterio); }
+
+    /// <summary>
+    /// Pide los datos por consola, 
+    /// crea los paquetes y registra 
+    /// un nuevo envio en la lista.
     /// </summary>
     public void RegistrarEnvio()
     {
@@ -64,6 +105,7 @@
             Console.WriteLine("Cantidad no válida.");
             return;
         }
+
         // creación de una lista vacía que acumula paquetes
         List<Paquete> paquetes = new List<Paquete>();
 
