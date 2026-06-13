@@ -6,11 +6,11 @@
 public class Paquete
 {
     
-    private string _CodigoPaquete;
-    private string _Contenido;
+    private string? _CodigoPaquete;
+    private string? _Contenido;
     private bool _EsFragil;
     private decimal _ValorDeclarado; // valor monetario declarado por el cliente, en caso de pérdida o daño, se reembolsa este valor.
-    private string _TipoPaquete;  // pequeño, mediano, grande, monetario, electrónico, perecedero, etc.
+    private string? _TipoPaquete;  // pequeño, mediano, grande, monetario, electrónico, perecedero, etc.
     private double _Peso; // en kg
     private double _Largo;
     private double _Alto;
@@ -29,60 +29,118 @@ public class Paquete
         Ancho = ancho;
     }
 
-    public string CodigoPaquete
+    public string? CodigoPaquete
     {
-        get { return _CodigoPaquete; }
-        set { _CodigoPaquete = value; }
+        get => _CodigoPaquete;
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException("Código de paquete obligatorio.");
+
+            if (value.Length != 8)
+                throw new ArgumentException("El código debe tener 8 caracteres.");
+
+            _CodigoPaquete = value;
+        }
     }
 
-    public string Contenido
+    public string? Contenido
     {
-        get { return _Contenido; }
-        set { _Contenido = value; }
+        get => _Contenido;
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException("Contenido obligatorio.");
+
+            if (value.Length < 3 || value.Length > 100)
+                throw new ArgumentException("Contenido inválido.");
+
+            _Contenido = value;
+        }
     }
-    
+
     public bool EsFragil
     {
-        get { return _EsFragil; }
-        set { _EsFragil = value; }
+        get => _EsFragil;
+        set => _EsFragil = value;
     }
 
     public decimal ValorDeclarado
     {
-        get { return _ValorDeclarado; }
-        set { _ValorDeclarado = value; }
+        get => _ValorDeclarado;
+        set
+        {
+            if (value < 0)
+                throw new ArgumentOutOfRangeException(nameof(value),
+                    "El valor declarado no puede ser negativo.");
+
+            _ValorDeclarado = value;
+        }
     }
 
-    public string TipoPaquete
+    public string? TipoPaquete
     {
-        get { return _TipoPaquete; }
-        set { _TipoPaquete = value; }
+        get => _TipoPaquete;
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException("Tipo de paquete obligatorio.");
+
+            _TipoPaquete = value;
+        }
     }
 
     public double Peso
     {
-        get { return _Peso; }
-        set { _Peso = value; }
+        get => _Peso;
+        set
+        {
+            if (value <= 0)
+                throw new ArgumentOutOfRangeException(nameof(value),
+                    "El peso debe ser mayor que cero.");
+
+            _Peso = value;
+        }
     }
 
     public double Largo
     {
-        get { return _Largo; }
-        set { _Largo = value; }
+        get => _Largo;
+        set
+        {
+            if (value <= 0)
+                throw new ArgumentOutOfRangeException(nameof(value),
+                    "El largo debe ser mayor que cero.");
+
+            _Largo = value;
+        }
     }
 
     public double Alto
     {
-        get { return _Alto; }
-        set { _Alto = value; }
+        get => _Alto;
+        set
+        {
+            if (value <= 0)
+                throw new ArgumentOutOfRangeException(nameof(value),
+                    "El alto debe ser mayor que cero.");
+
+            _Alto = value;
+        }
     }
 
     public double Ancho
     {
-        get { return _Ancho; }
-        set { _Ancho = value; }
-    }
+        get => _Ancho;
+        set
+        {
+            if (value <= 0)
+                throw new ArgumentOutOfRangeException(nameof(value),
+                    "El ancho debe ser mayor que cero.");
 
+            _Ancho = value;
+        }
+    }
 
     // Métodos
 

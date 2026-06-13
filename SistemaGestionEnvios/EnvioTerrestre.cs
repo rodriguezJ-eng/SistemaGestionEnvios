@@ -32,20 +32,47 @@ public sealed class EnvioTerrestre : Envio
     // Propiedades
     public int DistanciaKm
     {
-        get { return _DistanciaKm; }
-        set { _DistanciaKm = value; }
-    }
+        get => _DistanciaKm;
+        set
+        {
+            if (value <= 0)
+                throw new ArgumentOutOfRangeException(nameof(value),
+                    "La distancia debe ser mayor que cero.");
 
+            _DistanciaKm = value;
+        }
+    }
     public string PlacaCamion
     {
-        get { return _PlacaCamion; }
-        set { _PlacaCamion = value; }
+        get => _PlacaCamion;
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException("Placa obligatoria.");
+
+            if (value.Length < 6 || value.Length > 10)
+                throw new ArgumentException("La placa debe tener entre 6 y 10 caracteres.");
+
+            _PlacaCamion = value;
+        }
     }
 
     public string Ruta
     {
-        get { return _Ruta; }
-        set { _Ruta = value; }
+        get => _Ruta;
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException("Ruta obligatoria.");
+
+            if (value.Length < 3)
+                throw new ArgumentException("La ruta debe tener al menos 3 caracteres.");
+
+            if (value.Length > 100)
+                throw new ArgumentException("La ruta no puede superar los 100 caracteres.");
+
+            _Ruta = value;
+        }
     }
 
 
@@ -78,7 +105,7 @@ public sealed class EnvioTerrestre : Envio
         Console.WriteLine("  3. Entregado");
         Console.WriteLine("  4. Cancelado");
         Console.Write("  Seleccione: ");
-        string opcion = Console.ReadLine()?.Trim();
+        string? opcion = Console.ReadLine()?.Trim();
 
         switch (opcion)
         {

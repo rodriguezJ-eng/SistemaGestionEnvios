@@ -28,72 +28,119 @@ public abstract class Envio
         Destinatario = destinatario;
     }
 
-    public string NumeroGuia
+    public string? NumeroGuia
     {
-        get { return _NumeroGuia; }
+        get => _NumeroGuia;
         set
         {
             if (string.IsNullOrWhiteSpace(value))
-                throw new ArgumentException("El número de guía es obligatorio.");
+                throw new ArgumentException("Número de guía obligatorio.");
 
-            value = value.Trim();
+            if (value.Length != 10)
+                throw new ArgumentException("Debe tener exactamente 10 dígitos.");
 
             foreach (char c in value)
             {
                 if (!char.IsDigit(c))
-                    throw new ArgumentException("El número de guía solo puede contener dígitos.");
+                    throw new ArgumentException("Solo se permiten números.");
             }
 
             _NumeroGuia = value;
         }
-    }
 
+    }
     public DateTime FechaEnvio
     {
-        get { return _FechaEnvio; }
-        set { _FechaEnvio = value; }
-    }
+        get => _FechaEnvio;
+        set
+        {
+            if (value > DateTime.Now)
+                throw new ArgumentException("La fecha de envío no puede ser futura.");
 
-    public string Origen
+            _FechaEnvio = value;
+        }
+    }
+    public string? Origen
     {
-        get { return _Origen; }
-        set { _Origen = value; }
+        get => _Origen;
+        set => _Origen = ValidarLugar(value, "origen");
     }
-
     public string Destino
     {
-        get { return _Destino; }
-        set { _Destino = value; }
+        get => _Destino;
+        set => _Destino = ValidarLugar(value, "destino");
     }
 
     public string Estado
     {
-        get { return _Estado; }
-        set { _Estado = value; }
+        get => _Estado;
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException("Estado obligatorio.");
+
+            _Estado = value;
+        }
     }
 
     public List<Paquete> Paquetes
     {
-        get { return _Paquetes; }
-        set { _Paquetes = value; }
-    }
+        get => _Paquetes;
+        set
+        {
+            if (value == null || value.Count == 0)
+                throw new ArgumentException("Debe existir al menos un paquete.");
 
+            _Paquetes = value;
+        }
+    }
     public string CategoriaEnvio
     {
-        get { return _CategoriaEnvio; }
-        set { _CategoriaEnvio = value; }
-    }
+        get => _CategoriaEnvio;
+        set
+        {
+            if (value != "Nacional" && value != "Internacional")
+                throw new ArgumentException("Categoría inválida.");
 
+            _CategoriaEnvio = value;
+        }
+    }
     public string Remitente
     {
-        get { return _Remitente; }
-        set { _Remitente = value; }
-    }
+        get => _Remitente;
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException("Remitente obligatorio.");
 
+            _Remitente = value;
+        }
+    }
     public string Destinatario
+    
     {
         get { return _Destinatario; }
         set { _Destinatario = value; }
+    }
+   
+    private string ValidarLugar(string value, string campo)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            throw new ArgumentException($"{campo} obligatorio.");
+
+        if (value.Length < 3)
+            throw new ArgumentException($"{campo} debe tener al menos 3 caracteres.");
+
+        if (value.Length > 100)
+            throw new ArgumentException($"{campo} no puede superar los 100 caracteres.");
+
+        foreach (char c in value)
+        {
+            if (!char.IsLetter(c) && c != ' ')
+                throw new ArgumentException($"{campo} solo puede contener letras y espacios.");
+        }
+
+        return value;
     }
 
     /// <summary>
@@ -151,3 +198,4 @@ public abstract class Envio
     /// <returns>Descripcion del tiempo estimado de entrega.</returns>
     public abstract string CalcularTiempoEntrega();
 }
+
