@@ -35,26 +35,60 @@ public sealed class EnvioMaritimo : Envio
     // Propiedades
     public string NombreBarco
     {
-        get { return _NombreBarco; }
-        set { _NombreBarco = value; }
+        get => _NombreBarco;
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException("Nombre del barco obligatorio.");
+
+            if (value.Length < 3 || value.Length > 50)
+                throw new ArgumentException("Nombre del barco inválido.");
+
+            _NombreBarco = value;
+        }
     }
 
     public string PuertoOrigen
     {
-        get { return _PuertoOrigen; }
-        set { _PuertoOrigen = value; }
+        get => _PuertoOrigen;
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException("Puerto de origen obligatorio.");
+
+            if (value.Length < 3 || value.Length > 100)
+                throw new ArgumentException("Puerto de origen inválido.");
+
+            _PuertoOrigen = value;
+        }
     }
 
     public string PuertoDestino
     {
-        get { return _PuertoDestino; }
-        set { _PuertoDestino = value; }
+        get => _PuertoDestino;
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException("Puerto de destino obligatorio.");
+
+            if (value.Length < 3 || value.Length > 100)
+                throw new ArgumentException("Puerto de destino inválido.");
+
+            _PuertoDestino = value;
+        }
     }
 
     public int DiasNavegacion
     {
-        get { return _DiasNavegacion; }
-        set { _DiasNavegacion = value; }
+        get => _DiasNavegacion;
+        set
+        {
+            if (value <= 0)
+                throw new ArgumentOutOfRangeException(nameof(value),
+                    "Los días de navegación deben ser mayores que cero.");
+
+            _DiasNavegacion = value;
+        }
     }
 
     public override string TipoEnvio() => "Maritimo";

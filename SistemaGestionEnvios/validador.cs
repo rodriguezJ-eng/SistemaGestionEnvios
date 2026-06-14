@@ -2,7 +2,7 @@
 {
     public static string LeerNumeroGuia()
     {
-        string numeroGuia;
+        string? numeroGuia;
 
         do
         {
@@ -40,7 +40,7 @@
 
     public static string LeerNombre(string mensaje)
     {
-        string nombre;
+        string? nombre;
 
         do
         {
@@ -89,7 +89,7 @@
 
     public static string LeerLugar(string mensaje)
     {
-        string lugar;
+        string? lugar;
 
         do
         {
@@ -254,7 +254,7 @@
 
     public static string LeerCodigoPaquete()
     {
-        string codigo;
+        string? codigo;
 
         do
         {
@@ -297,7 +297,7 @@
 
     public static string LeerTexto(string mensaje, int minimo, int maximo)
     {
-        string texto;
+        string? texto;
 
         do
         {
@@ -337,13 +337,39 @@
             Console.WriteLine("  3. Grande");
             Console.Write("  Seleccione: ");
 
-            string opcion = Console.ReadLine()?.Trim();
+            string? opcion = Console.ReadLine()?.Trim();
 
             if (opcion == "1") return "Pequeño";
             if (opcion == "2") return "Mediano";
             if (opcion == "3") return "Grande";
 
             Console.WriteLine("Error: Seleccione 1, 2 o 3.");
+
+        } while (true);
+    }
+
+    public static string? LeerPlaca()
+    {
+        string? placa;
+
+        do
+        {
+            Console.Write("  Placa del camión: ");
+            placa = Console.ReadLine()?.Trim();
+
+            if (string.IsNullOrWhiteSpace(placa))
+            {
+                Console.WriteLine("Error: La placa es obligatoria.");
+                continue;
+            }
+
+            if (placa.Length < 6 || placa.Length > 10)
+            {
+                Console.WriteLine("Error: La placa debe tener entre 6 y 10 caracteres.");
+                continue;
+            }
+
+            return placa;
 
         } while (true);
     }

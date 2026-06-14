@@ -33,20 +33,58 @@ public sealed class EnvioAereo : Envio
     // Propiedades
     public string NumeroVuelo
     {
-        get { return _NumeroVuelo; }
-        set { _NumeroVuelo = value; }
-    }
+        get => _NumeroVuelo;
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException("Número de vuelo obligatorio.");
 
+            if (value.Length < 3 || value.Length > 15)
+                throw new ArgumentException("El número de vuelo debe tener entre 3 y 15 caracteres.");
+
+            _NumeroVuelo = value;
+        }
+    }
     public string AeropuertoOrigen
     {
-        get { return _AeropuertoOrigen;}
-        set { _AeropuertoOrigen = value; }
+        get => _AeropuertoOrigen;
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException("Aeropuerto de origen obligatorio.");
+
+            if (value.Length < 3 || value.Length > 100)
+                throw new ArgumentException("El aeropuerto de origen debe tener entre 3 y 100 caracteres.");
+
+            foreach (char c in value)
+            {
+                if (!char.IsLetter(c) && c != ' ')
+                    throw new ArgumentException("El aeropuerto de origen solo puede contener letras y espacios.");
+            }
+
+            _AeropuertoOrigen = value;
+        }
     }
 
     public string AeropuertoDestino
     {
-        get { return _AeropuertoDestino;}
-        set { _AeropuertoDestino = value; }
+        get => _AeropuertoDestino;
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException("Aeropuerto de destino obligatorio.");
+
+            if (value.Length < 3 || value.Length > 100)
+                throw new ArgumentException("El aeropuerto de destino debe tener entre 3 y 100 caracteres.");
+
+            foreach (char c in value)
+            {
+                if (!char.IsLetter(c) && c != ' ')
+                    throw new ArgumentException("El aeropuerto de destino solo puede contener letras y espacios.");
+            }
+
+            _AeropuertoDestino = value;
+        }
     }
 
     public override string TipoEnvio() => "Aereo";

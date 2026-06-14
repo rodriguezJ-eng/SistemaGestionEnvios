@@ -29,7 +29,7 @@ public class GestorEnvios
         Console.WriteLine("  2. Marítimo");
         Console.WriteLine("  3. Aéreo");
         Console.Write("  Seleccione: ");
-        string tipo = Console.ReadLine()?.Trim();
+        string? tipo = Console.ReadLine()?.Trim();
 
         if (tipo != "1" && tipo != "2" && tipo != "3")
         {
@@ -62,11 +62,10 @@ public class GestorEnvios
             {
                 Console.WriteLine("\n  === Datos del Envío Terrestre ===");
                 Console.Write("  Placa del camión: ");
-                string placa = Console.ReadLine()?.Trim();
-                Console.Write("  Ruta            : ");
-                string ruta = Console.ReadLine()?.Trim();
+                string? placa = Validador.LeerPlaca();
+                string ruta = Validador.LeerTexto("  Ruta            : ", 3, 100);
                 Console.Write("  Distancia (km)  : ");
-                int.TryParse(Console.ReadLine()?.Trim(), out int km);
+                int km = Validador.LeerEnteroPositivo("  Distancia (km)  : ");
 
                 envio = _service.RegistrarTerrestre(remitente, destinatario, origen, destino, categoria, paquetes, km, placa, ruta);
             }
@@ -74,26 +73,22 @@ public class GestorEnvios
             {
                 Console.WriteLine("\n  === Datos del Envío Marítimo ===");
                 Console.Write("  Nombre del barco  : ");
-                string barco = Console.ReadLine()?.Trim();
+                string barco = Validador.LeerNombre("  Nombre del barco  : ");
                 Console.Write("  Puerto de origen  : ");
-                string puertoOrigen = Console.ReadLine()?.Trim();
+                string puertoOrigen = Validador.LeerLugar("  Puerto de origen  : ");
                 Console.Write("  Puerto de destino : ");
-                string puertoDestino = Console.ReadLine()?.Trim();
+                string puertoDestino = Validador.LeerLugar("  Puerto de destino : ");
                 Console.Write("  Días de navegación: ");
-                int.TryParse(Console.ReadLine()?.Trim(), out int dias);
+                int dias = Validador.LeerEnteroPositivo("  Días de navegación: ");
 
                 envio = _service.RegistrarMaritimo(remitente, destinatario, origen, destino, categoria, paquetes, barco, puertoOrigen, puertoDestino, dias);
             }
             else
             {
                 Console.WriteLine("\n  === Datos del Envío Aéreo ===");
-                Console.Write("  Número de vuelo      : ");
-                string vuelo = Console.ReadLine()?.Trim();
-                Console.Write("  Aeropuerto de origen : ");
-                string aerOrigen = Console.ReadLine()?.Trim();
-                Console.Write("  Aeropuerto de destino: ");
-                string aerDestino = Console.ReadLine()?.Trim();
-
+                string vuelo = Validador.LeerTexto("  Número de vuelo      : ", 3, 15);
+                string aerOrigen = Validador.LeerLugar("  Aeropuerto de origen :  ");
+                string aerDestino = Validador.LeerLugar("  Aeropuerto de destino:  ");
                 envio = _service.RegistrarAereo(remitente, destinatario, origen, destino, categoria, paquetes, vuelo, aerOrigen, aerDestino);
             }
 
@@ -198,14 +193,10 @@ public class GestorEnvios
     public void OrdenarEnvios()
     {
         Console.Clear();
-        Console.WriteLine("=== ORDENAR ENVÍOS ===\n");
-        Console.WriteLine("  Ordenar por:");
-        Console.WriteLine("  1. Fecha de registro (más reciente primero)");
-        Console.WriteLine("  2. Número de guía");
-        Console.WriteLine("  3. Estado");
-        Console.WriteLine("  4. Costo total (mayor a menor)");
-        Console.Write("\n  Seleccione: ");
-        string opcion = Console.ReadLine()?.Trim();
+        Console.WriteLine("=== BUSCAR ENVIO ===");
+
+        Console.WriteLine("Numero de guia: ");
+        string guia = Console.ReadLine()?.Trim();
 
         List<Envio> resultado = null;
 
@@ -216,6 +207,10 @@ public class GestorEnvios
                 break;
             case "2":
                 resultado = _service.Ordenar(e => e.NumeroGuia);
+                break;
+            case "3":
+                resultado = _service.Ordenar(e => e.Estado);
+                break;
                 break;
             case "3":
                 resultado = _service.Ordenar(e => e.Estado);
@@ -235,8 +230,9 @@ public class GestorEnvios
     {
         Console.Clear();
         Console.WriteLine("== MODIFICAR ENVIO ==\n");
-        Console.Write("  Número de guía a modificar: ");
-        string guia = Console.ReadLine()?.Trim();
+
+        Console.Write("  Numero de guia a modificar: ");
+        string? guia = Console.ReadLine()?.Trim();
 
         Envio envio = _service.BuscarPorGuia(guia);
 
@@ -251,45 +247,45 @@ public class GestorEnvios
         Console.WriteLine("\n  Nuevos datos (Enter para conservar el actual):\n");
 
         Console.Write($"  Remitente [{envio.Remitente}]: ");
-        string remitente = Console.ReadLine()?.Trim();
+        string? remitente = Console.ReadLine()?.Trim();
+        string? remitente = Console.ReadLine()?.Trim();
+        if (!string.IsNullOrEmpty(remitente)) envio.Remitente = remitente;
 
-        Console.Write($"  Destinatario [{envio.Destinatario}]: ");
-        string destinatario = Console.ReadLine()?.Trim();
+        string? destinatario = Console.ReadLine()?.Trim();
+        if (!string.IsNullOrEmpty(destinatario)) envio.Destinatario = destinatario;
 
         Console.Write($"  Origen [{envio.Origen}]: ");
-        string origen = Console.ReadLine()?.Trim();
+        string? origen = Console.ReadLine()?.Trim();
+        if (!string.IsNullOrEmpty(origen)) envio.Origen = origen;
+
 
         Console.Write($"  Destino [{envio.Destino}]: ");
         string destino = Console.ReadLine()?.Trim();
+        if (!string.IsNullOrEmpty(destino)) envio.Destino = destino;
 
-        Console.Write($"  Categoría [{envio.CategoriaEnvio}]: ");
+        Console.Write($"  Categoria [{envio.CategoriaEnvio}]: ");
         string categoria = Console.ReadLine()?.Trim();
+        if (!string.IsNullOrEmpty(categoria)) envio.CategoriaEnvio = categoria;
 
-        try
-        {
-            _service.Modificar(guia, remitente, destinatario, origen, destino, categoria);
-
-            Console.Write("\n  Actualizar estado? (s/n): ");
+        Console.Write("\n  Actualizar estado? (s/n): ");
             if (Console.ReadLine()?.Trim().ToLower() == "s")
             {
                 envio.ActualizarEstado();  // muestra submenú de estados en consola
-                // una vez que ActualizarEstado() asigna el nuevo estado al objeto,
                 // el Service no necesita hacer nada más (ya es la misma referencia)
             }
-
-            Console.WriteLine("\n  Envío modificado correctamente.");
+            }
         }
         catch (Exception ex)
-        {
-            Console.WriteLine($"\n  Error: {ex.Message}");
         }
-    }
+        }
+        Console.Clear();
+        Console.WriteLine("== ELIMINAR ENVIO ==\n");
 
-    public void EliminarEnvio()
     {
         Console.Clear();
         Console.WriteLine("== ELIMINAR ENVIO ==\n");
-        Console.Write("  Número de guía a eliminar: ");
+
+        Console.Write("  Numero de guia a eliminar: ");
         string guia = Console.ReadLine()?.Trim();
 
         Envio envio = _service.BuscarPorGuia(guia);
@@ -306,7 +302,7 @@ public class GestorEnvios
         Console.Write("\n  Confirma la eliminación? (s/n): ");
         if (Console.ReadLine()?.Trim().ToLower() != "s")
         {
-            Console.WriteLine("  Eliminación cancelada.");
+            Console.WriteLine("  Eliminacion cancelada.");
             return;
         }
 
