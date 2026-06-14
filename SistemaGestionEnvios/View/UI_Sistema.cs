@@ -24,6 +24,7 @@
     {
         Console.Write("\n  Presione Enter para continuar...");
         Console.ReadLine();
+        Console.Clear();
     }
 
     public static void UI_RegistrarNuevoEnvio()

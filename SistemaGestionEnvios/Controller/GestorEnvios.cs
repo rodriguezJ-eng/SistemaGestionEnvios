@@ -196,10 +196,6 @@ public class GestorEnvios
             case "3":
                 resultado = _service.Ordenar(e => e.Estado);
                 break;
-                break;
-            case "3":
-                resultado = _service.Ordenar(e => e.Estado);
-                break;
             case "4":
                 resultado = _service.Ordenar(e => e.CalcularCostoTotal()).AsEnumerable().Reverse().ToList();
                 break;
