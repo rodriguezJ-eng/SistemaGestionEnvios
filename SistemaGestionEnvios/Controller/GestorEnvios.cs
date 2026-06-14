@@ -23,14 +23,7 @@ public class GestorEnvios
 
     public void RegistrarEnvio()
     {
-        Console.Clear();
-        Console.WriteLine("══ REGISTRAR NUEVO ENVÍO ══\n");
-
-        Console.WriteLine("  Tipo de envío:");
-        Console.WriteLine("  1. Terrestre");
-        Console.WriteLine("  2. Marítimo");
-        Console.WriteLine("  3. Aéreo");
-        Console.Write("  Seleccione: ");
+        UI_Sistema.UI_RegistrarNuevoEnvio();
         string? tipo = Console.ReadLine()?.Trim();
 
         if (tipo != "1" && tipo != "2" && tipo != "3")
@@ -146,14 +139,7 @@ public class GestorEnvios
 
     public void FiltrarEnvios()
     {
-        Console.Clear();
-        Console.WriteLine("=== FILTRAR ENVÍOS ===\n");
-        Console.WriteLine("  Filtrar por:");
-        Console.WriteLine("  1. Tipo de envío (Terrestre / Marítimo / Aéreo)");
-        Console.WriteLine("  2. Estado (Pendiente / En transito / Entregado / Cancelado)");
-        Console.WriteLine("  3. Categoría de envío");
-        Console.WriteLine("  4. Remitente");
-        Console.Write("\n  Seleccione: ");
+        UI_Sistema.UI_FiltrarEnvios();
         string opcion = Console.ReadLine()?.Trim();
 
         List<Envio> resultado = null;
@@ -194,11 +180,8 @@ public class GestorEnvios
 
     public void OrdenarEnvios()
     {
-        Console.Clear();
-        Console.WriteLine("=== BUSCAR ENVIO ===");
-
-        Console.WriteLine("Numero de guia: ");
-        string guia = Console.ReadLine()?.Trim();
+        UI_Sistema.UI_OrdenarEnvios();
+        string opcion = Console.ReadLine()?.Trim();
 
         List<Envio> resultado = null;
 
