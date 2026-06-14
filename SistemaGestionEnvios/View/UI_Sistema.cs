@@ -62,4 +62,42 @@
         Console.WriteLine("  4. Costo total (mayor a menor)");
         Console.Write("\n  Seleccione: ");
     }
+
+    public static void UI_DatosEnvioBasicos()
+    {
+        Console.Clear();
+        Console.WriteLine("══ DATOS DEL ENVIO ══\n");
+    }
+
+    public static void  UI_DatosPaqueteDelEnvio(int numero)
+    {
+        Console.Clear();
+        Console.WriteLine($"══ DATOS DEL PAQUETE #{numero} ══\n");
+    }
+
+    public static void UI_DatosEnvioTerrestre()
+    {
+        Console.Clear();
+        Console.WriteLine("══ DATOS DEL ENVÍO TERRESTRE ══\n");
+    }
+
+    public static void UI_DatosEnvioMaritimo()
+    {
+        Console.Clear();
+        Console.WriteLine("══ DATOS DEL ENVÍO MARÍTIMO ══\n");
+    }
+
+    public static void UI_DatosEnvioAereo()
+    {
+        Console.Clear();
+        Console.WriteLine("══ DATOS DEL ENVÍO AÉREO ══\n");
+    }   
+
+    public static void UI_DatosGeneralesEnvio(Envio envio)
+    {
+        Console.Clear();
+        Console.WriteLine("══ DATOS GENERALES DEL ENVÍO ══\n");
+        envio.MostrarInformacion();
+        Console.WriteLine("\n  Detalles específicos:");
+    }
 }

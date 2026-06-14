@@ -32,6 +32,7 @@ public class GestorEnvios
             return;
         }
 
+        UI_Sistema.UI_DatosEnvioBasicos();
         string remitente = Validador.LeerNombre("  Remitente      : ");
         string destinatario = Validador.LeerNombre("  Destinatario   : ");
         string origen = Validador.LeerLugar("  Origen         : ");
@@ -55,7 +56,7 @@ public class GestorEnvios
         {
             if (tipo == "1")
             {
-                Console.WriteLine("\n  === Datos del Envío Terrestre ===");
+                UI_Sistema.UI_DatosEnvioTerrestre();
                 Console.Write("  Placa del camión: ");
                 string? placa = Validador.LeerPlaca();
                 string ruta = Validador.LeerTexto("  Ruta            : ", 3, 100);
@@ -66,7 +67,7 @@ public class GestorEnvios
             }
             else if (tipo == "2")
             {
-                Console.WriteLine("\n  === Datos del Envío Marítimo ===");
+                UI_Sistema.UI_DatosEnvioMaritimo();
                 Console.Write("  Nombre del barco  : ");
                 string barco = Validador.LeerNombre("  Nombre del barco  : ");
                 Console.Write("  Puerto de origen  : ");
@@ -80,12 +81,13 @@ public class GestorEnvios
             }
             else
             {
-                Console.WriteLine("\n  === Datos del Envío Aéreo ===");
+                UI_Sistema.UI_DatosEnvioAereo();
                 string vuelo = Validador.LeerTexto("  Número de vuelo      : ", 3, 15);
                 string aerOrigen = Validador.LeerLugar("  Aeropuerto de origen :  ");
                 string aerDestino = Validador.LeerLugar("  Aeropuerto de destino:  ");
                 envio = _service.RegistrarAereo(remitente, destinatario, origen, destino, categoria, paquetes, vuelo, aerOrigen, aerDestino);
             }
+            UI_Sistema.UI_DatosGeneralesEnvio(envio);
 
             Console.WriteLine($"\n  Envío registrado. Número de guía asignado: {envio.NumeroGuia}");
         }
@@ -313,7 +315,7 @@ public class GestorEnvios
 
         for (int i = 1; i <= cantidad; i++)
         {
-            Console.WriteLine($"\n  -- Paquete {i} --");
+            UI_Sistema.UI_DatosPaqueteDelEnvio(i);
             string codigoPaquete = Validador.LeerCodigoPaquete();
             string contenido = Validador.LeerTexto("  Contenido      : ", 3, 100);
             bool esFragil = Validador.LeerSiNo("  Es frágil? (s/n): ");
