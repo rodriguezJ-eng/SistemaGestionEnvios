@@ -110,13 +110,16 @@ public class GestorEnvios
             return;
         }
 
-        Console.WriteLine($"  Total: {envios.Count} envío(s)");
-        Console.WriteLine(new string('-', 50));
+        Console.WriteLine($"  Total: {envios.Count} envío(s)\n");
 
+        int contador = 1;
         foreach (Envio envio in envios)
         {
+            string Encabezado = $"{new string('-', 10)} ENVIO #{contador} | NUMERO DE GUIA: {envio.NumeroGuia} {new string('-', 10)}";
+            Console.WriteLine($"\n{Encabezado}");
             envio.MostrarInformacion();
-            Console.WriteLine(new string('-', 50));
+                Console.WriteLine(new string('-', Encabezado.Length));
+            contador++;
         }
     }
 
