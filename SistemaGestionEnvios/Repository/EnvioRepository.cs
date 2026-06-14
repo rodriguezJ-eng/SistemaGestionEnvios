@@ -4,7 +4,7 @@
 /// Si mañana se cambia a XML o base de datos, solo se reemplaza esta clase
 /// por una nueva implementación de IEnvioRepository - el resto del sistema no cambia.
 /// </summary>
-public class EnvioRepositoryMemoria : IEnvioRepository
+public class EnvioRepository : IEnvioRepository
 {
     // La lista vive aquí y solo aquí. Nadie más la toca directamente.
     private readonly List<Envio> _envios = new List<Envio>();
