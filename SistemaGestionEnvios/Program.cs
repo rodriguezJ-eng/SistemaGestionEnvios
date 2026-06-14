@@ -2,7 +2,7 @@
 // Conecta las 3 capas: crea el Repository, se lo pasa al Service, y el Service al GestorEnvios.
 // Si mañana se cambia a XML, solo cambia la línea del Repository — nada más.
 
-IEnvioRepository repository = new EnvioRepositoryMemoria();
+IEnvioRepository repository = new EnvioRepository();
 EnvioService service = new EnvioService(repository);
 GestorEnvios gestor = new GestorEnvios(service);
 

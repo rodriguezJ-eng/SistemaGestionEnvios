@@ -1,4 +1,6 @@
-﻿/// <summary>
+﻿using System.Security.Cryptography.X509Certificates;
+
+/// <summary>
 /// Capa de presentación (UI de consola).
 /// 
 /// Responsabilidades:
@@ -248,7 +250,6 @@ public class GestorEnvios
 
         Console.Write($"  Remitente [{envio.Remitente}]: ");
         string? remitente = Console.ReadLine()?.Trim();
-        string? remitente = Console.ReadLine()?.Trim();
         if (!string.IsNullOrEmpty(remitente)) envio.Remitente = remitente;
 
         string? destinatario = Console.ReadLine()?.Trim();
@@ -267,20 +268,27 @@ public class GestorEnvios
         string categoria = Console.ReadLine()?.Trim();
         if (!string.IsNullOrEmpty(categoria)) envio.CategoriaEnvio = categoria;
 
-        Console.Write("\n  Actualizar estado? (s/n): ");
+        try
+        {
+            _service.Modificar(guia, remitente, destinatario, origen, destino, categoria);
+
+            Console.Write("\n  Actualizar estado? (s/n): ");
             if (Console.ReadLine()?.Trim().ToLower() == "s")
             {
+
+
                 envio.ActualizarEstado();  // muestra submenú de estados en consola
                 // el Service no necesita hacer nada más (ya es la misma referencia)
             }
-            }
+            Console.WriteLine("\n  Envío modificado correctamente.");
         }
         catch (Exception ex)
+        {
+            Console.WriteLine($"\n  Error: {ex.Message}");
         }
-        }
-        Console.Clear();
-        Console.WriteLine("== ELIMINAR ENVIO ==\n");
+    }
 
+    public void EliminarEnvio()
     {
         Console.Clear();
         Console.WriteLine("== ELIMINAR ENVIO ==\n");
