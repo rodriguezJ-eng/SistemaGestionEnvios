@@ -21,6 +21,9 @@ public class GestorEnvios
         _service = service ?? throw new ArgumentNullException(nameof(service));
     }
 
+    /// <summary>
+    /// Método para realizar un nuevo envío.
+    /// </summary>
     public void RegistrarEnvio()
     {
         UI_Sistema.UI_RegistrarNuevoEnvio();
@@ -32,11 +35,11 @@ public class GestorEnvios
             return;
         }
 
+        string categoria = Validador.LeerCategoria();
         string remitente = Validador.LeerNombre("  Remitente      : ");
         string destinatario = Validador.LeerNombre("  Destinatario   : ");
         string origen = Validador.LeerLugar("  Origen         : ");
         string destino = Validador.LeerLugar("  Destino        : ");
-        string categoria = Validador.LeerCategoria();
 
         Console.Write("\n  Cuántos paquetes tiene el envío: ");
         int.TryParse(Console.ReadLine()?.Trim(), out int cantidadPaquetes);
@@ -89,6 +92,9 @@ public class GestorEnvios
         }
     }
 
+    /// <summary>
+    /// Método para Mostrar lo Envíos en la consola 
+    /// </summary>
     public void MostrarEnvios()
     {
         Console.Clear();
@@ -111,7 +117,10 @@ public class GestorEnvios
             Console.WriteLine(new string('-', 50));
         }
     }
-       
+
+    /// <summary>
+    /// Busca un Envío por su número de guia
+    /// </summary>    
     public void BuscarEnvio()
     {
         Console.Clear();
@@ -131,6 +140,13 @@ public class GestorEnvios
         encontrado.MostrarInformacionEnvio();
     }
 
+    /// <summary>
+    /// Filtra los envios en categorias como 
+    /// su Tipo: (Terrestre / Maritimo / Aereo)
+    /// El estado (Pendiente,Cancelado,Entregado)
+    /// La Categoria (Nacional/Internacional)
+    /// Por Remitente
+    /// </summary>
     public void FiltrarEnvios()
     {
         UI_Sistema.UI_FiltrarEnvios();
@@ -201,6 +217,7 @@ public class GestorEnvios
         MostrarResultados(resultado);
     }
 
+
     public void ModificarEnvio()
     {
         Console.Clear();
@@ -231,7 +248,6 @@ public class GestorEnvios
         Console.Write($"  Origen [{envio.Origen}]: ");
         string? origen = Console.ReadLine()?.Trim();
         if (!string.IsNullOrEmpty(origen)) envio.Origen = origen;
-
 
         Console.Write($"  Destino [{envio.Destino}]: ");
         string? destino = Console.ReadLine()?.Trim();
@@ -340,12 +356,12 @@ public class GestorEnvios
         }
 
         Console.WriteLine($"  {lista.Count} envío(s) encontrado(s):");
-        Console.WriteLine(new string('-', 50));
+        Console.WriteLine(new string('.', 50));
 
         foreach (Envio envio in lista)
         {
             envio.MostrarInformacionEnvio();
-            Console.WriteLine(new string('-', 50));
+            Console.WriteLine(new string('~', 50));
         }
     }
 
@@ -354,17 +370,3 @@ public class GestorEnvios
     /// </summary>
     public int ContarEnvios() => _service.ContarEnvios();
 }
-
-/*
- GestorEnvios        ->  coordinar: tomar lo que leyó la UI y pasarlo al Service  
-EnvioService        ->  lógica de negocio
-IEnvioRepository    ->  persistencia
- */
-
-/*
- * ¿La lógica pertenece a UN objeto?     / va en la clase (Paquete, Envio)
-¿Involucra estado previo o varios     / va en el Service
- objetos coordinados?      
-¿Es interacción con el usuario?       /va en GestorEnvios / UI
-¿Es acceso a datos?                   / va en Repository
- */
