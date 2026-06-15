@@ -27,18 +27,6 @@
         Console.Clear();
     }
 
-    public static void UI_FiltrarEnvios()
-    {
-        Console.Clear();
-        Console.WriteLine("=== FILTRAR ENVÍOS ===\n");
-        Console.WriteLine("  Filtrar por:");
-        Console.WriteLine("  1. Tipo de envío (Terrestre / Marítimo / Aéreo)");
-        Console.WriteLine("  2. Estado (Pendiente / En transito / Entregado / Cancelado)");
-        Console.WriteLine("  3. Categoría de envío");
-        Console.WriteLine("  4. Remitente");
-        Console.Write("\n  Seleccione: ");
-    }
-
     public static void UI_OrdenarEnvios()
     {
         Console.Clear();
@@ -49,5 +37,25 @@
         Console.WriteLine("  3. Estado");
         Console.WriteLine("  4. Costo total (mayor a menor)");
         Console.Write("\n  Seleccione: ");
+    }
+
+    public static void MostrarResultados(List<Envio> lista)
+    {
+        Console.WriteLine();
+
+        if (lista == null || lista.Count == 0)
+        {
+            Console.WriteLine("  No se encontraron envíos con ese criterio.");
+            return;
+        }
+
+        Console.WriteLine($"  {lista.Count} envío(s) encontrado(s):");
+        Console.WriteLine(new string('-', 50));
+
+        foreach (Envio envio in lista)
+        {
+            envio.MostrarInformacion();
+            Console.WriteLine(new string('-', 50));
+        }
     }
 }

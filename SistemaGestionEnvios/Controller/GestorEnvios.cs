@@ -122,7 +122,7 @@ public class GestorEnvios
 
     public void FiltrarEnvios()
     {
-        UI_Sistema.UI_FiltrarEnvios();
+        UI_FiltarEnvios.UI_Menu();
         string? opcion = Console.ReadLine()?.Trim();
 
         List<Envio> resultado = null;
@@ -130,35 +130,35 @@ public class GestorEnvios
         switch (opcion)
         {
             case "1":
-                Console.Write("  Tipo (Terrestre / Maritimo / Aereo): ");
+                UI_FiltrarEnvios.UI_OpcionBusqueda(1);
                 string? tipo = Console.ReadLine()?.Trim();
                 resultado = _service.Filtrar(e => e.TipoEnvio().Equals(tipo, StringComparison.OrdinalIgnoreCase));
                 break;
 
             case "2":
-                Console.Write("  Estado: ");
+                UI_FiltrarEnvios.UI_OpcionBusqueda(2);
                 string? estado = Console.ReadLine()?.Trim();
                 resultado = _service.Filtrar(e => e.Estado.Equals(estado, StringComparison.OrdinalIgnoreCase));
                 break;
 
             case "3":
-                Console.Write("  Categoría: ");
+                UI_FiltrarEnvios.UI_OpcionBusqueda(3);
                 string? categoria = Console.ReadLine()?.Trim();
                 resultado = _service.Filtrar(e => e.CategoriaEnvio.Equals(categoria, StringComparison.OrdinalIgnoreCase));
                 break;
 
             case "4":
-                Console.Write("  Remitente (o parte del nombre): ");
+                UI_FiltrarEnvios.UI_OpcionBusqueda(4);
                 string? remitente = Console.ReadLine()?.Trim();
                 resultado = _service.Filtrar(e => e.Remitente.Contains(remitente, StringComparison.OrdinalIgnoreCase));
                 break;
 
             default:
-                Console.WriteLine("  Opción no válida.");
+                Console.WriteLine("  Opción no válida.");// este debe de venir de UI_validacion
                 return;
         }
 
-        MostrarResultados(resultado);
+        UI_Sistema.MostrarResultados(resultado);
     }
 
     public void OrdenarEnvios()
@@ -187,7 +187,7 @@ public class GestorEnvios
                 return;
         }
 
-        MostrarResultados(resultado);
+        UI_Sistema.MostrarResultados(resultado);
     }
 
     public void ModificarEnvio()
@@ -316,26 +316,6 @@ public class GestorEnvios
         }
 
         return paquetes;
-    }
-
-    private void MostrarResultados(List<Envio> lista)
-    {
-        Console.WriteLine();
-
-        if (lista == null || lista.Count == 0)
-        {
-            Console.WriteLine("  No se encontraron envíos con ese criterio.");
-            return;
-        }
-
-        Console.WriteLine($"  {lista.Count} envío(s) encontrado(s):");
-        Console.WriteLine(new string('-', 50));
-
-        foreach (Envio envio in lista)
-        {
-            envio.MostrarInformacion();
-            Console.WriteLine(new string('-', 50));
-        }
     }
 
     /// <summary>
