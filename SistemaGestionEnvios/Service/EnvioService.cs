@@ -90,7 +90,7 @@ public class EnvioService
         => _repository.ObtenerPorGuia(numeroGuia);
 
     /// <summary>
-    /// Filtra envíos usando un criterio Func. La lógica de qué filtrar la decide el caller (GestorEnvios),
+    /// Filtra envíos usando un criterio Func. La lógica de qué filtrar la decide el GestorEnvios,
     /// pero la ejecución del filtro siempre pasa por el repository.
     /// </summary>
     public List<Envio> Filtrar(Func<Envio, bool> criterio)
