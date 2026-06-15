@@ -14,7 +14,7 @@ public class EnvioService
     private readonly IEnvioRepository _repository;
 
     // El repository se inyecta: el Service no crea ni conoce la implementación concreta.
-    // Esto permite cambiar EnvioRepositoryMemoria por EnvioRepositoryXml sin tocar el Service.
+    // Esto permite cambiar EnvioRepository por EnvioRepositoryXml sin tocar el Service.
     public EnvioService(IEnvioRepository repository)
     {
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
