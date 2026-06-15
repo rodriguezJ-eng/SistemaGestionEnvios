@@ -9,6 +9,14 @@ public sealed class EnvioMaritimo : Envio
     private string _PuertoDestino;
     private int _DiasNavegacion;
 
+    // Requerido por XmlSerializer 
+    public EnvioMaritimo() : base()
+    {
+        _NombreBarco = string.Empty;
+        _PuertoOrigen = string.Empty;
+        _PuertoDestino = string.Empty;
+    }
+
     // Constructor
 
     public EnvioMaritimo(

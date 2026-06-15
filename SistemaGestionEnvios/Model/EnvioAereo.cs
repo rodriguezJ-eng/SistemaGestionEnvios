@@ -9,6 +9,14 @@ public sealed class EnvioAereo : Envio
     private string _AeropuertoOrigen;
     private string _AeropuertoDestino;
 
+    // Requerido por XmlSerializer
+    public EnvioAereo() : base()
+    {
+        _NumeroVuelo = string.Empty;
+        _AeropuertoOrigen = string.Empty;
+        _AeropuertoDestino = string.Empty;
+    }
+
     // Constructor
 
     public EnvioAereo(

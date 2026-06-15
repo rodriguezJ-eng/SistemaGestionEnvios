@@ -16,6 +16,14 @@ public class Paquete
     private double _Alto;
     private double _Ancho;
 
+    // Requerido por XmlSerializer 
+    public Paquete()
+    {
+        _CodigoPaquete = string.Empty;
+        _Contenido = string.Empty;
+        _TipoPaquete = string.Empty;
+    }
+
     public Paquete(string codigoPaquete, string contenido, bool esFragil, decimal valorDeclarado, string tipoPaquete, double peso, double largo, double alto, double ancho)
     {
         CodigoPaquete = codigoPaquete;

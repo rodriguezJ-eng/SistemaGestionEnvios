@@ -3,6 +3,11 @@
 /// Define los atributos y comportamientos comunes a todos los tipos de envio.
 /// </summary>
 using System;
+using System.Xml.Serialization;
+
+[XmlInclude(typeof(EnvioTerrestre))]
+[XmlInclude(typeof(EnvioMaritimo))]
+[XmlInclude(typeof(EnvioAereo))]
 public abstract class Envio
 {
     private string _NumeroGuia;
@@ -14,6 +19,19 @@ public abstract class Envio
     private string _CategoriaEnvio;
     private string _Remitente;
     private string _Destinatario;
+
+    // Constructor vacio para el Xml
+    protected Envio()
+    {
+        _NumeroGuia = string.Empty;
+        _Origen = string.Empty;
+        _Destino = string.Empty;
+        _Estado = string.Empty;
+        _CategoriaEnvio = string.Empty;
+        _Remitente = string.Empty;
+        _Destinatario = string.Empty;
+        _Paquetes = new List<Paquete>();
+    }
 
     public Envio(DateTime fechaEnvio, string origen, string destino, string estado, List<Paquete> paquetes, string categoriaEnvio, string remitente, string destinatario)
     {
@@ -34,7 +52,7 @@ public abstract class Envio
         get { return _NumeroGuia; }
         // El setter es internal: solo las clases del mismo ensamblado (las hijas) pueden asignarlo.
         // El usuario nunca lo toca directamente.
-        internal set
+        set
         {
             if (string.IsNullOrWhiteSpace(value))
                 throw new ArgumentException("El número de guía es obligatorio.");
@@ -110,12 +128,12 @@ public abstract class Envio
         }
     }
     public string Destinatario
-    
+
     {
         get { return _Destinatario; }
         set { _Destinatario = value; }
     }
-   
+
     private string ValidarLugar(string value, string campo)
     {
         if (string.IsNullOrWhiteSpace(value))
@@ -187,4 +205,3 @@ public abstract class Envio
     /// <returns>Descripcion del tiempo estimado de entrega.</returns>
     public abstract string CalcularTiempoEntrega();
 }
-
