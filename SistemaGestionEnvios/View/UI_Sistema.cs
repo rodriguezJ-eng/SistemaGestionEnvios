@@ -6,7 +6,7 @@
         Console.WriteLine("╔══════════════════════════════════════════════╗");
         Console.WriteLine("║      SISTEMA DE GESTIÓN DE ENVÍOS            ║");
         Console.WriteLine("╠══════════════════════════════════════════════╣");
-        Console.WriteLine($"║  Envíos registrados: {gestor.ContarEnvios(),-25}║");
+        Console.WriteLine($"║ Envíos registrados: {gestor.ContarEnvios(),-25}║");
         Console.WriteLine("╠══════════════════════════════════════════════╣");
         Console.WriteLine("║  1. Registrar envío                          ║");
         Console.WriteLine("║  2. Mostrar todos los envíos                 ║");
