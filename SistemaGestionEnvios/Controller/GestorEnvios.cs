@@ -57,7 +57,6 @@ public class GestorEnvios
             if (tipo == "1")
             {
                 UI_Sistema.UI_DatosEnvioTerrestre();
-                Console.Write("  Placa del camión: ");
                 string? placa = Validador.LeerPlaca();
                 string ruta = Validador.LeerTexto("  Ruta            : ", 3, 100);
                 int km = Validador.LeerEnteroPositivo("  Distancia (km)  : ");
@@ -67,8 +66,6 @@ public class GestorEnvios
             else if (tipo == "2")
             {
                 UI_Sistema.UI_DatosEnvioMaritimo();
-                Console.Write("  Nombre del barco  : ");
-                Console.WriteLine("\n  === Datos del Envío Marítimo ===");
                 string barco = Validador.LeerNombre("  Nombre del barco  : ");
                 string puertoOrigen = Validador.LeerLugar("  Puerto de origen  : ");
                 string puertoDestino = Validador.LeerLugar("  Puerto de destino : ");
