@@ -143,9 +143,9 @@ public sealed class EnvioAereo : Envio
         Console.WriteLine($"  Estado actualizado a: {Estado}");
     }
 
-    public override void MostrarInformacion()
+    public override void MostrarInformacionEnvio()
     {
-        base.MostrarInformacion();
+        base.MostrarInformacionEnvio();
         Console.WriteLine($"  Vuelo         : {NumeroVuelo}");
         Console.WriteLine($"  Aerop. Origen : {AeropuertoOrigen}");
         Console.WriteLine($"  Aerop. Destino: {AeropuertoDestino}");

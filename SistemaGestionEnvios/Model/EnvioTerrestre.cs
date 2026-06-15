@@ -133,9 +133,9 @@ public sealed class EnvioTerrestre : Envio
 
 
     // Muestra la informacion del envio incluyendo datos propios
-    public override void MostrarInformacion()
+    public override void MostrarInformacionEnvio()
     {
-        base.MostrarInformacion();
+        base.MostrarInformacionEnvio();
         Console.WriteLine($"  Placa Camion  : {PlacaCamion}");
         Console.WriteLine($"  Ruta          : {Ruta}");
         Console.WriteLine($"  Distancia     : {DistanciaKm} km");

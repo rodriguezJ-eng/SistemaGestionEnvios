@@ -145,9 +145,9 @@ public sealed class EnvioMaritimo : Envio
 
     }
 
-    public override void MostrarInformacion()
+    public override void MostrarInformacionEnvio()
     {
-        base.MostrarInformacion();
+        base.MostrarInformacionEnvio();
         Console.WriteLine($"  Barco         : {NombreBarco}");
         Console.WriteLine($"  Puerto Origen : {PuertoOrigen}");
         Console.WriteLine($"  Puerto Destino: {PuertoDestino}");

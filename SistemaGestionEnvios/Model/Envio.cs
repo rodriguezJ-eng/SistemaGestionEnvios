@@ -158,7 +158,7 @@ public abstract class Envio
     /// Muestra en consola toda la informacion del envio y sus paquetes.
     /// </summary>
 
-    public virtual void MostrarInformacion()
+    public virtual void MostrarInformacionEnvio()
     {
         Console.WriteLine($"  Código        : {NumeroGuia}");
         Console.WriteLine($"  Tipo          : {TipoEnvio()}");

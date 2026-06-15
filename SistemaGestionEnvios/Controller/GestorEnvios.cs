@@ -107,7 +107,7 @@ public class GestorEnvios
 
         foreach (Envio envio in envios)
         {
-            envio.MostrarInformacion();
+            envio.MostrarInformacionEnvio();
             Console.WriteLine(new string('-', 50));
         }
     }
@@ -128,7 +128,7 @@ public class GestorEnvios
         }
 
         Console.WriteLine("\n  Envío encontrado:");
-        encontrado.MostrarInformacion();
+        encontrado.MostrarInformacionEnvio();
     }
 
     public void FiltrarEnvios()
@@ -218,7 +218,7 @@ public class GestorEnvios
         }
 
         Console.WriteLine("\n  Datos actuales:");
-        envio.MostrarInformacion();
+        envio.MostrarInformacionEnvio();
         Console.WriteLine("\n  Nuevos datos (Enter para conservar el actual):\n");
 
         Console.Write($"  Remitente [{envio.Remitente}]: ");
@@ -278,7 +278,7 @@ public class GestorEnvios
         }
 
         Console.WriteLine("\n  Datos del envío a eliminar:");
-        envio.MostrarInformacion();
+        envio.MostrarInformacionEnvio();
 
         Console.Write("\n  Confirma la eliminación? (s/n): ");
         if (Console.ReadLine()?.Trim().ToLower() != "s")
@@ -344,7 +344,7 @@ public class GestorEnvios
 
         foreach (Envio envio in lista)
         {
-            envio.MostrarInformacion();
+            envio.MostrarInformacionEnvio();
             Console.WriteLine(new string('-', 50));
         }
     }
@@ -354,3 +354,17 @@ public class GestorEnvios
     /// </summary>
     public int ContarEnvios() => _service.ContarEnvios();
 }
+
+/*
+ GestorEnvios        ->  coordinar: tomar lo que leyó la UI y pasarlo al Service  
+EnvioService        ->  lógica de negocio
+IEnvioRepository    ->  persistencia
+ */
+
+/*
+ * ¿La lógica pertenece a UN objeto?     / va en la clase (Paquete, Envio)
+¿Involucra estado previo o varios     / va en el Service
+ objetos coordinados?      
+¿Es interacción con el usuario?       /va en GestorEnvios / UI
+¿Es acceso a datos?                   / va en Repository
+ */
