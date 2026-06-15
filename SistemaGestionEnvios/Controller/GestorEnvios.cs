@@ -21,7 +21,7 @@ public class GestorEnvios
         _service = service ?? throw new ArgumentNullException(nameof(service));
     }
 
-    public void RegistrarEnvio()
+    public void RegistrarEnvio() // listo en gestor
     {
         UI_RegistrarEnvio.UI_RegistrarNuevoEnvio();
         string? tipo = Console.ReadLine()?.Trim();
@@ -89,7 +89,7 @@ public class GestorEnvios
         }
     }
 
-    public void MostrarEnvios()
+    public void MostrarEnvios() // listo en gestor
     {
         UI_MostrarEnvios.UI_MostrarEnviosTitulo();
 
@@ -106,21 +106,18 @@ public class GestorEnvios
        
     public void BuscarEnvio()
     {
-        Console.Clear();
-        Console.WriteLine("=== BUSCAR ENVIO POR NÚMERO DE GUÍA ===\n");
-        Console.Write("  Número de guía: ");
+        UI_BuscarEnvio.UI_Titulo();
         string? guia = Console.ReadLine()?.Trim();
 
         Envio encontrado = _service.BuscarPorGuia(guia);
 
         if (encontrado == null)
         {
-            Console.WriteLine("\n  No se encontró ningún envío con ese número de guía.");
+            Console.WriteLine("\n  No se encontró ningún envío con ese número de guía."); // se tendria que en la clase UI_validaciones estandarizar un comentario de error.
             return;
         }
 
-        Console.WriteLine("\n  Envío encontrado:");
-        encontrado.MostrarInformacion();
+        UI_BuscarEnvio.UI_EnvioEncontrado();
     }
 
     public void FiltrarEnvios()
