@@ -166,14 +166,16 @@ public class Paquete
     /// Muestra en consola la informacion principal del paquete.
     /// </summary>
 
-    public void MostrarInformacion()
+    public void MostrarInformacionPaquete()
     {
+        Console.WriteLine("===== Paquete ==============================");
         Console.WriteLine($"Codigo           : {CodigoPaquete}");
         Console.WriteLine($"Contenido        : {Contenido}");
         Console.WriteLine($"Valor Declarado  : {ValorDeclarado}");
         Console.WriteLine($"Tipo Paquete     : {TipoPaquete}");
         Console.WriteLine($"Peso             : {Peso}");
         Console.WriteLine($"Fragil           : {(EsFragil ? "Sí" : "No")}");
+        Console.WriteLine("===================================\n");
     }
 
     /// <summary>
