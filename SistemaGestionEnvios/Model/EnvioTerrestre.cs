@@ -8,7 +8,12 @@ public sealed class EnvioTerrestre : Envio
     private string _PlacaCamion;
     private string _Ruta;
 
-
+    // Requerido por XmlSerializer
+    public EnvioTerrestre() : base()
+    {
+        _PlacaCamion = string.Empty;
+        _Ruta = string.Empty;
+    }
 
     // Constructor
 
