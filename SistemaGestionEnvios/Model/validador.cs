@@ -327,7 +327,7 @@
         } while (true);
     }
 
-    public static string LeerTipoPaquete()
+ /*   public static string LeerTipoPaquete()
     {
         do
         {
@@ -346,6 +346,29 @@
             Console.WriteLine("Error: Seleccione 1, 2 o 3.");
 
         } while (true);
+    }
+ */
+    public static string CalcularTipoPaquete(double peso, double alto, double ancho, double largo)
+    {
+        if (peso <= 0 || alto <= 0 || ancho <= 0 || largo <= 0)
+            return "Error: debe ser mayor a 0";
+
+        double volumen = alto * ancho * largo;
+        string categoriaTamaño = "";
+        string categoriaPeso = "";
+
+        // se busca saber la descripcion del objeto con respecto a su volumen
+        if (volumen <= 10000) categoriaTamaño = "pequeño";
+        else if (volumen <= 50000) categoriaTamaño = "Mediano";
+        else categoriaTamaño = "Grande";
+
+        // se busca saber la descripcion del objeto conrespecto a su oeso
+        if (peso <= 2) categoriaPeso = "Liviano";
+        else if (peso <= 10) categoriaPeso = "Moderado";
+        else categoriaPeso = "Pesado";
+
+        //se presenta si es pequeño mediano o grande con respecto a volumen, y presenta liviano moderado o pesado dependiendo en kg
+        return $"{categoriaTamaño} y {categoriaPeso}";
     }
 
     public static string? LeerPlaca()
