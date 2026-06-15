@@ -14,22 +14,22 @@ public static class UI_FiltrarEnvios
 
     public static void UI_OpcionBusqueda(int op)
     {
-        if(op = 1)
+        if(op == 1)
         {
             Console.Write("  Tipo (Terrestre / Maritimo / Aereo): ");
             return;
         }
-        else if (op = 2)
+        else if (op == 2)
         {
             Console.Write("  Estado: ");
             return;
         }
-        else if (op = 3)
+        else if (op == 3)
         {
             Console.Write("  Categoría: ");
             return;
         }
-        else if (op = 4)
+        else if (op == 4)
         {
             Console.Write("  Remitente (o parte del nombre): ");
             return;
