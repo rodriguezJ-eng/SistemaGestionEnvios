@@ -120,7 +120,7 @@ public class GestorEnvios
         UI_BuscarEnvio.UI_EnvioEncontrado();
     }
 
-    public void FiltrarEnvios()
+    public void FiltrarEnvios() //listo
     {
         UI_FiltarEnvios.UI_Menu();
         string? opcion = Console.ReadLine()?.Trim();
@@ -161,7 +161,7 @@ public class GestorEnvios
         UI_Sistema.MostrarResultados(resultado);
     }
 
-    public void OrdenarEnvios()
+    public void OrdenarEnvios() // listo
     {
         UI_OrdenarEnvios.UI_Menu();
         string? opcion = Console.ReadLine()?.Trim();
@@ -190,43 +190,39 @@ public class GestorEnvios
         UI_Sistema.MostrarResultados(resultado);
     }
 
-    public void ModificarEnvio()
+    public void ModificarEnvio() // pendiente
     {
-        Console.Clear();
-        Console.WriteLine("== MODIFICAR ENVIO ==\n");
-
-        Console.Write("  Numero de guia a modificar: ");
+        UI_ModificarEnvio.Menu();
         string? guia = Console.ReadLine()?.Trim();
 
         Envio envio = _service.BuscarPorGuia(guia);
 
         if (envio == null)
         {
-            Console.WriteLine("\n  Envío no encontrado.");
+            Console.WriteLine("\n  Envío no encontrado."); // esto debe ir en UI_Validacion
             return;
         }
 
-        Console.WriteLine("\n  Datos actuales:");
-        envio.MostrarInformacion();
-        Console.WriteLine("\n  Nuevos datos (Enter para conservar el actual):\n");
+        UI_ModificarEnvio.MostrarDatosActuales(envio);
+        UI_ModificarEnvio.TituloFormulario();
 
-        Console.Write($"  Remitente [{envio.Remitente}]: ");
+        UI_ModificarEnvio.Formulario(1, envio);
         string? remitente = Console.ReadLine()?.Trim();
         if (!string.IsNullOrEmpty(remitente)) envio.Remitente = remitente;
 
+        UI_ModificarEnvio.Formulario(2, envio);
         string? destinatario = Console.ReadLine()?.Trim();
         if (!string.IsNullOrEmpty(destinatario)) envio.Destinatario = destinatario;
 
-        Console.Write($"  Origen [{envio.Origen}]: ");
+        UI_ModificarEnvio.Formulario(3, envio);
         string? origen = Console.ReadLine()?.Trim();
         if (!string.IsNullOrEmpty(origen)) envio.Origen = origen;
 
-
-        Console.Write($"  Destino [{envio.Destino}]: ");
+        UI_ModificarEnvio.Formulario(4, envio);
         string? destino = Console.ReadLine()?.Trim();
         if (!string.IsNullOrEmpty(destino)) envio.Destino = destino;
 
-        Console.Write($"  Categoria [{envio.CategoriaEnvio}]: ");
+        UI_ModificarEnvio.Formulario(5, envio);
         string? categoria = Console.ReadLine()?.Trim();
         if (!string.IsNullOrEmpty(categoria)) envio.CategoriaEnvio = categoria;
 
@@ -252,10 +248,9 @@ public class GestorEnvios
 
     public void EliminarEnvio()
     {
-        Console.Clear();
-        Console.WriteLine("== ELIMINAR ENVIO ==\n");
+        UI_EliminarEnvio.Titulo();
 
-        Console.Write("  Numero de guia a eliminar: ");
+        UI_EliminarEnvio.PedirNumeroGuia();
         string? guia = Console.ReadLine()?.Trim();
 
         Envio envio = _service.BuscarPorGuia(guia);
@@ -265,11 +260,10 @@ public class GestorEnvios
             Console.WriteLine("\n  Envío no encontrado.");
             return;
         }
+            
+        UI_EliminarEnvio.DatosDelEnvio(envio);
 
-        Console.WriteLine("\n  Datos del envío a eliminar:");
-        envio.MostrarInformacion();
-
-        Console.Write("\n  Confirma la eliminación? (s/n): ");
+        UI_EliminarEnvio.PreguntaDeSeguridadParaInseguros();
         if (Console.ReadLine()?.Trim().ToLower() != "s")
         {
             Console.WriteLine("  Eliminacion cancelada.");
