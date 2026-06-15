@@ -23,7 +23,7 @@ public class GestorEnvios
 
     public void RegistrarEnvio()
     {
-        UI_Sistema.UI_RegistrarNuevoEnvio();
+        UI_RegistrarEnvio.UI_RegistrarNuevoEnvio();
         string? tipo = Console.ReadLine()?.Trim();
 
         if (tipo != "1" && tipo != "2" && tipo != "3")
@@ -32,7 +32,7 @@ public class GestorEnvios
             return;
         }
 
-        UI_Sistema.UI_DatosEnvioBasicos();
+        UI_RegistrarEnvio.UI_DatosEnvioBasicos();
         string remitente = Validador.LeerNombre("  Remitente      : ");
         string destinatario = Validador.LeerNombre("  Destinatario   : ");
         string origen = Validador.LeerLugar("  Origen         : ");
@@ -56,7 +56,7 @@ public class GestorEnvios
         {
             if (tipo == "1")
             {
-                UI_Sistema.UI_DatosEnvioTerrestre();
+                UI_RegistrarEnvio.UI_DatosEnvioTerrestre();
                 string? placa = Validador.LeerPlaca();
                 string ruta = Validador.LeerTexto("  Ruta            : ", 3, 100);
                 int km = Validador.LeerEnteroPositivo("  Distancia (km)  : ");
@@ -65,7 +65,7 @@ public class GestorEnvios
             }
             else if (tipo == "2")
             {
-                UI_Sistema.UI_DatosEnvioMaritimo();
+                UI_RegistrarEnvio.UI_DatosEnvioMaritimo();
                 string barco = Validador.LeerNombre("  Nombre del barco  : ");
                 string puertoOrigen = Validador.LeerLugar("  Puerto de origen  : ");
                 string puertoDestino = Validador.LeerLugar("  Puerto de destino : ");
@@ -75,15 +75,13 @@ public class GestorEnvios
             }
             else
             {
-                UI_Sistema.UI_DatosEnvioAereo();
+                UI_RegistrarEnvio.UI_DatosEnvioAereo();
                 string vuelo = Validador.LeerTexto("  Número de vuelo      : ", 3, 15);
                 string aerOrigen = Validador.LeerLugar("  Aeropuerto de origen :  ");
                 string aerDestino = Validador.LeerLugar("  Aeropuerto de destino:  ");
                 envio = _service.RegistrarAereo(remitente, destinatario, origen, destino, categoria, paquetes, vuelo, aerOrigen, aerDestino);
             }
-            UI_Sistema.UI_DatosGeneralesEnvio(envio);
-
-            Console.WriteLine($"\n  Envío registrado. Número de guía asignado: {envio.NumeroGuia}");
+            UI_RegistrarEnvio.UI_DatosGeneralesEnvio(envio);
         }
         catch (Exception ex)
         {
@@ -93,8 +91,7 @@ public class GestorEnvios
 
     public void MostrarEnvios()
     {
-        Console.Clear();
-        Console.WriteLine("=== LISTA DE ENVIOS ===\n");
+        UI_MostrarEnvios.UI_MostrarEnviosTitulo();
 
         List<Envio> envios = _service.ObtenerTodos();
 
@@ -104,17 +101,7 @@ public class GestorEnvios
             return;
         }
 
-        Console.WriteLine($"  Total: {envios.Count} envío(s)\n");
-
-        int contador = 1;
-        foreach (Envio envio in envios)
-        {
-            string Encabezado = $"{new string('-', 10)} ENVIO #{contador} | NUMERO DE GUIA: {envio.NumeroGuia} {new string('-', 10)}";
-            Console.WriteLine($"\n{Encabezado}");
-            envio.MostrarInformacion();
-                Console.WriteLine(new string('-', Encabezado.Length));
-            contador++;
-        }
+        UI_MostrarEnvios.UI_MostrarEnviosListados(envios);
     }
        
     public void BuscarEnvio()
@@ -312,7 +299,7 @@ public class GestorEnvios
 
         for (int i = 1; i <= cantidad; i++)
         {
-            UI_Sistema.UI_DatosPaqueteDelEnvio(i);
+            UI_RegistrarEnvio.UI_DatosPaqueteDelEnvio(i);
             string codigoPaquete = Validador.LeerCodigoPaquete();
             string contenido = Validador.LeerTexto("  Contenido      : ", 3, 100);
             bool esFragil = Validador.LeerSiNo("  Es frágil? (s/n): ");
