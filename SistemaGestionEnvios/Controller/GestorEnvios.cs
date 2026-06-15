@@ -163,7 +163,7 @@ public class GestorEnvios
 
     public void OrdenarEnvios()
     {
-        UI_Sistema.UI_OrdenarEnvios();
+        UI_OrdenarEnvios.UI_Menu();
         string? opcion = Console.ReadLine()?.Trim();
 
         List<Envio> resultado = null;
@@ -183,7 +183,7 @@ public class GestorEnvios
                 resultado = _service.Ordenar(e => e.CalcularCostoTotal()).AsEnumerable().Reverse().ToList();
                 break;
             default:
-                Console.WriteLine("  Opción no válida.");
+                Console.WriteLine("  Opción no válida.");// este debe de venir de UI_validacion
                 return;
         }
 
