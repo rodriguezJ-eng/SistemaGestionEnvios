@@ -10,6 +10,6 @@ public static class UI_BuscarEnvio
     public static void UI_EnvioEncontrado(Envio encontrado)
     {
         Console.WriteLine("\n  Envío encontrado:");
-        encontrado.MostrarInformacion();
+        encontrado.MostrarInformacionEnvio();
     }
 }

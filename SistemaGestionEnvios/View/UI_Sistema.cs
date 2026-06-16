@@ -42,7 +42,7 @@
 
         foreach (Envio envio in lista)
         {
-            envio.MostrarInformacion();
+            envio.MostrarInformacionEnvio();
             Console.WriteLine(new string('-', 50));
         }
     }

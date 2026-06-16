@@ -11,7 +11,7 @@ public static class UI_ModificarEnvio
     public static void MostrarDatosActuales(Envio envio)
     {
         Console.WriteLine("\n  Datos actuales:");
-        envio.MostrarInformacion();
+        envio.MostrarInformacionEnvio();
     }
 
     public static void TituloFormulario()

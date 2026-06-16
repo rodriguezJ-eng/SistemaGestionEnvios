@@ -15,7 +15,7 @@ public static class UI_MostrarEnvios
         {
             string Encabezado = $"{new string('-', 10)} ENVIO #{contador} | NUMERO DE GUIA: {envio.NumeroGuia} {new string('-', 10)}";
             Console.WriteLine($"\n{Encabezado}");
-            envio.MostrarInformacion();
+            envio.MostrarInformacionEnvio();
             Console.WriteLine(new string('-', Encabezado.Length));
             contador++;
         }
