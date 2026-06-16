@@ -24,9 +24,9 @@ public class GestorEnvios
     /// <summary>
     /// Método para realizar un nuevo envío.
     /// </summary>
-    public void RegistrarEnvio()
+    public void RegistrarEnvio() // listo en gestor
     {
-        UI_Sistema.UI_RegistrarNuevoEnvio();
+        UI_RegistrarEnvio.UI_RegistrarNuevoEnvio();
         string? tipo = Console.ReadLine()?.Trim();
 
         if (tipo != "1" && tipo != "2" && tipo != "3")
@@ -35,6 +35,7 @@ public class GestorEnvios
             return;
         }
 
+        UI_RegistrarEnvio.UI_DatosEnvioBasicos();
         string categoria = Validador.LeerCategoria();
         string remitente = Validador.LeerNombre("  Remitente      : ");
         string destinatario = Validador.LeerNombre("  Destinatario   : ");
@@ -58,7 +59,7 @@ public class GestorEnvios
         {
             if (tipo == "1")
             {
-                Console.WriteLine("\n  === Datos del Envío Terrestre ===");
+                UI_RegistrarEnvio.UI_DatosEnvioTerrestre();
                 string? placa = Validador.LeerPlaca();
                 string ruta = Validador.LeerTexto("  Ruta            : ", 3, 100);
                 int km = Validador.LeerEnteroPositivo("  Distancia (km)  : ");
@@ -67,7 +68,7 @@ public class GestorEnvios
             }
             else if (tipo == "2")
             {
-                Console.WriteLine("\n  === Datos del Envío Marítimo ===");
+                UI_RegistrarEnvio.UI_DatosEnvioMaritimo();
                 string barco = Validador.LeerNombre("  Nombre del barco  : ");
                 string puertoOrigen = Validador.LeerLugar("  Puerto de origen  : ");
                 string puertoDestino = Validador.LeerLugar("  Puerto de destino : ");
@@ -77,14 +78,13 @@ public class GestorEnvios
             }
             else
             {
-                Console.WriteLine("\n  === Datos del Envío Aéreo ===");
+                UI_RegistrarEnvio.UI_DatosEnvioAereo();
                 string vuelo = Validador.LeerTexto("  Número de vuelo      : ", 3, 15);
                 string aerOrigen = Validador.LeerLugar("  Aeropuerto de origen :  ");
                 string aerDestino = Validador.LeerLugar("  Aeropuerto de destino:  ");
                 envio = _service.RegistrarAereo(remitente, destinatario, origen, destino, categoria, paquetes, vuelo, aerOrigen, aerDestino);
             }
-
-            Console.WriteLine($"\n  Envío registrado. Número de guía asignado: {envio.NumeroGuia}");
+            UI_RegistrarEnvio.UI_DatosGeneralesEnvio(envio);
         }
         catch (Exception ex)
         {
@@ -95,10 +95,9 @@ public class GestorEnvios
     /// <summary>
     /// Método para Mostrar lo Envíos en la consola 
     /// </summary>
-    public void MostrarEnvios()
+    public void MostrarEnvios() // listo en gestor
     {
-        Console.Clear();
-        Console.WriteLine("=== LISTA DE ENVIOS ===\n");
+        UI_MostrarEnvios.UI_MostrarEnviosTitulo();
 
         List<Envio> envios = _service.ObtenerTodos();
 
@@ -108,14 +107,7 @@ public class GestorEnvios
             return;
         }
 
-        Console.WriteLine($"  Total: {envios.Count} envío(s)");
-        Console.WriteLine(new string('-', 50));
-
-        foreach (Envio envio in envios)
-        {
-            envio.MostrarInformacionEnvio();
-            Console.WriteLine(new string('-', 50));
-        }
+        UI_MostrarEnvios.UI_MostrarEnviosListados(envios);
     }
 
     /// <summary>
@@ -123,21 +115,18 @@ public class GestorEnvios
     /// </summary>    
     public void BuscarEnvio()
     {
-        Console.Clear();
-        Console.WriteLine("=== BUSCAR ENVIO POR NÚMERO DE GUÍA ===\n");
-        Console.Write("  Número de guía: ");
+        UI_BuscarEnvio.UI_Titulo();
         string? guia = Console.ReadLine()?.Trim();
 
         Envio encontrado = _service.BuscarPorGuia(guia);
 
         if (encontrado == null)
         {
-            Console.WriteLine("\n  No se encontró ningún envío con ese número de guía.");
+            Console.WriteLine("\n  No se encontró ningún envío con ese número de guía."); // se tendria que en la clase UI_validaciones estandarizar un comentario de error.
             return;
         }
 
-        Console.WriteLine("\n  Envío encontrado:");
-        encontrado.MostrarInformacionEnvio();
+        UI_BuscarEnvio.UI_EnvioEncontrado(encontrado);
     }
 
     /// <summary>
@@ -147,9 +136,9 @@ public class GestorEnvios
     /// La Categoria (Nacional/Internacional)
     /// Por Remitente
     /// </summary>
-    public void FiltrarEnvios()
+    public void FiltrarEnvios() //listo
     {
-        UI_Sistema.UI_FiltrarEnvios();
+        UI_FiltrarEnvios.UI_Menu();
         string? opcion = Console.ReadLine()?.Trim();
 
         List<Envio> resultado = null;
@@ -157,40 +146,40 @@ public class GestorEnvios
         switch (opcion)
         {
             case "1":
-                Console.Write("  Tipo (Terrestre / Maritimo / Aereo): ");
+                UI_FiltrarEnvios.UI_OpcionBusqueda(1);
                 string? tipo = Console.ReadLine()?.Trim();
                 resultado = _service.Filtrar(e => e.TipoEnvio().Equals(tipo, StringComparison.OrdinalIgnoreCase));
                 break;
 
             case "2":
-                Console.Write("  Estado: ");
+                UI_FiltrarEnvios.UI_OpcionBusqueda(2);
                 string? estado = Console.ReadLine()?.Trim();
                 resultado = _service.Filtrar(e => e.Estado.Equals(estado, StringComparison.OrdinalIgnoreCase));
                 break;
 
             case "3":
-                Console.Write("  Categoría: ");
+                UI_FiltrarEnvios.UI_OpcionBusqueda(3);
                 string? categoria = Console.ReadLine()?.Trim();
                 resultado = _service.Filtrar(e => e.CategoriaEnvio.Equals(categoria, StringComparison.OrdinalIgnoreCase));
                 break;
 
             case "4":
-                Console.Write("  Remitente (o parte del nombre): ");
+                UI_FiltrarEnvios.UI_OpcionBusqueda(4);
                 string? remitente = Console.ReadLine()?.Trim();
                 resultado = _service.Filtrar(e => e.Remitente.Contains(remitente, StringComparison.OrdinalIgnoreCase));
                 break;
 
             default:
-                Console.WriteLine("  Opción no válida.");
+                Console.WriteLine("  Opción no válida.");// este debe de venir de UI_validacion
                 return;
         }
 
-        MostrarResultados(resultado);
+        UI_Sistema.MostrarResultados(resultado);
     }
 
-    public void OrdenarEnvios()
+    public void OrdenarEnvios() // listo
     {
-        UI_Sistema.UI_OrdenarEnvios();
+        UI_OrdenarEnvios.UI_Menu();
         string? opcion = Console.ReadLine()?.Trim();
 
         List<Envio> resultado = null;
@@ -210,50 +199,46 @@ public class GestorEnvios
                 resultado = _service.Ordenar(e => e.CalcularCostoTotal()).AsEnumerable().Reverse().ToList();
                 break;
             default:
-                Console.WriteLine("  Opción no válida.");
+                Console.WriteLine("  Opción no válida.");// este debe de venir de UI_validacion
                 return;
         }
 
-        MostrarResultados(resultado);
+        UI_Sistema.MostrarResultados(resultado);
     }
 
-
-    public void ModificarEnvio()
+    public void ModificarEnvio() // pendiente
     {
-        Console.Clear();
-        Console.WriteLine("== MODIFICAR ENVIO ==\n");
-
-        Console.Write("  Numero de guia a modificar: ");
+        UI_ModificarEnvio.Menu();
         string? guia = Console.ReadLine()?.Trim();
 
         Envio envio = _service.BuscarPorGuia(guia);
 
         if (envio == null)
         {
-            Console.WriteLine("\n  Envío no encontrado.");
+            Console.WriteLine("\n  Envío no encontrado."); // esto debe ir en UI_Validacion
             return;
         }
 
-        Console.WriteLine("\n  Datos actuales:");
-        envio.MostrarInformacionEnvio();
-        Console.WriteLine("\n  Nuevos datos (Enter para conservar el actual):\n");
+        UI_ModificarEnvio.MostrarDatosActuales(envio);
+        UI_ModificarEnvio.TituloFormulario();
 
-        Console.Write($"  Remitente [{envio.Remitente}]: ");
+        UI_ModificarEnvio.Formulario(1, envio);
         string? remitente = Console.ReadLine()?.Trim();
         if (!string.IsNullOrEmpty(remitente)) envio.Remitente = remitente;
 
+        UI_ModificarEnvio.Formulario(2, envio);
         string? destinatario = Console.ReadLine()?.Trim();
         if (!string.IsNullOrEmpty(destinatario)) envio.Destinatario = destinatario;
 
-        Console.Write($"  Origen [{envio.Origen}]: ");
+        UI_ModificarEnvio.Formulario(3, envio);
         string? origen = Console.ReadLine()?.Trim();
         if (!string.IsNullOrEmpty(origen)) envio.Origen = origen;
 
-        Console.Write($"  Destino [{envio.Destino}]: ");
+        UI_ModificarEnvio.Formulario(4, envio);
         string? destino = Console.ReadLine()?.Trim();
         if (!string.IsNullOrEmpty(destino)) envio.Destino = destino;
 
-        Console.Write($"  Categoria [{envio.CategoriaEnvio}]: ");
+        UI_ModificarEnvio.Formulario(5, envio);
         string? categoria = Console.ReadLine()?.Trim();
         if (!string.IsNullOrEmpty(categoria)) envio.CategoriaEnvio = categoria;
 
@@ -279,10 +264,9 @@ public class GestorEnvios
 
     public void EliminarEnvio()
     {
-        Console.Clear();
-        Console.WriteLine("== ELIMINAR ENVIO ==\n");
+        UI_EliminarEnvio.Titulo();
 
-        Console.Write("  Numero de guia a eliminar: ");
+        UI_EliminarEnvio.PedirNumeroGuia();
         string? guia = Console.ReadLine()?.Trim();
 
         Envio envio = _service.BuscarPorGuia(guia);
@@ -292,11 +276,10 @@ public class GestorEnvios
             Console.WriteLine("\n  Envío no encontrado.");
             return;
         }
+            
+        UI_EliminarEnvio.DatosDelEnvio(envio);
 
-        Console.WriteLine("\n  Datos del envío a eliminar:");
-        envio.MostrarInformacionEnvio();
-
-        Console.Write("\n  Confirma la eliminación? (s/n): ");
+        UI_EliminarEnvio.PreguntaDeSeguridadParaInseguros();
         if (Console.ReadLine()?.Trim().ToLower() != "s")
         {
             Console.WriteLine("  Eliminacion cancelada.");
@@ -323,7 +306,7 @@ public class GestorEnvios
 
         for (int i = 1; i <= cantidad; i++)
         {
-            Console.WriteLine($"\n  -- Paquete {i} --");
+            UI_RegistrarEnvio.UI_DatosPaqueteDelEnvio(i);
             string codigoPaquete = Validador.LeerCodigoPaquete();
             string contenido = Validador.LeerTexto("  Contenido      : ", 3, 100);
             bool esFragil = Validador.LeerSiNo("  Es frágil? (s/n): ");
@@ -343,26 +326,6 @@ public class GestorEnvios
         }
 
         return paquetes;
-    }
-
-    private void MostrarResultados(List<Envio> lista)
-    {
-        Console.WriteLine();
-
-        if (lista == null || lista.Count == 0)
-        {
-            Console.WriteLine("  No se encontraron envíos con ese criterio.");
-            return;
-        }
-
-        Console.WriteLine($"  {lista.Count} envío(s) encontrado(s):");
-        Console.WriteLine(new string('.', 50));
-
-        foreach (Envio envio in lista)
-        {
-            envio.MostrarInformacionEnvio();
-            Console.WriteLine(new string('~', 50));
-        }
     }
 
     /// <summary>

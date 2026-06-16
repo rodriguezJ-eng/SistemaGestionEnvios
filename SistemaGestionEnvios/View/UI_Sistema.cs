@@ -6,7 +6,7 @@
         Console.WriteLine("╔══════════════════════════════════════════════╗");
         Console.WriteLine("║      SISTEMA DE GESTIÓN DE ENVÍOS            ║");
         Console.WriteLine("╠══════════════════════════════════════════════╣");
-        Console.WriteLine($"║ Envíos registrados: {gestor.ContarEnvios(),-25}║");
+        Console.WriteLine($"║  Envíos registrados: {gestor.ContarEnvios(), -24}║");
         Console.WriteLine("╠══════════════════════════════════════════════╣");
         Console.WriteLine("║  1. Registrar envío                          ║");
         Console.WriteLine("║  2. Mostrar todos los envíos                 ║");
@@ -27,39 +27,28 @@
         Console.Clear();
     }
 
-    public static void UI_RegistrarNuevoEnvio()
+    public static void MostrarResultados(List<Envio> lista)
     {
-        Console.Clear();
-        Console.WriteLine("══ REGISTRAR NUEVO ENVÍO ══\n");
+        Console.WriteLine();
 
-        Console.WriteLine("  Tipo de envío:");
-        Console.WriteLine("  1. Terrestre");
-        Console.WriteLine("  2. Marítimo");
-        Console.WriteLine("  3. Aéreo");
-        Console.Write("  Seleccione: ");
+        if (lista == null || lista.Count == 0)
+        {
+            Console.WriteLine("  No se encontraron envíos con ese criterio.");
+            return;
+        }
+
+        Console.WriteLine($"  {lista.Count} envío(s) encontrado(s):");
+        Console.WriteLine(new string('-', 50));
+
+        foreach (Envio envio in lista)
+        {
+            envio.MostrarInformacion();
+            Console.WriteLine(new string('-', 50));
+        }
     }
 
-    public static void UI_FiltrarEnvios()
+    public static void Despedir()
     {
-        Console.Clear();
-        Console.WriteLine("=== FILTRAR ENVÍOS ===\n");
-        Console.WriteLine("  Filtrar por:");
-        Console.WriteLine("  1. Tipo de envío (Terrestre / Marítimo / Aéreo)");
-        Console.WriteLine("  2. Estado (Pendiente / En transito / Entregado / Cancelado)");
-        Console.WriteLine("  3. Categoría de envío");
-        Console.WriteLine("  4. Remitente");
-        Console.Write("\n  Seleccione: ");
-    }
-
-    public static void UI_OrdenarEnvios()
-    {
-        Console.Clear();
-        Console.WriteLine("=== ORDENAR ENVÍOS ===\n");
-        Console.WriteLine("  Ordenar por:");
-        Console.WriteLine("  1. Fecha de registro (más reciente primero)");
-        Console.WriteLine("  2. Número de guía");
-        Console.WriteLine("  3. Estado");
-        Console.WriteLine("  4. Costo total (mayor a menor)");
-        Console.Write("\n  Seleccione: ");
+        Console.WriteLine("\n  Hasta luego.\n");
     }
 }
