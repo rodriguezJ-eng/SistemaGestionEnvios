@@ -117,12 +117,12 @@ public class GestorEnvios
             return;
         }
 
-        UI_BuscarEnvio.UI_EnvioEncontrado();
+        UI_BuscarEnvio.UI_EnvioEncontrado(encontrado);
     }
 
     public void FiltrarEnvios() //listo
     {
-        UI_FiltarEnvios.UI_Menu();
+        UI_FiltrarEnvios.UI_Menu();
         string? opcion = Console.ReadLine()?.Trim();
 
         List<Envio> resultado = null;

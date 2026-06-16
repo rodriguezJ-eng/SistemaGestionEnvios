@@ -33,12 +33,13 @@ public static class UI_ModificarEnvio
         {
             Console.Write($"  Origen [{envio.Origen}]: ");
         }
-        else if(i == 4)
+        else if (i == 4)
         {
             Console.Write($"  Destino [{envio.Destino}]: ");
         }
-        else if(i == 5)
+        else if (i == 5)
         {
             Console.Write($"  Categoria [{envio.CategoriaEnvio}]: ");
         }
+    }
 }
