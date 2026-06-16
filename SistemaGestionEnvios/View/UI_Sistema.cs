@@ -46,4 +46,9 @@
             Console.WriteLine(new string('-', 50));
         }
     }
+
+    public static void Despedir()
+    {
+        Console.WriteLine("\n  Hasta luego.\n");
+    }
 }

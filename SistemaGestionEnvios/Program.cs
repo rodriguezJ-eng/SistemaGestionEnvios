@@ -23,7 +23,7 @@ while (!salir)
         case "7": gestor.EliminarEnvio(); UI_Sistema.UI_Pausa(); break;
         case "0":
             salir = true;
-            Console.WriteLine("\n  Hasta luego.\n");
+            UI_Sistema.Despedir();
             break;
         default:
             Console.WriteLine("\n  Opción no válida.");
