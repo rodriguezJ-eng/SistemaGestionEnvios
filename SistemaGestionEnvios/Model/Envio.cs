@@ -112,7 +112,6 @@ public abstract class Envio
         {
             if (value != "Nacional" && value != "Internacional")
                 throw new ArgumentException("Categoría inválida.");
-
             _CategoriaEnvio = value;
         }
     }
@@ -144,12 +143,12 @@ public abstract class Envio
 
         if (value.Length > 100)
             throw new ArgumentException($"{campo} no puede superar los 100 caracteres.");
-
-        foreach (char c in value)
+        
+        /*foreach (char c in value)
         {
             if (!char.IsLetter(c) && c != ' ')
                 throw new ArgumentException($"{campo} solo puede contener letras y espacios.");
-        }
+        }*/
 
         return value;
     }

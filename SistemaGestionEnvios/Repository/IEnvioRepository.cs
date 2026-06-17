@@ -6,6 +6,7 @@
 public interface IEnvioRepository
 {
     void Agregar(Envio envio);
+    void Actualizar(Envio envio);
     void Eliminar(Envio envio);
     Envio ObtenerPorGuia(string numeroGuia);
     List<Envio> ObtenerTodos();
