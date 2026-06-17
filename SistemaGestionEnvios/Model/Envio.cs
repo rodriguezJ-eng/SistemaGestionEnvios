@@ -163,8 +163,8 @@ public abstract class Envio
         Console.WriteLine("\n===== Envio ==============================");
         Console.WriteLine($"  Número Guía        : {NumeroGuia}");
         Console.WriteLine($"  Tipo          : {TipoEnvio()}");
-        Console.WriteLine($"  Origen  : {Origen}");
-        Console.WriteLine($"  Destino: {Destino}");
+        Console.WriteLine($"  Origen        : {Origen}");
+        Console.WriteLine($"  Destino       : {Destino}");
         Console.WriteLine($"  Remitente     : {Remitente}");
         Console.WriteLine($"  Destinatario  : {Destinatario}");
         Console.WriteLine($"  Estado        : {Estado}");
