@@ -160,7 +160,7 @@ public abstract class Envio
 
     public virtual void MostrarInformacionEnvio()
     {
-        Console.WriteLine("\n===== Envio ==============================");
+        Console.WriteLine("\n===== Datos del Envio ================================");
         Console.WriteLine($"  Código        : {NumeroGuia}");
         Console.WriteLine($"  Tipo          : {TipoEnvio()}");
         Console.WriteLine($"  Remitente     : {Remitente}");
@@ -168,9 +168,10 @@ public abstract class Envio
         Console.WriteLine($"  Estado        : {Estado}");
         Console.WriteLine($"  Fecha Registro.    : {FechaEnvio.ToString("dd/MM/yyyy HH:mm")}");
         Console.WriteLine($"  Costo         : ${CalcularCostoTotal():F2}");
+        Console.WriteLine("======================================================\n");
         foreach (Paquete paquete in Paquetes)
         {
-            paquete.MostrarInformacionPaquete();
+            paquete.MostrarInformacionPaquete(Paquetes.IndexOf(paquete) + 1);
         }
     }
 

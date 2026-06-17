@@ -136,10 +136,13 @@ public sealed class EnvioTerrestre : Envio
     public override void MostrarInformacionEnvio()
     {
         base.MostrarInformacionEnvio();
+        string Encabezado = $"{new string('=', 5)} Datos Terrestre {new string('=', 32)}";
+        Console.WriteLine($"{Encabezado}");
         Console.WriteLine($"  Placa Camion  : {PlacaCamion}");
         Console.WriteLine($"  Ruta          : {Ruta}");
         Console.WriteLine($"  Distancia     : {DistanciaKm} km");
         Console.WriteLine($"  Tiempo Entrega: {CalcularTiempoEntrega()}");
+        Console.WriteLine($"{new string('=', Encabezado.Length)}\n");
     }
 
     

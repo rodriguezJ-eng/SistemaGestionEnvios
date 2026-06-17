@@ -146,9 +146,12 @@ public sealed class EnvioAereo : Envio
     public override void MostrarInformacionEnvio()
     {
         base.MostrarInformacionEnvio();
+        string Encabezado = $"{new string('=', 5)} Datos Aéreos {new string('=', 35)}";
+        Console.WriteLine($"{Encabezado}");
         Console.WriteLine($"  Vuelo         : {NumeroVuelo}");
         Console.WriteLine($"  Aerop. Origen : {AeropuertoOrigen}");
         Console.WriteLine($"  Aerop. Destino: {AeropuertoDestino}");
         Console.WriteLine($"  Tiempo Entrega: {CalcularTiempoEntrega()}");
+        Console.WriteLine($"{new string('=', Encabezado.Length)}\n");
     }
 }

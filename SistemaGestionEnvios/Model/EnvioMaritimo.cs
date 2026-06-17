@@ -148,10 +148,13 @@ public sealed class EnvioMaritimo : Envio
     public override void MostrarInformacionEnvio()
     {
         base.MostrarInformacionEnvio();
+        string Encabezado = $"{new string('=', 5)} Datos Marítimos {new string('=', 32)}";
+        Console.WriteLine($"{Encabezado}");
         Console.WriteLine($"  Barco         : {NombreBarco}");
         Console.WriteLine($"  Puerto Origen : {PuertoOrigen}");
         Console.WriteLine($"  Puerto Destino: {PuertoDestino}");
         Console.WriteLine($"  Dias Naveg.   : {DiasNavegacion} dias");
         Console.WriteLine($"  Tiempo Entrega: {CalcularTiempoEntrega()}");
+        Console.WriteLine($"{new string('=', Encabezado.Length)}\n");
     }
 }
