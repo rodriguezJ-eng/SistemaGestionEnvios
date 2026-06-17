@@ -26,8 +26,7 @@ while (!salir)
             UI_Sistema.Despedir();
             break;
         default:
-            Console.WriteLine("\n  Opción no válida.");
-            UI_Sistema.UI_Pausa();
+            UI_Alerta.MostrarAdvertencia("Opción no válida.");
             break;
     }
 }

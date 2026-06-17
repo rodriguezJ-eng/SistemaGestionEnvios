@@ -31,7 +31,7 @@ public class GestorEnvios
 
         if (tipo != "1" && tipo != "2" && tipo != "3")
         {
-            Console.WriteLine("  Tipo no válido.");
+            UI_Alerta.MostrarAdvertencia("Tipo no válido.", true, false);
             return;
         }
 
@@ -47,7 +47,7 @@ public class GestorEnvios
 
         if (cantidadPaquetes <= 0)
         {
-            Console.WriteLine("  Cantidad no válida.");
+            UI_Alerta.MostrarAdvertencia("Cantidad no válida.", true, false);
             return;
         }
 
@@ -88,7 +88,7 @@ public class GestorEnvios
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"\n  Error al registrar el envío: {ex.Message}");
+            UI_Alerta.MostrarError($"Error al registrar el envío: {ex.Message}", true, false);
         }
     }
 
@@ -103,7 +103,7 @@ public class GestorEnvios
 
         if (envios.Count == 0)
         {
-            Console.WriteLine("  No hay envíos registrados.");
+            UI_Alerta.MostrarAdvertencia("No hay envíos registrados.", true, false);
             return;
         }
 
@@ -122,7 +122,7 @@ public class GestorEnvios
 
         if (encontrado == null)
         {
-            Console.WriteLine("\n  No se encontró ningún envío con ese número de guía."); // se tendria que en la clase UI_validaciones estandarizar un comentario de error.
+            UI_Alerta.MostrarAdvertencia("No se encontró ningún envío con ese número de guía.", true, false);
             return;
         }
 
@@ -170,7 +170,7 @@ public class GestorEnvios
                 break;
 
             default:
-                Console.WriteLine("  Opción no válida.");// este debe de venir de UI_validacion
+                UI_Alerta.MostrarAdvertencia("Opción no válida.", true, false);
                 return;
         }
 
@@ -199,7 +199,7 @@ public class GestorEnvios
                 resultado = _service.Ordenar(e => e.CalcularCostoTotal()).AsEnumerable().Reverse().ToList();
                 break;
             default:
-                Console.WriteLine("  Opción no válida.");// este debe de venir de UI_validacion
+                UI_Alerta.MostrarAdvertencia("Opción no válida.", true, false);
                 return;
         }
 
@@ -215,7 +215,7 @@ public class GestorEnvios
 
         if (envio == null)
         {
-            Console.WriteLine("\n  Envío no encontrado."); // esto debe ir en UI_Validacion
+            UI_Alerta.MostrarAdvertencia("Envío no encontrado.", true, false);
             return;
         }
 
@@ -254,11 +254,11 @@ public class GestorEnvios
                 envio.ActualizarEstado();  // muestra submenú de estados en consola
                 // el Service no necesita hacer nada más (ya es la misma referencia)
             }
-            Console.WriteLine("\n  Envío modificado correctamente.");
+            UI_Alerta.MostrarExito("  Envío modificado correctamente.", true, true);
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"\n  Error: {ex.Message}");
+            UI_Alerta.MostrarError($"Error: {ex.Message}", true, false);
         }
     }
 
@@ -273,7 +273,7 @@ public class GestorEnvios
 
         if (envio == null)
         {
-            Console.WriteLine("\n  Envío no encontrado.");
+            UI_Alerta.MostrarAdvertencia("Envío no encontrado.", true, false);
             return;
         }
             
@@ -282,18 +282,18 @@ public class GestorEnvios
         UI_EliminarEnvio.PreguntaDeSeguridadParaInseguros();
         if (Console.ReadLine()?.Trim().ToLower() != "s")
         {
-            Console.WriteLine("  Eliminacion cancelada.");
+            UI_Alerta.MostrarExito("  Eliminacion cancelada.", true, false);
             return;
         }
 
         try
         {
             _service.Eliminar(guia);
-            Console.WriteLine("\n  Envío eliminado exitosamente.");
+            UI_Alerta.MostrarExito("Envío eliminado exitosamente.", true, false);
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"\n  Error: {ex.Message}");
+            UI_Alerta.MostrarError($"Error: {ex.Message}", true, false);
         }
     }
 

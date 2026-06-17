@@ -11,25 +11,25 @@
 
             if (string.IsNullOrWhiteSpace(numeroGuia))
             {
-                Console.WriteLine("Error: El número de guía es obligatorio.");
+                UI_Alerta.MostrarError("Error: El número de guía es obligatorio.", false, false);
                 continue;
             }
 
             if (numeroGuia.StartsWith("-"))
             {
-                Console.WriteLine("Error: No se permiten números negativos.");
+                UI_Alerta.MostrarError("Error: No se permiten números negativos.", false, false);
                 continue;
             }
 
             if (!long.TryParse(numeroGuia, out _))
             {
-                Console.WriteLine("Error: Solo se permiten números.");
+                UI_Alerta.MostrarError("Error: Solo se permiten números.", false, false);
                 continue;
             }
 
             if (numeroGuia.Length != 10)
             {
-                Console.WriteLine("Error: El número de guía debe tener exactamente 10 dígitos.");
+                UI_Alerta.MostrarError("Error: El número de guía debe tener exactamente 10 dígitos.", false, false);
                 continue;
             }
 
@@ -49,19 +49,19 @@
 
             if (string.IsNullOrWhiteSpace(nombre))
             {
-                Console.WriteLine("Error: El campo es obligatorio.");
+                UI_Alerta.MostrarError("Error: El campo es obligatorio.", false, false);
                 continue;
             }
 
             if (nombre.Length < 3)
             {
-                Console.WriteLine("Error: Debe tener al menos 3 caracteres.");
+                UI_Alerta.MostrarError("Error: Debe tener al menos 3 caracteres.", false, false);
                 continue;
             }
 
             if (nombre.Length > 50)
             {
-                Console.WriteLine("Error: No puede tener más de 50 caracteres.");
+                UI_Alerta.MostrarError("Error: No puede tener más de 50 caracteres.", false, false);
                 continue;
             }
 
@@ -78,7 +78,7 @@
 
             if (!valido)
             {
-                Console.WriteLine("Error: Solo se permiten letras y espacios.");
+                UI_Alerta.MostrarError("Error: Solo se permiten letras y espacios.", false, false);
                 continue;
             }
 
@@ -98,19 +98,19 @@
 
             if (string.IsNullOrWhiteSpace(lugar))
             {
-                Console.WriteLine("Error: El campo es obligatorio.");
+                UI_Alerta.MostrarError("Error: El campo es obligatorio.", false, false);
                 continue;
             }
 
             if (lugar.Length < 3)
             {
-                Console.WriteLine("Error: Debe tener al menos 3 caracteres.");
+                UI_Alerta.MostrarError("Error: Debe tener al menos 3 caracteres.", false, false);
                 continue;
             }
 
             if (lugar.Length > 100)
             {
-                Console.WriteLine("Error: No puede tener más de 100 caracteres.");
+                UI_Alerta.MostrarError("Error: No puede tener más de 100 caracteres.", false, false);
                 continue;
             }
 
@@ -127,7 +127,7 @@
 
             if (!valido)
             {
-                Console.WriteLine("Error: Solo se permiten letras y espacios.");
+                UI_Alerta.MostrarError("Error: Solo se permiten letras y espacios.", false, false);
                 continue;
             }
 
@@ -153,7 +153,7 @@
             if (opcion == "2")
                 return "Internacional";
 
-            Console.WriteLine("Error: Seleccione 1 o 2.");
+            UI_Alerta.MostrarError("Error: Seleccione 1 o 2.", false, false);
 
         } while (true);
     }
@@ -168,13 +168,13 @@
 
             if (!int.TryParse(Console.ReadLine()?.Trim(), out valor))
             {
-                Console.WriteLine("Error: Debe ingresar un número entero válido.");
+                UI_Alerta.MostrarError("Error: Debe ingresar un número entero válido.", false, false);
                 continue;
             }
 
             if (valor <= 0)
             {
-                Console.WriteLine("Error: Debe ser mayor que cero.");
+                UI_Alerta.MostrarError("Error: Debe ser mayor que cero.", false, false);
                 continue;
             }
 
@@ -193,13 +193,13 @@
 
             if (!double.TryParse(Console.ReadLine()?.Trim(), out valor))
             {
-                Console.WriteLine("Error: Debe ingresar un número válido.");
+                UI_Alerta.MostrarError("Error: Debe ingresar un número válido.", false, false);
                 continue;
             }
 
             if (valor <= 0)
             {
-                Console.WriteLine("Error: Debe ser mayor que cero.");
+                UI_Alerta.MostrarError("Error: Debe ser mayor que cero.", false, false);
                 continue;
             }
 
@@ -218,13 +218,13 @@
 
             if (!decimal.TryParse(Console.ReadLine()?.Trim(), out valor))
             {
-                Console.WriteLine("Error: Debe ingresar un número válido.");
+                UI_Alerta.MostrarError("Error: Debe ingresar un número válido.", false, false);
                 continue;
             }
 
             if (valor < 0)
             {
-                Console.WriteLine("Error: No se permiten valores negativos.");
+                UI_Alerta.MostrarError("Error: No se permiten valores negativos.", false, false);
                 continue;
             }
 
@@ -247,7 +247,7 @@
             if (respuesta == "n")
                 return false;
 
-            Console.WriteLine("Error: Ingrese únicamente 's' o 'n'.");
+            UI_Alerta.MostrarError("Error: Ingrese únicamente 's' o 'n'.", false, false);
 
         } while (true);
     }
@@ -263,13 +263,13 @@
 
             if (string.IsNullOrWhiteSpace(codigo))
             {
-                Console.WriteLine("Error: El código es obligatorio.");
+                UI_Alerta.MostrarError("Error: El código es obligatorio.", false, false);
                 continue;
             }
 
             if (codigo.Length != 8)
             {
-                Console.WriteLine("Error: Debe tener exactamente 8 caracteres.");
+                UI_Alerta.MostrarError("Error: Debe tener exactamente 8 caracteres.", false, false);
                 continue;
             }
 
@@ -286,7 +286,7 @@
 
             if (!valido)
             {
-                Console.WriteLine("Error: Solo se permiten letras y números.");
+                UI_Alerta.MostrarError("Error: Solo se permiten letras y números.", false, false);
                 continue;
             }
 
@@ -306,19 +306,19 @@
 
             if (string.IsNullOrWhiteSpace(texto))
             {
-                Console.WriteLine("Error: El campo es obligatorio.");
+                UI_Alerta.MostrarError("Error: El campo es obligatorio.", false, false);
                 continue;
             }
 
             if (texto.Length < minimo)
             {
-                Console.WriteLine($"Error: Debe tener al menos {minimo} caracteres.");
+                UI_Alerta.MostrarError($"Error: Debe tener al menos {minimo} caracteres.", false, false);
                 continue;
             }
 
             if (texto.Length > maximo)
             {
-                Console.WriteLine($"Error: No puede tener más de {maximo} caracteres.");
+                UI_Alerta.MostrarError($"Error: No puede tener más de {maximo} caracteres.", false, false);
                 continue;
             }
 
@@ -351,7 +351,7 @@
     public static string CalcularTipoPaquete(double peso, double alto, double ancho, double largo)
     {
         if (peso <= 0 || alto <= 0 || ancho <= 0 || largo <= 0)
-            return "Error: debe ser mayor a 0";
+            return UI_Alerta.MostrarError("Error: debe ser mayor a 0", false, false);
 
         double volumen = alto * ancho * largo;
         string categoriaTamaño = "";
@@ -382,13 +382,13 @@
 
             if (string.IsNullOrWhiteSpace(placa))
             {
-                Console.WriteLine("Error: La placa es obligatoria.");
+                UI_Alerta.MostrarError("Error: La placa es obligatoria.", false, false);
                 continue;
             }
 
             if (placa.Length < 6 || placa.Length > 10)
             {
-                Console.WriteLine("Error: La placa debe tener entre 6 y 10 caracteres.");
+                UI_Alerta.MostrarError("Error: La placa debe tener entre 6 y 10 caracteres.", false, false);
                 continue;
             }
 

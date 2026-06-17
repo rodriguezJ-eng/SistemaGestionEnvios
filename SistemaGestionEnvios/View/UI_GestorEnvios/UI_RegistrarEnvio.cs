@@ -47,7 +47,9 @@ public static class UI_RegistrarEnvio
         Console.Clear();
         Console.WriteLine("══ DATOS GENERALES DEL ENVÍO ══\n");
         envio.MostrarInformacionEnvio();
-        Console.WriteLine("\n  Detalles específicos:");
-        Console.WriteLine($"\n  Envío registrado. Número de guía asignado: {envio.NumeroGuia}");
+        UI_Sistema.UI_Pausa();
+        /* Console.WriteLine("\n  Detalles específicos:");
+         Console.WriteLine($"\n  Envío registrado. Número de guía asignado: {envio.NumeroGuia}");*/
+        UI_Alerta.MostrarExito($"Envío registrado. Número de guía asignado: {envio.NumeroGuia}");
     }
 }
