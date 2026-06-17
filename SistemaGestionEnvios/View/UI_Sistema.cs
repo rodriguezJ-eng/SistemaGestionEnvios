@@ -38,12 +38,15 @@
         }
 
         Console.WriteLine($"  {lista.Count} envío(s) encontrado(s):");
-        Console.WriteLine(new string('-', 50));
+        int contador = 1;
 
         foreach (Envio envio in lista)
         {
+            string Encabezado = $"{new string('-', 10)} ENVIO #{contador} | NUMERO DE GUIA: {envio.NumeroGuia} {new string('-', 10)}";
+            Console.WriteLine($"\n{Encabezado}");
             envio.MostrarInformacionEnvio();
-            Console.WriteLine(new string('-', 50));
+            Console.WriteLine(new string('-', Encabezado.Length));
+            contador++;
         }
     }
 
