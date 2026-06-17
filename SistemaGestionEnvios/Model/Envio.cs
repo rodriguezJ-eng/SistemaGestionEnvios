@@ -112,7 +112,6 @@ public abstract class Envio
         {
             if (value != "Nacional" && value != "Internacional")
                 throw new ArgumentException("Categoría inválida.");
-
             _CategoriaEnvio = value;
         }
     }
@@ -144,12 +143,12 @@ public abstract class Envio
 
         if (value.Length > 100)
             throw new ArgumentException($"{campo} no puede superar los 100 caracteres.");
-
-        foreach (char c in value)
+        
+        /*foreach (char c in value)
         {
             if (!char.IsLetter(c) && c != ' ')
                 throw new ArgumentException($"{campo} solo puede contener letras y espacios.");
-        }
+        }*/
 
         return value;
     }
@@ -160,14 +159,17 @@ public abstract class Envio
 
     public virtual void MostrarInformacionEnvio()
     {
-        Console.WriteLine("\n===== Datos del Envio ================================");
-        Console.WriteLine($"  Código        : {NumeroGuia}");
-        Console.WriteLine($"  Tipo          : {TipoEnvio()}");
-        Console.WriteLine($"  Remitente     : {Remitente}");
-        Console.WriteLine($"  Destinatario  : {Destinatario}");
-        Console.WriteLine($"  Estado        : {Estado}");
+        Console.WriteLine("\n===== Datos del Envio ==============================");
+        Console.WriteLine($"  Número Guía        : {NumeroGuia}");
+        Console.WriteLine($"  Categoria envío    : {CategoriaEnvio}");
+        Console.WriteLine($"  Tipo               : {TipoEnvio()}");
+        Console.WriteLine($"  Origen             : {Origen}");
+        Console.WriteLine($"  Destino            : {Destino}");
+        Console.WriteLine($"  Remitente          : {Remitente}");
+        Console.WriteLine($"  Destinatario       : {Destinatario}");
+        Console.WriteLine($"  Estado             : {Estado}");
         Console.WriteLine($"  Fecha Registro.    : {FechaEnvio.ToString("dd/MM/yyyy HH:mm")}");
-        Console.WriteLine($"  Costo         : ${CalcularCostoTotal():F2}");
+        Console.WriteLine($"  Costo              : ${CalcularCostoTotal():F2}");
         Console.WriteLine("======================================================\n");
         foreach (Paquete paquete in Paquetes)
         {

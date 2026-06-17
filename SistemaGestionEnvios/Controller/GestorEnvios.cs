@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.ComponentModel.Design;
+using System.Security.Cryptography.X509Certificates;
 
 /// <summary>
 /// Capa de presentación (UI de consola).
@@ -97,17 +98,24 @@ public class GestorEnvios
     /// </summary>
     public void MostrarEnvios() // listo en gestor
     {
-        UI_MostrarEnvios.UI_MostrarEnviosTitulo();
-
-        List<Envio> envios = _service.ObtenerTodos();
-
-        if (envios.Count == 0)
+        try
         {
-            UI_Alerta.MostrarAdvertencia("No hay envíos registrados.", true, false);
-            return;
-        }
+            UI_MostrarEnvios.UI_MostrarEnviosTitulo();
 
-        UI_MostrarEnvios.UI_MostrarEnviosListados(envios);
+            List<Envio> envios = _service.ObtenerTodos();
+
+            if (envios.Count == 0)
+            {
+                UI_Alerta.MostrarAdvertencia("No hay envíos registrados.", true, false);
+                return;
+            }
+
+            UI_MostrarEnvios.UI_MostrarEnviosListados(envios);
+        }
+        catch (Exception ex)
+        {
+            UI_Alerta.MostrarError($"Error al mostrar los envíos: {ex.Message}", true, false);
+        }
     }
 
     /// <summary>
@@ -115,18 +123,25 @@ public class GestorEnvios
     /// </summary>    
     public void BuscarEnvio()
     {
-        UI_BuscarEnvio.UI_Titulo();
-        string? guia = Console.ReadLine()?.Trim();
-
-        Envio encontrado = _service.BuscarPorGuia(guia);
-
-        if (encontrado == null)
+        try
         {
-            UI_Alerta.MostrarAdvertencia("No se encontró ningún envío con ese número de guía.", true, false);
-            return;
-        }
+            UI_BuscarEnvio.UI_Titulo();
+            string? guia = Console.ReadLine()?.Trim();
 
-        UI_BuscarEnvio.UI_EnvioEncontrado(encontrado);
+            Envio encontrado = _service.BuscarPorGuia(guia);
+
+            if (encontrado == null)
+            {
+                UI_Alerta.MostrarAdvertencia("No se encontró ningún envío con ese número de guía.", true, false);
+                return;
+            }
+
+            UI_BuscarEnvio.UI_EnvioEncontrado(encontrado);
+        }
+        catch (Exception ex)
+        {
+            UI_Alerta.MostrarError($"Error al buscar el envío: {ex.Message}", true, false);
+        }
     }
 
     /// <summary>
@@ -138,72 +153,85 @@ public class GestorEnvios
     /// </summary>
     public void FiltrarEnvios() //listo
     {
-        UI_FiltrarEnvios.UI_Menu();
-        string? opcion = Console.ReadLine()?.Trim();
-
-        List<Envio> resultado = null;
-
-        switch (opcion)
+        try
         {
-            case "1":
-                UI_FiltrarEnvios.UI_OpcionBusqueda(1);
-                string? tipo = Console.ReadLine()?.Trim();
-                resultado = _service.Filtrar(e => e.TipoEnvio().Equals(tipo, StringComparison.OrdinalIgnoreCase));
-                break;
+            UI_FiltrarEnvios.UI_Menu();
+            string? opcion = Console.ReadLine()?.Trim();
 
-            case "2":
-                UI_FiltrarEnvios.UI_OpcionBusqueda(2);
-                string? estado = Console.ReadLine()?.Trim();
-                resultado = _service.Filtrar(e => e.Estado.Equals(estado, StringComparison.OrdinalIgnoreCase));
-                break;
+            List<Envio> resultado = null;
 
-            case "3":
-                UI_FiltrarEnvios.UI_OpcionBusqueda(3);
-                string? categoria = Console.ReadLine()?.Trim();
-                resultado = _service.Filtrar(e => e.CategoriaEnvio.Equals(categoria, StringComparison.OrdinalIgnoreCase));
-                break;
+            switch (opcion)
+            {
+                case "1":
+                    UI_FiltrarEnvios.UI_OpcionBusqueda(1);
+                    string? tipo = Console.ReadLine()?.Trim();
+                    resultado = _service.Filtrar(e => e.TipoEnvio().Equals(tipo, StringComparison.OrdinalIgnoreCase));
+                    break;
 
-            case "4":
-                UI_FiltrarEnvios.UI_OpcionBusqueda(4);
-                string? remitente = Console.ReadLine()?.Trim();
-                resultado = _service.Filtrar(e => e.Remitente.Contains(remitente, StringComparison.OrdinalIgnoreCase));
-                break;
+                case "2":
+                    UI_FiltrarEnvios.UI_OpcionBusqueda(2);
+                    string? estado = Console.ReadLine()?.Trim();
+                    resultado = _service.Filtrar(e => e.Estado.Equals(estado, StringComparison.OrdinalIgnoreCase));
+                    break;
 
-            default:
-                UI_Alerta.MostrarAdvertencia("Opción no válida.", true, false);
-                return;
+                case "3":
+                    UI_FiltrarEnvios.UI_OpcionBusqueda(3);
+                    string? categoria = Console.ReadLine()?.Trim();
+                    resultado = _service.Filtrar(e => e.CategoriaEnvio.Equals(categoria, StringComparison.OrdinalIgnoreCase));
+                    break;
+
+                case "4":
+                    UI_FiltrarEnvios.UI_OpcionBusqueda(4);
+                    string? remitente = Console.ReadLine()?.Trim();
+                    resultado = _service.Filtrar(e => e.Remitente.Contains(remitente, StringComparison.OrdinalIgnoreCase));
+                    break;
+
+                default:
+                    UI_Alerta.MostrarAdvertencia("Opción no válida.", true, false);
+                    return;
+            }
+            UI_Sistema.MostrarResultados(resultado);
         }
-
-        UI_Sistema.MostrarResultados(resultado);
+        catch (Exception ex)
+        {
+            UI_Alerta.MostrarError($"Error al filtrar los envíos: {ex.Message}", true, false);
+        }   
     }
 
     public void OrdenarEnvios() // listo
     {
-        UI_OrdenarEnvios.UI_Menu();
-        string? opcion = Console.ReadLine()?.Trim();
-
-        List<Envio> resultado = null;
-
-        switch (opcion)
+        try
         {
-            case "1":
-                resultado = _service.Ordenar(e => e.FechaEnvio).AsEnumerable().Reverse().ToList();
-                break;
-            case "2":
-                resultado = _service.Ordenar(e => e.NumeroGuia);
-                break;
-            case "3":
-                resultado = _service.Ordenar(e => e.Estado);
-                break;
-            case "4":
-                resultado = _service.Ordenar(e => e.CalcularCostoTotal()).AsEnumerable().Reverse().ToList();
-                break;
-            default:
-                UI_Alerta.MostrarAdvertencia("Opción no válida.", true, false);
-                return;
-        }
+            UI_OrdenarEnvios.UI_Menu();
+            string? opcion = Console.ReadLine()?.Trim();
 
-        UI_Sistema.MostrarResultados(resultado);
+            List<Envio> resultado = null;
+
+            switch (opcion)
+            {
+                case "1":
+                    resultado = _service.Ordenar(e => e.FechaEnvio).AsEnumerable().Reverse().ToList();
+                    break;
+                case "2":
+                    resultado = _service.Ordenar(e => e.NumeroGuia);
+                    break;
+                case "3":
+                    resultado = _service.Ordenar(e => e.Estado);
+                    break;
+                case "4":
+                    resultado = _service.Ordenar(e => e.CalcularCostoTotal()).AsEnumerable().Reverse().ToList();
+                    break;
+                default:
+                    UI_Alerta.MostrarAdvertencia("Opción no válida.", true, false);
+                    return;
+            }
+
+            UI_Sistema.MostrarResultados(resultado);
+        }
+        catch (Exception ex)
+        {
+            UI_Alerta.MostrarError($"Error al ordenar los envíos: {ex.Message}", true, false);
+        }
     }
 
     public void ModificarEnvio() // listo
@@ -224,37 +252,40 @@ public class GestorEnvios
 
         UI_ModificarEnvio.Formulario(1, envio);
         string? remitente = Console.ReadLine()?.Trim();
-        if (!string.IsNullOrEmpty(remitente)) envio.Remitente = remitente;
 
         UI_ModificarEnvio.Formulario(2, envio);
         string? destinatario = Console.ReadLine()?.Trim();
-        if (!string.IsNullOrEmpty(destinatario)) envio.Destinatario = destinatario;
 
         UI_ModificarEnvio.Formulario(3, envio);
         string? origen = Console.ReadLine()?.Trim();
-        if (!string.IsNullOrEmpty(origen)) envio.Origen = origen;
 
         UI_ModificarEnvio.Formulario(4, envio);
         string? destino = Console.ReadLine()?.Trim();
-        if (!string.IsNullOrEmpty(destino)) envio.Destino = destino;
 
         UI_ModificarEnvio.Formulario(5, envio);
         string? categoria = Console.ReadLine()?.Trim();
-        if (!string.IsNullOrEmpty(categoria)) envio.CategoriaEnvio = categoria;
 
         try
         {
+            UI_ModificarEnvio.DeseaModificarEstado();
+
+            string? respuesta = Console.ReadLine()?.Trim().ToLower();
+
+            if (respuesta != "s" && respuesta != "n")
+            {
+                UI_Alerta.MostrarError("Debe ingresar unicamente 's' o 'n'", true, false);
+                return;
+            }
+
             _service.Modificar(guia, remitente, destinatario, origen, destino, categoria);
 
-            UI_ModificarEnvio.DeseaModificarEstado();
-            if (Console.ReadLine()?.Trim().ToLower() == "s")
+            if (respuesta == "s")
             {
-
-
-                envio.ActualizarEstado();  // muestra submenú de estados en consola
-                // el Service no necesita hacer nada más (ya es la misma referencia)
+                string nuevoEstado = UI_ModificarEnvio.LeerNuevoEstado();
+                _service.ActualizarEstado(guia, nuevoEstado);
             }
-            UI_Alerta.MostrarExito("  Envío modificado correctamente.", true, true);
+                //envio.ActualizarEstado();
+            
         }
         catch (Exception ex)
         {

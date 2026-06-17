@@ -94,4 +94,22 @@ public class EnvioRepositoryXml : IEnvioRepository
 
     public Envio Buscar(Func<Envio, bool> criterio)
         => LeerArchivo().FirstOrDefault(criterio);
+
+    public void Actualizar(Envio envio)
+    {
+        List<Envio> envios = LeerArchivo();
+
+        Envio existente = envios.FirstOrDefault(e => e.NumeroGuia == envio.NumeroGuia)
+            ?? throw new ArgumentException(
+                $"No existe un envío con guía '{envio.NumeroGuia}'");
+
+        existente.Remitente = envio.Remitente;
+        existente.Destinatario = envio.Destinatario;
+        existente.Origen = envio.Origen;
+        existente.Destino = envio.Destino;
+        existente.CategoriaEnvio = envio.CategoriaEnvio;
+        existente.Estado = envio.Estado;
+
+        GuardarArchivo(envios);
+    }
 }

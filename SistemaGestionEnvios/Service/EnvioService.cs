@@ -105,6 +105,13 @@ public class EnvioService
     /// <summary>
     /// Modifica los campos básicos de un envío existente.
     /// Lanza excepción si el envío no existe.
+    /// 
+    /// Garantiza la atomicidad: o se aplican todos los cambio, o ninguno
+    /// Antes de tocar el objeto real, se guarda su estado Original. Si alguna
+    /// asignación falla, ser revierte todo lo que ya se había alcanzado modificar, luego se relanza
+    /// la excepción para que el GestorEnvios la capture y la aisle
+    /// 
+    /// Evita que un objeto quede en un estado parcialmente modificado y termine persistiendo en el Xml
     /// </summary>
     public void Modificar(string numeroGuia,
         string remitente, string destinatario,
@@ -113,11 +120,37 @@ public class EnvioService
         Envio envio = _repository.ObtenerPorGuia(numeroGuia)
             ?? throw new InvalidOperationException($"No existe un envío con guía {numeroGuia}.");
 
-        if (!string.IsNullOrEmpty(remitente)) envio.Remitente = remitente;
-        if (!string.IsNullOrEmpty(destinatario)) envio.Destinatario = destinatario;
-        if (!string.IsNullOrEmpty(origen)) envio.Origen = origen;
-        if (!string.IsNullOrEmpty(destino)) envio.Destino = destino;
-        if (!string.IsNullOrEmpty(categoria)) envio.CategoriaEnvio = categoria;
+        //Un guardado previo del estado original antes de modificar
+        string remitenteOriginal = envio.Remitente;
+        string destinatarioOriginal = envio.Destinatario;
+        string origenOriginal = envio.Origen;
+        string destinoOriginal = envio.Destino;
+        string categoriaOriginal = envio.CategoriaEnvio;
+
+        try
+        {
+            if (!string.IsNullOrEmpty(remitente)) envio.Remitente = remitente;
+            if (!string.IsNullOrEmpty(destinatario)) envio.Destinatario = destinatario;
+            if (!string.IsNullOrEmpty(origen)) envio.Origen = origen;
+            if (!string.IsNullOrEmpty(destino)) envio.Destino = destino;
+            if (!string.IsNullOrEmpty(categoria)) envio.CategoriaEnvio = categoria;
+
+            _repository.Actualizar(envio);
+        }
+        catch (Exception ex)
+        {
+            // Se busca realizar un Rollback
+
+            envio.Remitente = remitenteOriginal;
+            envio.Destinatario = destinatarioOriginal;
+            envio.Origen = origenOriginal;
+            envio.Destino = destinoOriginal;
+            envio.CategoriaEnvio = categoriaOriginal;
+
+            throw;
+        }
+
+
     }
 
     /// <summary>
@@ -133,14 +166,26 @@ public class EnvioService
             throw new InvalidOperationException(
                 $"El envío {numeroGuia} ya está en estado '{envio.Estado}' y no puede modificarse.");
 
-        envio.Estado = nuevoEstado;
+        string estadoOriginal = envio.Estado;
+
+        try
+        {
+            envio.Estado = nuevoEstado;
+            _repository.Actualizar(envio);
+        }
+        catch (ArgumentException)
+        {
+            envio.Estado = estadoOriginal;
+            throw;
+        }
     }
 
-    /// <summary>
-    /// Elimina un envío por número de guía.
-    /// Lanza excepción si el envío no existe.
-    /// </summary>
-    public void Eliminar(string numeroGuia)
+
+/// <summary>
+/// Elimina un envío por número de guía.
+/// Lanza excepción si el envío no existe.
+/// </summary>
+public void Eliminar(string numeroGuia)
     {
         Envio envio = _repository.ObtenerPorGuia(numeroGuia)
             ?? throw new InvalidOperationException($"No existe un envío con guía {numeroGuia}.");
