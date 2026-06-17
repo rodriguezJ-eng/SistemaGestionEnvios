@@ -47,4 +47,25 @@ public static class UI_ModificarEnvio
     {
         Console.Write("\n  Actualizar estado? (s/n): ");
     }
+
+    public static string LeerNuevoEstado()
+    {
+        Console.WriteLine("  Estados disponibles:");
+        Console.WriteLine("  1. Pendiente");
+        Console.WriteLine("  2. En transito");
+        Console.WriteLine("  3. Entregado");
+        Console.WriteLine("  4. Cancelado");
+        Console.Write("  Seleccione: ");
+
+        string opcion = Console.ReadLine()?.Trim();
+
+        return opcion switch
+        {
+            "1" => "Pendiente",
+            "2" => "En transito",
+            "3" => "Entregado",
+            "4" => "Cancelado",
+            _ => throw new ArgumentException("Opción no válida.")
+        };
+    }
 }
