@@ -161,8 +161,10 @@ public abstract class Envio
     public virtual void MostrarInformacionEnvio()
     {
         Console.WriteLine("\n===== Envio ==============================");
-        Console.WriteLine($"  Código        : {NumeroGuia}");
+        Console.WriteLine($"  Número Guía        : {NumeroGuia}");
         Console.WriteLine($"  Tipo          : {TipoEnvio()}");
+        Console.WriteLine($"  Origen  : {Origen}");
+        Console.WriteLine($"  Destino: {Destino}");
         Console.WriteLine($"  Remitente     : {Remitente}");
         Console.WriteLine($"  Destinatario  : {Destinatario}");
         Console.WriteLine($"  Estado        : {Estado}");
