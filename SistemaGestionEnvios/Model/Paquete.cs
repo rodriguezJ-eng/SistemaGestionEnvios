@@ -180,20 +180,50 @@ public class Paquete
         Console.WriteLine($"{new string('=', Encabezado.Length)}\n");
     }
 
-    /// <summary>
-    /// Calcula el costo base del paquete segun su peso. Agrega un recargo si es fragil.
-    /// </summary>
-    /// <returns>Costo base como valor decimal.</returns>
-    public decimal CalcularCostoBase()
+    public decimal CalcularCostoBase(double divisorVolumetrico = 5000)
     {
-        decimal costo = (decimal)Peso * 10;
+        decimal tarifaBase = 50.00m; // C$50 córdobas, cubre manejo y etiquetado
+
+        decimal pesoFacturable = (decimal)PesoFacturable(divisorVolumetrico);
+        decimal costoPorPeso;
+
+        if (pesoFacturable <= 2.0m)
+            costoPorPeso = pesoFacturable * 25.00m;       // C$25/kg
+        else if (pesoFacturable <= 10.0m)
+            costoPorPeso = (2.0m * 25.00m) + ((pesoFacturable - 2.0m) * 18.00m);
+        else
+            costoPorPeso = (2.0m * 25.00m) + (8.0m * 18.00m) + ((pesoFacturable - 10.0m) * 12.00m);
+
+        decimal costoTotal = tarifaBase + costoPorPeso;
 
         if (EsFragil)
-        {
-            costo += 50;
-        }
+            costoTotal += costoTotal * 0.15m;
 
-        return costo;
+        return Math.Round(costoTotal, 2);
+    }
+
+    /// <summary>
+    /// Peso volumétrico estándar usado en la industria: volumen (cm³) / divisor.
+    /// Divisor 5000 es el más común para aéreo/terrestre; cada modo puede usar su propio divisor.
+    /// </summary>
+    public double CalcularPesoVolumetrico(double divisor = 5000)
+    {
+        return CalcularVolumen() / divisor;
+    }
+
+    public double PesoFacturable(double divisor = 5000)
+    {
+        return Math.Max(Peso, CalcularPesoVolumetrico(divisor));
+    }
+
+    /// <summary>
+    /// Cargo de seguro proporcional al valor declarado. Práctica estándar: 1%-5% del valor.
+    /// </summary>
+    public decimal CalcularCargoSeguro(decimal porcentaje = 0.02m)
+    {
+        decimal minimo = 10.00m; // cargo mínimo por procesar el seguro
+        decimal cargo = ValorDeclarado * porcentaje;
+        return Math.Round(Math.Max(cargo, minimo), 2);
     }
 
     /// <summary>

@@ -110,11 +110,21 @@ public sealed class EnvioAereo : Envio
     public override decimal CalcularCostoTotal()
     {
         decimal costo = 0;
-        foreach (Paquete p in Paquetes)
-            costo += p.CalcularCostoBase();
 
-        costo *= 2.5m;
-        return costo;
+        foreach (Paquete p in Paquetes)
+        {
+            // Divisor más estricto para aéreo: el espacio en avión es más caro
+            decimal pesoFacturable = (decimal)p.PesoFacturable(divisor: 6000);
+            decimal tarifaAerea = pesoFacturable * 180.00m; // C$180/kg facturable, tarifa internacional típica
+
+            costo += tarifaAerea;
+            costo += p.CalcularCargoSeguro(0.03m); // 3% aéreo (mayor valor de mercadería típica)
+
+            if (p.EsFragil)
+                costo += tarifaAerea * 0.15m;
+        }
+
+        return Math.Round(costo, 2);
     }
 
     public override string CalcularTiempoEntrega()

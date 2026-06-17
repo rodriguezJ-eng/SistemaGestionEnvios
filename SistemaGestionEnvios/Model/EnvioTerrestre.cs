@@ -93,20 +93,24 @@ public sealed class EnvioTerrestre : Envio
         NumeroGuia = $"TER-{DateTime.Now:yyyyMMddHHmmss}-{randomNumb}";
     }
 
-    /// <summary>
-    /// Calcula el costo: costo base de paquetes + Tarifa por km
-    /// </summary>
-    /// <returns></returns>
     public override decimal CalcularCostoTotal()
     {
-        decimal costo = 0;
+        decimal costoPaquetes = 0;
+        decimal pesoFacturableTotal = 0;
+
         foreach (Paquete p in Paquetes)
         {
-            costo += p.CalcularCostoBase();
+            costoPaquetes += p.CalcularCostoBase();
+            costoPaquetes += p.CalcularCargoSeguro(0.015m); // 1.5% terrestre (menor riesgo)
+            pesoFacturableTotal += (decimal)p.PesoFacturable();
         }
 
-        costo += DistanciaKm * 500;
-        return costo;
+        // Tarifa de flete: C$8 por km, ajustada por kg facturable total
+        decimal tarifaPorKmPorKg = 8.00m;
+        decimal costoDistancia = DistanciaKm * tarifaPorKmPorKg * Math.Max(pesoFacturableTotal, 1m) / 10m;
+        // (se divide entre 10 para que no escale demasiado agresivo en distancias largas; ajustable)
+
+        return Math.Round(costoPaquetes + costoDistancia, 2);
     }
 
     public override void ActualizarEstado()

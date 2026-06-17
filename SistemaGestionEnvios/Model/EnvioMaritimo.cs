@@ -113,12 +113,21 @@ public sealed class EnvioMaritimo : Envio
     public override decimal CalcularCostoTotal()
     {
         decimal costo = 0;
+        decimal volumenTotalM3 = 0;
+
         foreach (Paquete p in Paquetes)
+        {
             costo += p.CalcularCostoBase();
+            costo += p.CalcularCargoSeguro(0.01m); // 1% marítimo (más lento, pero más estable)
+            volumenTotalM3 += (decimal)(p.CalcularVolumen() / 1_000_000); // cm³ a m³
+        }
 
-        costo += DiasNavegacion * 15000;
-        return costo;
+        decimal tarifaPorM3 = 3500.00m; // C$3500 por m³, tarifa de flete marítimo típica
+        decimal costoFlete = Math.Max(volumenTotalM3 * tarifaPorM3, 1500.00m); // mínimo de flete
 
+        decimal costoTransito = DiasNavegacion * 80.00m; // costo menor, por combustible/operación diaria
+
+        return Math.Round(costo + costoFlete + costoTransito, 2);
     }
 
     public override string CalcularTiempoEntrega() => $"{DiasNavegacion} dia(s) de navegacion";
