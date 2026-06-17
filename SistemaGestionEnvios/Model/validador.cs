@@ -6,7 +6,7 @@
 
         do
         {
-            Console.Write("\n  Número de guía : ");
+            UI_Validador.LeerNumeroGuia();
             numeroGuia = Console.ReadLine()?.Trim();
 
             if (string.IsNullOrWhiteSpace(numeroGuia))
@@ -44,7 +44,7 @@
 
         do
         {
-            Console.Write(mensaje);
+            UI_Validador.LeerNombre(mensaje);
             nombre = Console.ReadLine()?.Trim();
 
             if (string.IsNullOrWhiteSpace(nombre))
@@ -93,7 +93,7 @@
 
         do
         {
-            Console.Write(mensaje);
+            UI_Validador.LeerLugar(mensaje);
             lugar = Console.ReadLine()?.Trim();
 
             if (string.IsNullOrWhiteSpace(lugar))
@@ -140,10 +140,7 @@
     {
         do
         {
-            Console.WriteLine("\n  Categoría:");
-            Console.WriteLine("  1. Nacional");
-            Console.WriteLine("  2. Internacional");
-            Console.Write("  Seleccione: ");
+            UI_Validador.LeerCategoria();
 
             string opcion = Console.ReadLine()?.Trim();
 
@@ -164,7 +161,7 @@
 
         do
         {
-            Console.Write(mensaje);
+            UI_Validador.LeerEnteroPositivo(mensaje);
 
             if (!int.TryParse(Console.ReadLine()?.Trim(), out valor))
             {
@@ -189,7 +186,7 @@
 
         do
         {
-            Console.Write(mensaje);
+            UI_Validador.LeerDoublePositivo(mensaje);
 
             if (!double.TryParse(Console.ReadLine()?.Trim(), out valor))
             {
@@ -214,7 +211,7 @@
 
         do
         {
-            Console.Write(mensaje);
+            UI_Validador.LeerDecimalPositivo(mensaje);
 
             if (!decimal.TryParse(Console.ReadLine()?.Trim(), out valor))
             {
@@ -237,7 +234,7 @@
     {
         do
         {
-            Console.Write(mensaje);
+            UI_Validador.LeerSiNo(mensaje);
 
             string respuesta = Console.ReadLine()?.Trim().ToLower();
 
@@ -258,7 +255,7 @@
 
         do
         {
-            Console.Write("  Codigo paquete : ");
+            UI_Validador.LeerCodigoPaquete();
             codigo = Console.ReadLine()?.Trim();
 
             if (string.IsNullOrWhiteSpace(codigo))
@@ -301,7 +298,7 @@
 
         do
         {
-            Console.Write(mensaje);
+            UI_Validador.LeerTexto(mensaje);
             texto = Console.ReadLine()?.Trim();
 
             if (string.IsNullOrWhiteSpace(texto))
@@ -351,7 +348,7 @@
     public static string CalcularTipoPaquete(double peso, double alto, double ancho, double largo)
     {
         if (peso <= 0 || alto <= 0 || ancho <= 0 || largo <= 0)
-            return UI_Alerta.MostrarError("Error: debe ser mayor a 0", false, false);
+            return "Error: debe ser mayor a 0";
 
         double volumen = alto * ancho * largo;
         string categoriaTamaño = "";
@@ -377,7 +374,7 @@
 
         do
         {
-            Console.Write("  Placa del camión: ");
+            UI_Validador.LeerPlaca();
             placa = Console.ReadLine()?.Trim();
 
             if (string.IsNullOrWhiteSpace(placa))
