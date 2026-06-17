@@ -42,7 +42,7 @@ public class GestorEnvios
         string origen = Validador.LeerLugar("  Origen         : ");
         string destino = Validador.LeerLugar("  Destino        : ");
 
-        Console.Write("\n  Cuántos paquetes tiene el envío: ");
+        UI_RegistrarEnvio.UI_CuantosPaquetes();
         int.TryParse(Console.ReadLine()?.Trim(), out int cantidadPaquetes);
 
         if (cantidadPaquetes <= 0)
@@ -206,7 +206,7 @@ public class GestorEnvios
         UI_Sistema.MostrarResultados(resultado);
     }
 
-    public void ModificarEnvio() // pendiente
+    public void ModificarEnvio() // listo
     {
         UI_ModificarEnvio.Menu();
         string? guia = Console.ReadLine()?.Trim();
@@ -246,7 +246,7 @@ public class GestorEnvios
         {
             _service.Modificar(guia, remitente, destinatario, origen, destino, categoria);
 
-            Console.Write("\n  Actualizar estado? (s/n): ");
+            UI_ModificarEnvio.DeseaModificarEstado();
             if (Console.ReadLine()?.Trim().ToLower() == "s")
             {
 
@@ -318,7 +318,7 @@ public class GestorEnvios
 
             string tipoPaquete = Validador.CalcularTipoPaquete(peso, alto, ancho, largo);
 
-            Console.WriteLine($"  Tipo calculado: {tipoPaquete}");
+            UI_RegistrarEnvio.UI_DatoDelTipoDePaquete(tipoPaquete);
 
             Paquete paquete = new Paquete( codigoPaquete,contenido,esFragil,valorDeclarado,tipoPaquete,peso,largo,alto,ancho);
 

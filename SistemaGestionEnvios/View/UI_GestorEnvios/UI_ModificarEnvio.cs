@@ -42,4 +42,9 @@ public static class UI_ModificarEnvio
             Console.Write($"  Categoria [{envio.CategoriaEnvio}]: ");
         }
     }
+
+    public static void DeseaModificarEstado()
+    {
+        Console.Write("\n  Actualizar estado? (s/n): ");
+    }
 }

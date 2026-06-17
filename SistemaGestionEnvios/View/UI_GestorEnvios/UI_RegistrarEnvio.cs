@@ -18,6 +18,11 @@ public static class UI_RegistrarEnvio
         Console.WriteLine("══ DATOS DEL ENVIO ══\n");
     }
 
+    public static void UI_CuantosPaquetes()
+    {
+        Console.Write("\n  ¿Cuántos paquetes incluye el envío?: ");
+    }
+
     public static void UI_DatosPaqueteDelEnvio(int numero)
     {
         Console.Clear();
@@ -34,6 +39,11 @@ public static class UI_RegistrarEnvio
     {
         Console.Clear();
         Console.WriteLine("══ DATOS DEL ENVÍO MARÍTIMO ══\n");
+    }
+
+    public static void UI_DatoDelTipoDePaquete(string tipoPaquete)
+    {
+        Console.WriteLine($"  Tipo calculado: {tipoPaquete}");
     }
 
     public static void UI_DatosEnvioAereo()
