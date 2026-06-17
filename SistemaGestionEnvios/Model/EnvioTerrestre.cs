@@ -6,13 +6,13 @@ public sealed class EnvioTerrestre : Envio
     // Atributos
     private int _DistanciaKm;
     private string _PlacaCamion;
-    private string _Ruta;
+    private string _Direccion;
 
     // Requerido por XmlSerializer
     public EnvioTerrestre() : base()
     {
         _PlacaCamion = string.Empty;
-        _Ruta = string.Empty;
+        _Direccion = string.Empty;
     }
 
     // Constructor
@@ -28,11 +28,11 @@ public sealed class EnvioTerrestre : Envio
     string destinatario, 
     int distanciaKm, 
     string placaCamion, 
-    string ruta) : base(fechaEnvio, origen, destino, estado, paquetes, categoriaEnvio, remitente, destinatario)
+    string direccion) : base(fechaEnvio, origen, destino, estado, paquetes, categoriaEnvio, remitente, destinatario)
     {
         DistanciaKm = distanciaKm;
         PlacaCamion = placaCamion;
-        Ruta = ruta;
+        Direccion = direccion;
         GenerarNumeroGuia();
     }
 
@@ -64,21 +64,21 @@ public sealed class EnvioTerrestre : Envio
         }
     }
 
-    public string Ruta
+    public string Direccion
     {
-        get => _Ruta;
+        get => _Direccion;
         set
         {
             if (string.IsNullOrWhiteSpace(value))
-                throw new ArgumentException("Ruta obligatoria.");
+                throw new ArgumentException("Dirección obligatoria.");
 
             if (value.Length < 3)
-                throw new ArgumentException("La ruta debe tener al menos 3 caracteres.");
+                throw new ArgumentException("La dirección debe tener al menos 3 caracteres.");
 
             if (value.Length > 100)
-                throw new ArgumentException("La ruta no puede superar los 100 caracteres.");
+                throw new ArgumentException("La dirección no puede superar los 100 caracteres.");
 
-            _Ruta = value;
+            _Direccion = value;
         }
     }
 
@@ -139,7 +139,7 @@ public sealed class EnvioTerrestre : Envio
         string Encabezado = $"{new string('=', 5)} Datos Terrestre {new string('=', 32)}";
         Console.WriteLine($"{Encabezado}");
         Console.WriteLine($"  Placa Camion  : {PlacaCamion}");
-        Console.WriteLine($"  Ruta          : {Ruta}");
+        Console.WriteLine($"  Dirección     : {Direccion}");
         Console.WriteLine($"  Distancia     : {DistanciaKm} km");
         Console.WriteLine($"  Tiempo Entrega: {CalcularTiempoEntrega()}");
         Console.WriteLine($"{new string('=', Encabezado.Length)}\n");

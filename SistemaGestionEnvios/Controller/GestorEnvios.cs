@@ -61,10 +61,10 @@ public class GestorEnvios
             {
                 UI_RegistrarEnvio.UI_DatosEnvioTerrestre();
                 string? placa = Validador.LeerPlaca();
-                string ruta = Validador.LeerTexto("  Ruta            : ", 3, 100);
+                string direccion = Validador.LeerTexto("  Dirección       : ", 3, 100);
                 int km = Validador.LeerEnteroPositivo("  Distancia (km)  : ");
 
-                envio = _service.RegistrarTerrestre(remitente, destinatario, origen, destino, categoria, paquetes, km, placa, ruta);
+                envio = _service.RegistrarTerrestre(remitente, destinatario, origen, destino, categoria, paquetes, km, placa, direccion);
             }
             else if (tipo == "2")
             {

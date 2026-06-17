@@ -30,12 +30,12 @@ public class EnvioService
         string remitente, string destinatario,
         string origen, string destino, string categoria,
         List<Paquete> paquetes,
-        int distanciaKm, string placaCamion, string ruta)
+        int distanciaKm, string placaCamion, string direccion)
     {
         var envio = new EnvioTerrestre(
             DateTime.Now, origen, destino, "Pendiente",
             paquetes, categoria, remitente, destinatario,
-            distanciaKm, placaCamion, ruta
+            distanciaKm, placaCamion, direccion
         );
         _repository.Agregar(envio);
         return envio;
