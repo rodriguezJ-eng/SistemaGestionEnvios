@@ -93,22 +93,36 @@ public sealed class EnvioTerrestre : Envio
         NumeroGuia = $"TER-{DateTime.Now:yyyyMMddHHmmss}-{randomNumb}";
     }
 
+    /// <summary>
+    /// Calcula el costo total del envío terrestre combinando el costo operativo individual de los paquetes,
+    /// tasas de seguro por transporte carretero y un cálculo de flete  basado en la distancia y el peso total.
+    /// </summary>
+    /// <returns>El costo total acumulado del envío terrestre en unidades monetarias (C$), redondeado a 2 decimales.</returns>
     public override decimal CalcularCostoTotal()
     {
         decimal costoPaquetes = 0;
         decimal pesoFacturableTotal = 0;
 
+        // Procesamiento y acumulación de cada paquete individual 
         foreach (Paquete p in Paquetes)
         {
+            // Acumulación de los costos base 
+            // prima de seguro terrestre se aplica tasa del 1.5% sobre el valor declarado
             costoPaquetes += p.CalcularCostoBase();
             costoPaquetes += p.CalcularCargoSeguro(0.015m); // 1.5% terrestre (menor riesgo)
+
+            // Consolidación peso factorible
             pesoFacturableTotal += (decimal)p.PesoFacturable();
         }
 
-        // Tarifa de flete: C$8 por km, ajustada por kg facturable total
+        // Tarifa de flete: C$8 por km
         decimal tarifaPorKmPorKg = 8.00m;
+
+        // Multiplica la distancia por la tarifa y el peso acumulado.
+        // Se utiliza Math.Max para asegurar que el peso mínimo multiplicador sea 1m y evitar fletes en cero.
+        // Se divide entre 10m como factor de amortiguación para evitar un escalado excesivo en rutas de larga distancia.
         decimal costoDistancia = DistanciaKm * tarifaPorKmPorKg * Math.Max(pesoFacturableTotal, 1m) / 10m;
-        // (se divide entre 10 para que no escale demasiado agresivo en distancias largas; ajustable)
+        
 
         return Math.Round(costoPaquetes + costoDistancia, 2);
     }
