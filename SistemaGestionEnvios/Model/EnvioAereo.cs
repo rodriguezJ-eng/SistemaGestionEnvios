@@ -107,19 +107,31 @@ public sealed class EnvioAereo : Envio
         NumeroGuia = $"AER-{DateTime.Now:yyyyMMddHHmmss}-{randomNumb}";
     }
 
+    /// <summary>
+    /// Calcula el costo total del envío aéreo procesando cada paquete de forma individual.
+    /// Aplica un factor de conversión volumétrico estricto, tarifas por kilogramo,
+    /// tasas de seguro por alta prioridad y recargos por manejo de mercancía frágil.
+    /// </summary>
+    /// <returns>El costo total acumulado del envío aéreo en unidades monetarias (C$), redondeado a 2 decimales.</returns>
     public override decimal CalcularCostoTotal()
     {
         decimal costo = 0;
-
+        
+        // Procesamiento individual de cada paquete dentro del contenedor o guía aérea
         foreach (Paquete p in Paquetes)
         {
-            // Divisor más estricto para aéreo: el espacio en avión es más caro
+            // Se utiliza un divisor volumétrico más estricto (6000) debido a la limitación crítica de espacio en cabina de carga
             decimal pesoFacturable = (decimal)p.PesoFacturable(divisor: 6000);
+
             decimal tarifaAerea = pesoFacturable * 180.00m; // C$180/kg facturable, tarifa internacional típica
 
             costo += tarifaAerea;
-            costo += p.CalcularCargoSeguro(0.03m); // 3% aéreo (mayor valor de mercadería típica)
+            // Se aplica una tasa del 3% (0.03) sobre el valor declarado,
+            // justificado por el alto valor comercial y la prioridad de la mercancía que viaja por este medio.
+            costo += p.CalcularCargoSeguro(0.03m);
 
+            // Si el paquete es delicado,
+            // se añade un 15% extra calculado estrictamente sobre el costo del flete aéreo de ese paquete.
             if (p.EsFragil)
                 costo += tarifaAerea * 0.15m;
         }
