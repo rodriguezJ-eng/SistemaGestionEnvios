@@ -175,7 +175,7 @@ public class Paquete
         Console.WriteLine($"Contenido        : {Contenido}");
         Console.WriteLine($"Valor Declarado  : {ValorDeclarado}");
         Console.WriteLine($"Tipo Paquete     : {TipoPaquete}");
-        Console.WriteLine($"Peso             : {Peso}");
+        Console.WriteLine($"Peso             : {Peso}kg");
         Console.WriteLine($"Fragil           : {(EsFragil ? "Sí" : "No")}");
         Console.WriteLine($"{new string('=', Encabezado.Length)}\n");
     }

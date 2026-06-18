@@ -140,12 +140,12 @@ public sealed class EnvioMaritimo : Envio
 
             // Conversió métrica, se calcula el volumen individual y se divide entre 1,000,000
             // para transformar las dimensiones de cm^3 a m^3
-            volumenTotalM3 += (decimal)(p.CalcularVolumen() / 1_000_000); // cm³ a m³
+            volumenTotalM3 += (decimal)(p.CalcularVolumen() / 1_000_000); // cm^3 a m^3
         }
 
         // Se multiplica el volumen por la tarifa, pero asegura un cobro
         // minimo de C$ 1,500 para amortizar los costos fijos de consolidación.
-        decimal tarifaPorM3 = 3500.00m; // C$3500 por m³, tarifa de flete marítimo típica
+        decimal tarifaPorM3 = 3500.00m; // C$3500 por m^3, tarifa de flete marítimo típica
         decimal costoFlete = Math.Max(volumenTotalM3 * tarifaPorM3, 1500.00m); // mínimo de flete
 
         // costos operativos 
