@@ -1,5 +1,12 @@
-﻿public static class UI_Sistema
+﻿/// <summary>
+/// Gestiona la impresión principal del sistema operativo, menús principales y renderizadores transversales de resultados.
+/// </summary>
+public static class UI_Sistema
 {
+    /// <summary>
+    /// Dibuja el marco de la interfaz de usuario principal de la aplicación, mostrando un contador en tiempo real de registros activos.
+    /// </summary>
+    /// <param name="gestor">Referencia del controlador lógico de datos.</param>
     public static void UI_MostrarMenu(GestorEnvios gestor)
     {
         Console.Clear();
@@ -20,6 +27,9 @@
         Console.Write("\n  Seleccione una opción: ");
     }
 
+    /// <summary>
+    /// Congela el hilo de la consola forzando una espera hasta que el operador presione Enter. Limpia la pantalla después.
+    /// </summary>
     public static void UI_Pausa()
     {
         Console.Write("\n  Presione Enter para continuar...");
@@ -27,6 +37,10 @@
         Console.Clear();
     }
 
+    /// <summary>
+    /// Renderiza un listado filtrado u ordenado de elementos. Si no contiene datos, muestra un aviso neutral.
+    /// </summary>
+    /// <param name="lista">Colección genérica filtrada a proyectar.</param>
     public static void MostrarResultados(List<Envio> lista)
     {
         Console.WriteLine();
@@ -50,6 +64,9 @@
         }
     }
 
+    /// <summary>
+    /// Envía un mensaje de cierre al finalizar el ciclo principal de ejecución del programa.
+    /// </summary>
     public static void Despedir()
     {
         Console.WriteLine("\n  Hasta luego.\n");

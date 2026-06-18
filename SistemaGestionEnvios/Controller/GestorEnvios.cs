@@ -2,40 +2,41 @@
 using System.Security.Cryptography.X509Certificates;
 
 /// <summary>
-/// Capa de presentación (UI de consola).
-/// 
-/// Responsabilidades:
-///   - Leer datos del usuario por consola usando Validador
-///   - Llamar al EnvioService con los datos ya capturados
-///   - Mostrar resultados en pantalla
-/// 
-/// NO tiene lógica de negocio.
-/// NO accede a la lista de envíos directamente.
-/// Solo conoce al EnvioService.
+/// Controlador principal de la interfaz de usuario para la gestión de envíos.
+/// Controla los flujos de captura de datos por consola, invoca las operaciones del servicio de negocio
+/// y coordina la visualización de resultados, alertas y errores al usuario.
 /// </summary>
 public class GestorEnvios
 {
     private readonly EnvioService _service;
 
+    /// <summary>
+    /// Inicializa una nueva instancia del gestor inyectando el servicio de negocio correspondiente.
+    /// </summary>
+    /// <param name="service">Instancia de la capa de servicios logísticos.</param>
     public GestorEnvios(EnvioService service)
     {
         _service = service ?? throw new ArgumentNullException(nameof(service));
     }
 
     /// <summary>
-    /// Método para realizar un nuevo envío.
+    /// Conduce el flujo interactivo por consola para registrar un nuevo envío.
+    /// Captura datos básicos, clasifica por tipo de transporte (Terrestre, Marítimo o Aéreo),
+    /// solicita la carga útil (paquetes) e invoca la persistencia del servicio.
     /// </summary>
     public void RegistrarEnvio() // listo en gestor
     {
         UI_RegistrarEnvio.UI_RegistrarNuevoEnvio();
         string? tipo = Console.ReadLine()?.Trim();
 
+        // Validación inicial del tipo de transporte seleccionado
         if (tipo != "1" && tipo != "2" && tipo != "3")
         {
             UI_Alerta.MostrarAdvertencia("Tipo no válido.", true, false);
             return;
         }
 
+        // Captura y validación de datos comunes del envío
         UI_RegistrarEnvio.UI_DatosEnvioBasicos();
         string categoria = Validador.LeerCategoria();
         string remitente = Validador.LeerNombre("  Remitente      : ");
@@ -52,12 +53,13 @@ public class GestorEnvios
             return;
         }
 
+        // Carga secuencial de la lista de bultos a transportar
         List<Paquete> paquetes = LeerPaquetes(cantidadPaquetes);
-
         Envio envio = null;
 
         try
         {
+            // Segmentación del flujo y captura de datos específicos según la modalidad logística
             if (tipo == "1")
             {
                 UI_RegistrarEnvio.UI_DatosEnvioTerrestre();
@@ -85,6 +87,7 @@ public class GestorEnvios
                 string aerDestino = Validador.LeerLugar("  Aeropuerto de destino:  ");
                 envio = _service.RegistrarAereo(remitente, destinatario, origen, destino, categoria, paquetes, vuelo, aerOrigen, aerDestino);
             }
+            // resumen general tras la inserción exitosa
             UI_RegistrarEnvio.UI_DatosGeneralesEnvio(envio);
         }
         catch (Exception ex)
@@ -94,9 +97,10 @@ public class GestorEnvios
     }
 
     /// <summary>
-    /// Método para Mostrar lo Envíos en la consola 
+    /// Consulta el listado global de registros al servicio y coordina su despliegue  en la consola.
+    /// Muestra una advertencia controlada si el repositorio se encuentra vacío.
     /// </summary>
-    public void MostrarEnvios() // listo en gestor
+    public void MostrarEnvios() 
     {
         try
         {
@@ -119,8 +123,9 @@ public class GestorEnvios
     }
 
     /// <summary>
-    /// Busca un Envío por su número de guia
-    /// </summary>    
+    /// Solicita al usuario un identificador único por consola y despliega la información detallada 
+    /// de la guía localizada por el servicio de negocio.
+    /// </summary>
     public void BuscarEnvio()
     {
         try
@@ -145,11 +150,8 @@ public class GestorEnvios
     }
 
     /// <summary>
-    /// Filtra los envios en categorias como 
-    /// su Tipo: (Terrestre / Maritimo / Aereo)
-    /// El estado (Pendiente,Cancelado,Entregado)
-    /// La Categoria (Nacional/Internacional)
-    /// Por Remitente
+    /// Despliega el menú de filtrado y procesa la búsqueda  mediante 
+    /// expresiones Lambda enviadas directamente a la capa de abstracción de datos.
     /// </summary>
     public void FiltrarEnvios() //listo
     {
@@ -165,24 +167,28 @@ public class GestorEnvios
                 case "1":
                     UI_FiltrarEnvios.UI_OpcionBusqueda(1);
                     string? tipo = Console.ReadLine()?.Trim();
+                    // Filtro polimórfico por tipo de envío (Terrestre, Marítimo o Aéreo)
                     resultado = _service.Filtrar(e => e.TipoEnvio().Equals(tipo, StringComparison.OrdinalIgnoreCase));
                     break;
 
                 case "2":
                     UI_FiltrarEnvios.UI_OpcionBusqueda(2);
                     string? estado = Console.ReadLine()?.Trim();
+                    // Filtro operacional por estado (Pendiente, En Tránsito, Entregado, Cancelado)
                     resultado = _service.Filtrar(e => e.Estado.Equals(estado, StringComparison.OrdinalIgnoreCase));
                     break;
 
                 case "3":
                     UI_FiltrarEnvios.UI_OpcionBusqueda(3);
                     string? categoria = Console.ReadLine()?.Trim();
+                    // Filtro geográfico por categoría de envío (Nacional o Internacional)
                     resultado = _service.Filtrar(e => e.CategoriaEnvio.Equals(categoria, StringComparison.OrdinalIgnoreCase));
                     break;
 
                 case "4":
                     UI_FiltrarEnvios.UI_OpcionBusqueda(4);
                     string? remitente = Console.ReadLine()?.Trim();
+                    // Filtro predictivo por coincidencia parcial de texto en la entidad Remitente
                     resultado = _service.Filtrar(e => e.Remitente.Contains(remitente, StringComparison.OrdinalIgnoreCase));
                     break;
 
@@ -198,6 +204,10 @@ public class GestorEnvios
         }   
     }
 
+    /// <summary>
+    /// Despliega el menú de ordenamiento y devuelve la colección de datos organizada de forma secuencial,
+    /// aplicando operaciones de inversión en memoria para listados de naturaleza descendente (ej. fecha y costos).
+    /// </summary>
     public void OrdenarEnvios() // listo
     {
         try
@@ -210,15 +220,19 @@ public class GestorEnvios
             switch (opcion)
             {
                 case "1":
+                    // Ordenamiento cronológico descendente (De más reciente a más antiguo)
                     resultado = _service.Ordenar(e => e.FechaEnvio).AsEnumerable().Reverse().ToList();
                     break;
                 case "2":
+                    // Ordenamiento alfanumérico secuencial por Número de Guía
                     resultado = _service.Ordenar(e => e.NumeroGuia);
                     break;
                 case "3":
+                    // Ordenamiento alfabético por Estado Operacional
                     resultado = _service.Ordenar(e => e.Estado);
                     break;
                 case "4":
+                    // Ordenamiento financiero descendente (De mayor costo a menor flete)
                     resultado = _service.Ordenar(e => e.CalcularCostoTotal()).AsEnumerable().Reverse().ToList();
                     break;
                 default:
@@ -234,6 +248,11 @@ public class GestorEnvios
         }
     }
 
+    /// <summary>
+    /// Conduce el formulario de actualización de datos de un envío.
+    /// Captura las modificaciones opcionales de los campos de texto e interactúa de manera 
+    /// segura con el proceso transaccional de rollback expuesto por el servicio de negocio.
+    /// </summary>
     public void ModificarEnvio() // listo
     {
         UI_ModificarEnvio.Menu();
@@ -247,6 +266,7 @@ public class GestorEnvios
             return;
         }
 
+        // Carga visual de datos actuales para servir de referencia al usuario
         UI_ModificarEnvio.MostrarDatosActuales(envio);
         UI_ModificarEnvio.TituloFormulario();
 
@@ -277,8 +297,10 @@ public class GestorEnvios
                 return;
             }
 
+            // Invocación segura de actualización de campos básicos de la guía
             _service.Modificar(guia, remitente, destinatario, origen, destino, categoria);
 
+            // Actualización secundaria controlada por reglas transaccionales de cambio de estado
             if (respuesta == "s")
             {
                 string nuevoEstado = UI_ModificarEnvio.LeerNuevoEstado();
@@ -293,6 +315,10 @@ public class GestorEnvios
         }
     }
 
+    /// <summary>
+    /// Conduce el flujo de remoción física o lógica de un registro.
+    /// Requiere la confirmación explícita del operador en consola antes de ejecutar la eliminación permanente.
+    /// </summary>
     public void EliminarEnvio()
     {
         UI_EliminarEnvio.Titulo();
@@ -329,8 +355,11 @@ public class GestorEnvios
     }
 
     /// <summary>
-    /// solo GestorEnvios sabe cómo pedirle paquetes al usuario.
+    /// método privado de lectura repetitiva. Se encarga exclusivamente del escaneo, validación 
+    /// y cálculo automatizado de propiedades físicas y volumétricas para cada bulto ingresado.
     /// </summary>
+    /// <param name="cantidad">El número total de paquetes asociados al envío.</param>
+    /// <returns>Una colección genérica tipo List cargada con los objetos Paquete instanciados.</returns>
     private List<Paquete> LeerPaquetes(int cantidad)
     {
         List<Paquete> paquetes = new List<Paquete>();
@@ -347,12 +376,12 @@ public class GestorEnvios
             double ancho = Validador.LeerDoublePositivo("  Ancho (cm)     : ");
             double largo = Validador.LeerDoublePositivo("  Largo (cm)     : ");
 
+            // Cálculo automatizado del tipo de paquete (Caja, Sobre, Bulto Grande, etc.) por dimensiones
             string tipoPaquete = Validador.CalcularTipoPaquete(peso, alto, ancho, largo);
-
             UI_RegistrarEnvio.UI_DatoDelTipoDePaquete(tipoPaquete);
 
+            // Instanciación directa del modelo de datos de infraestructura
             Paquete paquete = new Paquete( codigoPaquete,contenido,esFragil,valorDeclarado,tipoPaquete,peso,largo,alto,ancho);
-
             paquetes.Add(paquete);
         }
 
@@ -360,7 +389,9 @@ public class GestorEnvios
     }
 
     /// <summary>
-    /// Expone el conteo de envíos al Program.cs para el encabezado del menú.
+    /// Expone de manera directa el conteo global de registros de envíos,
+    /// facilitando la actualización de encabezados de menú en Program.cs.
     /// </summary>
+    /// <returns>La cantidad total de registros almacenados de tipo entero (int).</returns>
     public int ContarEnvios() => _service.ContarEnvios();
 }

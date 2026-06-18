@@ -1,23 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 
+/// <summary>
+/// Representa un envío logístico gestionado por transporte marítimo o transatlántico.
+/// Esta clase es sellada para evitar herencia adicional.
+/// </summary>
 public sealed class EnvioMaritimo : Envio
 {
-    // Atributos
     private string _NombreBarco;
     private string _PuertoOrigen;
     private string _PuertoDestino;
     private int _DiasNavegacion;
 
-    // Requerido por XmlSerializer 
+    /// <summary>
+    /// Inicializa una nueva instancia de la clase con valores por defecto.
+    /// Requerido para procesos de persistencia.
+    /// </summary>
     public EnvioMaritimo() : base()
     {
         _NombreBarco = string.Empty;
         _PuertoOrigen = string.Empty;
         _PuertoDestino = string.Empty;
     }
-
-    // Constructor
 
     public EnvioMaritimo(
     DateTime fechaEnvio,
@@ -99,10 +103,14 @@ public sealed class EnvioMaritimo : Envio
         }
     }
 
+    /// <summary>
+    /// Devuelve la etiqueta descriptiva del tipo de transporte actual.
+    /// </summary>
+    /// <returns>Cadena de texto "Maritimo".</returns>
     public override string TipoEnvio() => "Maritimo";
 
     /// <summary>
-    /// Genera el número de guía con prefijo MAR, timestamp y 4 dígitos aleatorios.
+    /// Genera el identificador único del envío con el prefijo "MAR", marca de tiempo y 4 números pseudoaleatorios.
     /// </summary>
     protected override void GenerarNumeroGuia()
     {
@@ -111,10 +119,10 @@ public sealed class EnvioMaritimo : Envio
     }
 
     /// <summary>
-    /// Calcula el costo total de un envío marítimo en función del volumen del paquete (metros cúbicos),
-    /// las tarifas de seguro específicas, una regla de flete mínimo y los costos operativos diarios de navegación.
+    /// Calcula el flete basándose en el cubicaje total en metros cúbicos ($m^3$), aplicando una tasa de seguro reducida del 1% 
+    /// y asegurando una tarifa base de flete mínimo de C$1,500.00.
     /// </summary>
-    /// <returns>El costo total acumulado del envío marítimo en unidades monetarias (C$), redondeado a 2 decimales.</returns>
+    /// <returns>El costo financiero final con precisión de dos decimales.</returns>
     public override decimal CalcularCostoTotal()
     {
         decimal costo = 0;
@@ -127,7 +135,7 @@ public sealed class EnvioMaritimo : Envio
             costo += p.CalcularCostoBase();
 
             // prima de seguro, se aplica una tasa baja del %1 debido a que por barco
-            // se reduce el riesgo de siniestros por colici´no o manipulación brusca
+            // se reduce el riesgo de siniestros por colición o manipulación brusca
             costo += p.CalcularCargoSeguro(0.01m); 
 
             // Conversió métrica, se calcula el volumen individual y se divide entre 1,000,000
@@ -147,8 +155,14 @@ public sealed class EnvioMaritimo : Envio
         return Math.Round(costo + costoFlete + costoTransito, 2);
     }
 
+    /// <summary>
+    /// Formatea el string con la duración real del transporte según los días de navegación.
+    /// </summary>
     public override string CalcularTiempoEntrega() => $"{DiasNavegacion} dia(s) de navegacion";
 
+    /// <summary>
+    /// Permite el cambio de estado de la orden por medio de lectura por consola.
+    /// </summary>
     public override void ActualizarEstado()
     {
         Console.WriteLine("  Estados disponibles:");
@@ -171,6 +185,9 @@ public sealed class EnvioMaritimo : Envio
 
     }
 
+    /// <summary>
+    /// Muestra la información general y anexa la información de cabotaje marítimo.
+    /// </summary>
     public override void MostrarInformacionEnvio()
     {
         base.MostrarInformacionEnvio();

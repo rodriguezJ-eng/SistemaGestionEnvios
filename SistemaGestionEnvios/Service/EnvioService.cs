@@ -1,25 +1,21 @@
 ﻿/// <summary>
-/// Capa de lógica de negocio para la gestión de envíos.
-/// Recibir datos ya validados y construir los objetos Envio correctos
-/// Delegar el almacenamiento al IEnvioRepository
-/// 
-/// NO sabe nada de consola, archivos ni bases de datos.
-/// Solo conoce la interfaz IEnvioRepository, no la implementación concreta.
+/// Capa de lógica de negocio (Service) encargada de coordinar los flujos operacionales del sistema,
+/// la validación de reglas transaccionales y la comunicación segura con la capa de persistencia abstracta.
 /// </summary>
 public class EnvioService
 {
     private readonly IEnvioRepository _repository;
 
-    // El repository se inyecta el Service no crea ni conoce la implementación concreta.
-    // Esto permite cambiar EnvioRepository por EnvioRepositoryXml sin tocar el Service.
+    /// <summary>Inicializa el servicio inyectando la abstracción del repositorio bajo el principio de inversión de dependencias.</summary>
+    /// <param name="repository">La implementación concreta de acceso a datos.</param>
     public EnvioService(IEnvioRepository repository)
     {
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
     /// <summary>
-    /// Registra un nuevo envío terrestre.
-    ///  El número de guía lo genera el constructor.
+    /// Instancia un envío de tipo Terrestre bajo el estado inicial 'Pendiente' 
+    /// y lo persiste en el sistema.
     /// </summary>
     public EnvioTerrestre RegistrarTerrestre(
         string remitente, string destinatario,
@@ -37,7 +33,8 @@ public class EnvioService
     }
 
     /// <summary>
-    /// Registra un nuevo envío marítimo.
+    /// Instancia un envío de tipo Marítimo bajo el estado inicial 'Pendiente' 
+    /// y lo persiste en el sistema.
     /// </summary>
     public EnvioMaritimo RegistrarMaritimo(
         string remitente, string destinatario,
@@ -55,7 +52,8 @@ public class EnvioService
     }
 
     /// <summary>
-    /// Registra un nuevo envío aéreo.
+    /// Instancia un envío de tipo Aéreo bajo el estado inicial 'Pendiente' 
+    /// y lo persiste en el sistema.
     /// </summary>
     public EnvioAereo RegistrarAereo(
         string remitente, string destinatario,
@@ -73,39 +71,33 @@ public class EnvioService
     }
 
     /// <summary>
-    /// Retorna todos los envíos registrados.
+    /// Solicita al repositorio el listado global de todos los envíos registrados.
     /// </summary>
     public List<Envio> ObtenerTodos()
         => _repository.ObtenerTodos();
 
     /// <summary>
-    /// Busca un envío por su número de guía. Retorna null si no existe.
+    /// Solicita al repositorio la localización de un registro mediante su clave primaria.
     /// </summary>
     public Envio BuscarPorGuia(string numeroGuia)
         => _repository.ObtenerPorGuia(numeroGuia);
 
+
     /// <summary>
-    /// Filtra envíos usando un criterio Func. La lógica de qué filtrar la decide el GestorEnvios,
-    /// pero la ejecución del filtro siempre pasa por el repository.
+    /// Transfiere el criterio de filtrado dinámico hacia la infraestructura del repositorio.
     /// </summary>
     public List<Envio> Filtrar(Func<Envio, bool> criterio)
         => _repository.Filtrar(criterio);
 
     /// <summary>
-    /// Ordena envíos usando un criterio Func.
+    /// Transfiere el criterio de ordenamiento dinámico hacia la infraestructura del repositorio.
     /// </summary>
     public List<Envio> Ordenar(Func<Envio, object> criterio)
         => _repository.Ordenar(criterio);
 
     /// <summary>
-    /// Modifica los campos básicos de un envío existente.
-    /// Lanza excepción si el envío no existe.
-    /// 
-    /// Garantiza la atomicidad o se aplican todos los cambio, o ninguno Antes de tocar el objeto real, se guarda su estado Original. 
-    /// Si alguna asignación falla, ser revierte todo lo que ya se había alcanzado modificar, luego se relanza la excepción para que 
-    /// el GestorEnvios la capture y la aisle
-    /// 
-    /// Evita que un objeto quede en un estado parcialmente modificado y termine persistiendo en el Xml
+    /// Modifica de forma segura los atributos descriptivos de un envío.
+    /// Realiza una operación atómica simulando un rollback de base de datos en memoria si la persistencia falla.
     /// </summary>
     public void Modificar(string numeroGuia,
         string remitente, string destinatario,
@@ -175,11 +167,10 @@ public class EnvioService
     }
 
 
-/// <summary>
-/// Elimina un envío por número de guía.
-/// Lanza excepción si el envío no existe.
-/// </summary>
-public void Eliminar(string numeroGuia)
+    /// <summary>
+    /// Ordena la remoción definitiva de un registro delegando el identificador lógico al repositorio.
+    /// </summary>
+    public void Eliminar(string numeroGuia)
     {
         Envio envio = _repository.ObtenerPorGuia(numeroGuia)
             ?? throw new InvalidOperationException($"No existe un envío con guía {numeroGuia}.");
@@ -188,7 +179,7 @@ public void Eliminar(string numeroGuia)
     }
 
     /// <summary>
-    /// Retorna el total de envíos registrados.
+    /// Calcula la magnitud numérica de la colección actual de envíos registrados.
     /// </summary>
     public int ContarEnvios()
         => _repository.ObtenerTodos().Count;

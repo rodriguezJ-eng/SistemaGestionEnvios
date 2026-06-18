@@ -1,5 +1,11 @@
+/// <summary>
+/// Administra el menú de selección de algoritmos y criterios de ordenación de listas.
+/// </summary>
 public static class UI_OrdenarEnvios
 {
+    /// <summary>
+    /// Presenta al operador las propiedades cuantitativas y cualitativas bajo las cuales puede ordenar los registros.
+    /// </summary>
     public static void UI_Menu()
     {
         Console.Clear();

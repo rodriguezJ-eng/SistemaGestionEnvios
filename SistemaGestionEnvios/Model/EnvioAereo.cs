@@ -2,14 +2,20 @@
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 
+/// <summary>
+/// Representa un envío logístico gestionado por transporte aéreo.
+/// Esta clase es sellada para evitar herencia adicional y optimizar el rendimiento.
+/// </summary>
 public sealed class EnvioAereo : Envio
 {
-    // Atributos
     private string _NumeroVuelo;
     private string _AeropuertoOrigen;
     private string _AeropuertoDestino;
 
-    // Requerido por XmlSerializer
+    /// <summary>
+    /// Inicializa una nueva instancia de la clase con valores predeterminados.
+    /// Requerido para los procesos de serialización y deserialización.
+    /// </summary>
     public EnvioAereo() : base()
     {
         _NumeroVuelo = string.Empty;
@@ -17,7 +23,6 @@ public sealed class EnvioAereo : Envio
         _AeropuertoDestino = string.Empty;
     }
 
-    // Constructor
 
     public EnvioAereo(
     DateTime fechaEnvio,
@@ -39,6 +44,8 @@ public sealed class EnvioAereo : Envio
     }
 
     // Propiedades
+
+
     public string NumeroVuelo
     {
         get => _NumeroVuelo;
@@ -95,11 +102,16 @@ public sealed class EnvioAereo : Envio
         }
     }
 
+    /// <summary>
+    /// Devuelve la etiqueta descriptiva del tipo de transporte actual.
+    /// </summary>
+    /// <returns>Cadena de texto "Aereo".</returns>
+
     public override string TipoEnvio() => "Aereo";
 
 
     /// <summary>
-    /// Genera el numero de guia con el prefijo AER, y 4 dijitos aleatorios.
+    /// Genera de forma única el número de guía concatenando el prefijo "AER", la marca de tiempo exacta del sistema y 4 dígitos aleatorios.
     /// </summary>
     protected override void GenerarNumeroGuia()
     {   
@@ -108,11 +120,10 @@ public sealed class EnvioAereo : Envio
     }
 
     /// <summary>
-    /// Calcula el costo total del envío aéreo procesando cada paquete de forma individual.
-    /// Aplica un factor de conversión volumétrico estricto, tarifas por kilogramo,
-    /// tasas de seguro por alta prioridad y recargos por manejo de mercancía frágil.
+    /// Calcula el costo total del flete aplicando un divisor volumétrico estricto de 6000 para el aire, 
+    /// un recargo del 3% sobre el valor declarado y una tasa de fragilidad del 15%.
     /// </summary>
-    /// <returns>El costo total acumulado del envío aéreo en unidades monetarias (C$), redondeado a 2 decimales.</returns>
+    /// <returns>Monto total en moneda local (C$) con dos decimales redondeados.</returns>
     public override decimal CalcularCostoTotal()
     {
         decimal costo = 0;
@@ -139,6 +150,10 @@ public sealed class EnvioAereo : Envio
         return Math.Round(costo, 2);
     }
 
+    /// <summary>
+    /// Obtiene una estimación del tiempo de entrega de la carga aérea.
+    /// </summary>
+    /// <returns>Cadena con el rango estimado en días.</returns>
     public override string CalcularTiempoEntrega()
     {
         return "1 a 3 dias habiles";
@@ -165,6 +180,9 @@ public sealed class EnvioAereo : Envio
         Console.WriteLine($"  Estado actualizado a: {Estado}");
     }
 
+    /// <summary>
+    /// Imprime en la consola el desglose de datos del flete base junto a los atributos específicos del vuelo aéreo.
+    /// </summary>
     public override void MostrarInformacionEnvio()
     {
         base.MostrarInformacionEnvio();

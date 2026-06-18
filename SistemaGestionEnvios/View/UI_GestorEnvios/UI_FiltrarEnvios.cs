@@ -1,5 +1,11 @@
+/// <summary>
+/// Controla los menús interactivos destinados a la segregación de listas según propiedades compartidas.
+/// </summary>
 public static class UI_FiltrarEnvios
 {
+    /// <summary>
+    /// Presenta las propiedades y criterios disponibles mediante los cuales el usuario puede filtrar los envíos.
+    /// </summary>
     public static void UI_Menu()
     {
         Console.Clear();
@@ -12,6 +18,10 @@ public static class UI_FiltrarEnvios
         Console.Write("\n  Seleccione: ");
     }
 
+    /// <summary>
+    /// Evalúa la opción de filtrado y escribe el indicador exacto correspondiente al dato esperado.
+    /// </summary>
+    /// <param name="op">Identificador numérico de la opción elegida.</param>
     public static void UI_OpcionBusqueda(int op)
     {
         if(op == 1)

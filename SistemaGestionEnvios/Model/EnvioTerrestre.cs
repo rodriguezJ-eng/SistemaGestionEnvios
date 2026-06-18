@@ -1,21 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 
+/// <summary>
+/// Representa un envío logístico a nivel continental o nacional mediante vehículos de carga vial.
+/// Esta clase es sellada.
+/// </summary>
 public sealed class EnvioTerrestre : Envio
 {
-    // Atributos
     private int _DistanciaKm;
     private string _PlacaCamion;
     private string _Direccion;
 
-    // Requerido por XmlSerializer
+    /// <summary>
+    /// Inicializa una nueva instancia de la clase con valores por defecto.
+    /// Requerido por el motor de serialización XML.
+    /// </summary>
     public EnvioTerrestre() : base()
     {
         _PlacaCamion = string.Empty;
         _Direccion = string.Empty;
     }
 
-    // Constructor
 
     public EnvioTerrestre(
     DateTime fechaEnvio,
@@ -36,7 +41,6 @@ public sealed class EnvioTerrestre : Envio
         GenerarNumeroGuia();
     }
 
-    // Propiedades
     public int DistanciaKm
     {
         get => _DistanciaKm;
@@ -82,10 +86,14 @@ public sealed class EnvioTerrestre : Envio
         }
     }
 
+    /// <summary>
+    /// Devuelve la etiqueta descriptiva del tipo de transporte actual.
+    /// </summary>
+    /// <returns>Cadena de texto "Terrestre".</returns>
     public override string TipoEnvio() => "Terrestre";
 
     /// <summary>
-    /// Genera el número de guía con prefijo TER, timestamp y 4 dígitos aleatorios.
+    /// Genera el código alfanumérico único para transportes viales con prefijo "TER".
     /// </summary>
     protected override void GenerarNumeroGuia()
     {
@@ -94,10 +102,10 @@ public sealed class EnvioTerrestre : Envio
     }
 
     /// <summary>
-    /// Calcula el costo total del envío terrestre combinando el costo operativo individual de los paquetes,
-    /// tasas de seguro por transporte carretero y un cálculo de flete  basado en la distancia y el peso total.
+    /// Calcula el costo basándose en una tasa de seguro del 1.5% y un algoritmo exponencial amortiguado 
+    /// que evalúa la distancia recorrida multiplicada por el peso facturable total acumulado de la carga.
     /// </summary>
-    /// <returns>El costo total acumulado del envío terrestre en unidades monetarias (C$), redondeado a 2 decimales.</returns>
+    /// <returns>Costo total calculado.</returns>
     public override decimal CalcularCostoTotal()
     {
         decimal costoPaquetes = 0;
@@ -127,6 +135,9 @@ public sealed class EnvioTerrestre : Envio
         return Math.Round(costoPaquetes + costoDistancia, 2);
     }
 
+    /// <summary>
+    /// Actualiza el estado operativo actual mediante la lectura interactiva de flujos de consola.
+    /// </summary>
     public override void ActualizarEstado()
     {
         Console.WriteLine("  Estados disponibles:");
@@ -150,7 +161,9 @@ public sealed class EnvioTerrestre : Envio
     }
 
 
-    // Muestra la informacion del envio incluyendo datos propios
+    /// <summary>
+    /// Muestra la información del envío anexando el módulo de datos de carreteras y destinos viales.
+    /// </summary>
     public override void MostrarInformacionEnvio()
     {
         base.MostrarInformacionEnvio();
@@ -163,7 +176,10 @@ public sealed class EnvioTerrestre : Envio
         Console.WriteLine($"{new string('=', Encabezado.Length)}\n");
     }
 
-    
+    /// <summary>
+    /// Estima los días hábiles requeridos de acuerdo a rangos fijos de kilometraje vial.
+    /// </summary>
+    /// <returns>Rango de días en formato de texto legible.</returns>
     public override string CalcularTiempoEntrega()
     {
     

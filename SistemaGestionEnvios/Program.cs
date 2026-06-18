@@ -2,8 +2,16 @@
 // Conecta las 3 capas: crea el Repository, se lo pasa al Service, y el Service al GestorEnvios.
 // Si mañana se cambia a XML, solo cambia la línea del Repository — nada más.
 
+// Instancia la capa de persistencia de datos utilizando el patrón Repository.
+// Se inicializa con la implementación XML apuntando al archivo físico "envios.xml".
 IEnvioRepository repository = new EnvioRepositoryXml("envios.xml");
+
+// Instancia la capa de lógica de negocio (Service), inyectándole el repositorio.
+// Esto permite que el servicio gestione las reglas de negocio independientemente de dónde se guarden los datos.
 EnvioService service = new EnvioService(repository);
+
+// Instancia el controlador de la interfaz de usuario (GestorEnvios), inyectándole el servicio.
+// El gestor actúa como puente directo entre las vistas de la consola y la lógica de negocio.
 GestorEnvios gestor = new GestorEnvios(service);
 
 bool salir = false;
