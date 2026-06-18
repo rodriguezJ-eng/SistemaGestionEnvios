@@ -1,10 +1,7 @@
 ﻿/// <summary>
 /// Capa de lógica de negocio para la gestión de envíos.
-/// 
-/// Responsabilidades:
-///   - Recibir datos ya validados y construir los objetos Envio correctos
-///   - Aplicar las reglas de negocio (no duplicados, validaciones de estado, etc.)
-///   - Delegar el almacenamiento al IEnvioRepository
+/// Recibir datos ya validados y construir los objetos Envio correctos
+/// Delegar el almacenamiento al IEnvioRepository
 /// 
 /// NO sabe nada de consola, archivos ni bases de datos.
 /// Solo conoce la interfaz IEnvioRepository, no la implementación concreta.
@@ -13,18 +10,16 @@ public class EnvioService
 {
     private readonly IEnvioRepository _repository;
 
-    // El repository se inyecta: el Service no crea ni conoce la implementación concreta.
+    // El repository se inyecta el Service no crea ni conoce la implementación concreta.
     // Esto permite cambiar EnvioRepository por EnvioRepositoryXml sin tocar el Service.
     public EnvioService(IEnvioRepository repository)
     {
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
-    // CRUD
-
     /// <summary>
-    /// Registra un nuevo envío terrestre. Valida que no exista ya un envío con la misma guía
-    /// (situación teórica de colisión de timestamp). El número de guía lo genera el constructor.
+    /// Registra un nuevo envío terrestre.
+    ///  El número de guía lo genera el constructor.
     /// </summary>
     public EnvioTerrestre RegistrarTerrestre(
         string remitente, string destinatario,
@@ -106,10 +101,9 @@ public class EnvioService
     /// Modifica los campos básicos de un envío existente.
     /// Lanza excepción si el envío no existe.
     /// 
-    /// Garantiza la atomicidad: o se aplican todos los cambio, o ninguno
-    /// Antes de tocar el objeto real, se guarda su estado Original. Si alguna
-    /// asignación falla, ser revierte todo lo que ya se había alcanzado modificar, luego se relanza
-    /// la excepción para que el GestorEnvios la capture y la aisle
+    /// Garantiza la atomicidad o se aplican todos los cambio, o ninguno Antes de tocar el objeto real, se guarda su estado Original. 
+    /// Si alguna asignación falla, ser revierte todo lo que ya se había alcanzado modificar, luego se relanza la excepción para que 
+    /// el GestorEnvios la capture y la aisle
     /// 
     /// Evita que un objeto quede en un estado parcialmente modificado y termine persistiendo en el Xml
     /// </summary>
@@ -154,7 +148,7 @@ public class EnvioService
     }
 
     /// <summary>
-    /// Actualiza el estado de un envío. Aplica la regla de negocio:
+    /// Actualiza el estado de un envío. Aplica la regla de negocio
     /// un envío "Entregado" o "Cancelado" no puede cambiar de estado.
     /// </summary>
     public void ActualizarEstado(string numeroGuia, string nuevoEstado)

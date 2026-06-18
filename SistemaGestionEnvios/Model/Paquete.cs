@@ -180,22 +180,37 @@ public class Paquete
         Console.WriteLine($"{new string('=', Encabezado.Length)}\n");
     }
 
+    /// <summary>
+    /// calcula el costo base de un paquete individual utilidzando tarifas escalonadas por peso y recarga por fragiilidad
+    /// </summary>
+    /// <param name="divisorVolumetrico"></param>
+    /// <returns> El costo base total del paquete en unidaddes monetarioas redondeado a 2 decimales</returns>
     public decimal CalcularCostoBase(double divisorVolumetrico = 5000)
     {
-        decimal tarifaBase = 50.00m; // C$50 córdobas, cubre manejo y etiquetado
+        // tarifa fija de apertura (costos operativos mínimos: manejo, sistema y etiquetado)
+        decimal tarifaBase = 50.00m; 
 
+        // determinación del peso mayor entre el peso real de bascula y el peso volumétrico
         decimal pesoFacturable = (decimal)PesoFacturable(divisorVolumetrico);
         decimal costoPorPeso;
 
-        if (pesoFacturable <= 2.0m)
+        // Aplicación de las tarifas
+        if (pesoFacturable <= 2.0m) 
+            //Tramo 1 paquetes ligeris (0.1kg a 2.0kg) tarifa estandar completa
             costoPorPeso = pesoFacturable * 25.00m;       // C$25/kg
         else if (pesoFacturable <= 10.0m)
+            // Tramo 2 paquete medianos De 2 kg a 10 kg C
+            // Los primeros 2 kg a tarifa estándar y el excedente a tarifa con descuento.
             costoPorPeso = (2.0m * 25.00m) + ((pesoFacturable - 2.0m) * 18.00m);
         else
+            // Tramo 3: Paquetes pesados (Más de 10 kg).
+            // Bloques fijos para los primeros 10 kg y tarifa de superdescuento para el exceso masivo.
             costoPorPeso = (2.0m * 25.00m) + (8.0m * 18.00m) + ((pesoFacturable - 10.0m) * 12.00m);
 
+        // Consolidado del costo operativo y el costo por peso
         decimal costoTotal = tarifaBase + costoPorPeso;
 
+        // Recargo por fragilidad, hay un incremento del 15% sobre el subtotal por manejo especial de la mercancia
         if (EsFragil)
             costoTotal += costoTotal * 0.15m;
 
@@ -203,26 +218,38 @@ public class Paquete
     }
 
     /// <summary>
-    /// Peso volumétrico estándar usado en la industria: volumen (cm³) / divisor.
+    /// Calcula el Peso teórico del paquete con base el espacio físico que ocupa (volumen en cm^3)
     /// Divisor 5000 es el más común para aéreo/terrestre; cada modo puede usar su propio divisor.
     /// </summary>
+    /// /// <param name="divisor">El factor de conversión logística (por defecto 5000 para estándar aéreo/terrestre).</param>
+    /// <returns>El peso volumétrico calculado en kilogramos (kg).</returns>
     public double CalcularPesoVolumetrico(double divisor = 5000)
     {
+        // Fórmula estándar internacional de la industria : Volumen / Divisor
         return CalcularVolumen() / divisor;
     }
 
+    /// <summary>
+    /// Evalúa y selecciona el peso definitivo sobre el cual se aplicará el cobro de la tarifa.
+    /// </summary>
+    /// <param name="divisor">El factor de conversión empleado para el cálculo del peso volumétrico (por defecto 5000).</param>
+    /// <returns>El valor máximo (en kg) entre el peso real de la báscula y el peso por dimensiones.</returns>
     public double PesoFacturable(double divisor = 5000)
     {
+        // Se factura el impacto que resulte mayor para el transporte
         return Math.Max(Peso, CalcularPesoVolumetrico(divisor));
     }
 
     /// <summary>
-    /// Cargo de seguro proporcional al valor declarado. Práctica estándar: 1%-5% del valor.
+    /// Calcula el costo del seguro de protección de la mercancía de manera proporcional a su valor declaradol.
     /// </summary>
+    /// <param name="porcentaje">La tasa de riesgo aplicable expresada en decimal (por defecto 0.02 correspondiente al 2%).</param>
+    /// <returns>El costo final del seguro, asegurando una tasa de cobro mínima obligatoria de C$10.00.</returns>
     public decimal CalcularCargoSeguro(decimal porcentaje = 0.02m)
     {
-        decimal minimo = 10.00m; // cargo mínimo por procesar el seguro
+        decimal minimo = 10.00m; // cargo mínimo por procesar el seguro de C$10
         decimal cargo = ValorDeclarado * porcentaje;
+        // Retorna el valor más alto entre el cálculo porcentual y la tarifa mínima requerida
         return Math.Round(Math.Max(cargo, minimo), 2);
     }
 
