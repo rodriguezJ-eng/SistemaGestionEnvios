@@ -110,23 +110,40 @@ public sealed class EnvioMaritimo : Envio
         NumeroGuia = $"MAR-{DateTime.Now:yyyyMMddHHmmss}-{randomNumb}";
     }
 
+    /// <summary>
+    /// Calcula el costo total de un envío marítimo en función del volumen del paquete (metros cúbicos),
+    /// las tarifas de seguro específicas, una regla de flete mínimo y los costos operativos diarios de navegación.
+    /// </summary>
+    /// <returns>El costo total acumulado del envío marítimo en unidades monetarias (C$), redondeado a 2 decimales.</returns>
     public override decimal CalcularCostoTotal()
     {
         decimal costo = 0;
         decimal volumenTotalM3 = 0;
 
+        // procesamiento individual de cada paquete 
         foreach (Paquete p in Paquetes)
         {
+            // acumulación del costo base operativo de cada parque 
             costo += p.CalcularCostoBase();
-            costo += p.CalcularCargoSeguro(0.01m); // 1% marítimo (más lento, pero más estable)
+
+            // prima de seguro, se aplica una tasa baja del %1 debido a que por barco
+            // se reduce el riesgo de siniestros por colici´no o manipulación brusca
+            costo += p.CalcularCargoSeguro(0.01m); 
+
+            // Conversió métrica, se calcula el volumen individual y se divide entre 1,000,000
+            // para transformar las dimensiones de cm^3 a m^3
             volumenTotalM3 += (decimal)(p.CalcularVolumen() / 1_000_000); // cm³ a m³
         }
 
+        // Se multiplica el volumen por la tarifa, pero asegura un cobro
+        // minimo de C$ 1,500 para amortizar los costos fijos de consolidación.
         decimal tarifaPorM3 = 3500.00m; // C$3500 por m³, tarifa de flete marítimo típica
         decimal costoFlete = Math.Max(volumenTotalM3 * tarifaPorM3, 1500.00m); // mínimo de flete
 
+        // costos operativos 
         decimal costoTransito = DiasNavegacion * 80.00m; // costo menor, por combustible/operación diaria
 
+        // Costo total 
         return Math.Round(costo + costoFlete + costoTransito, 2);
     }
 
